@@ -17,8 +17,10 @@ export const SITE_CONTENT = {
 
   cta: {
     button: "Unirse al Discord",
+    whatsappButton: "Unirse al WhatsApp",
     note: "entrada abierta",
     discordUrl: "https://discord.gg/wkhHrWZC3Q",
+    whatsappUrl: "https://chat.whatsapp.com/BhC5waw0nm1FIRSb9Kvs7a",
   },
 
   pillars: [

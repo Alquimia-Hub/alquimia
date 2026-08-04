@@ -250,7 +250,8 @@
     transform: none;
   }
 
-  .btn-discord {
+  .btn-discord,
+  .btn-whatsapp {
     animation: none !important;
   }
 }
@@ -305,6 +306,30 @@
 .btn-discord.cta-idle {
   animation: cta-pulse 4s var(--ease-in-out) infinite;
   animation-delay: 2.5s;
+}
+
+/* Secondary (ghost) CTA */
+.btn-whatsapp {
+  box-shadow:
+    0 0 0 1px var(--bg),
+    0 0 0 2px var(--rule-2);
+  transition:
+    background-color 0.25s var(--ease-out-quart),
+    border-color 0.25s var(--ease-out-quart),
+    color 0.25s var(--ease-out-quart),
+    box-shadow 0.3s var(--ease-out-quart),
+    transform 0.25s var(--ease-out-quart);
+}
+
+.btn-whatsapp:hover {
+  color: var(--ink);
+  background-color: color-mix(in oklch, var(--gold) 12%, transparent);
+  border-color: var(--gold);
+  box-shadow:
+    0 0 0 1px var(--bg),
+    0 0 0 2px var(--rule),
+    0 8px 40px color-mix(in oklch, var(--gold) 15%, transparent);
+  transform: translateY(-1px);
 }
 
 /* CTA celebration particles */
