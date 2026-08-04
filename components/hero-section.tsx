@@ -1,5 +1,5 @@
 import { SITE_CONTENT } from "@/lib/constants";
-import { DiscordCta } from "./discord-cta";
+import { CommunityCta } from "./community-cta";
 import {
   AlquimiaDivider,
   AutomatizacionIcon,
@@ -61,8 +61,8 @@ export function HeroSection() {
         {SITE_CONTENT.hero.subtitle}
       </p>
 
-      {/* CTA Button */}
-      <DiscordCta />
+      {/* CTA Buttons */}
+      <CommunityCta />
 
       {/* Pillars */}
       <ScrollReveal className="mt-20 w-full" id="pilares">
