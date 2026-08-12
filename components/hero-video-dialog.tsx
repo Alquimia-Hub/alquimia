@@ -72,14 +72,14 @@ export function HeroVideoDialog({
       </DialogTrigger>
 
       <DialogContent
-        className="max-w-[min(1100px,calc(100%-2rem))] gap-0 rounded-none border-gold/30 bg-bg-2 p-0 shadow-[0_30px_120px_rgba(0,0,0,0.7)] sm:max-w-[min(1100px,calc(100%-4rem))]"
+        className="w-[min(1100px,calc(100vw-2rem),calc((100dvh-8rem)*16/9))] max-w-none gap-0 rounded-none border-gold/30 bg-bg-2 p-0 shadow-[0_30px_120px_rgba(0,0,0,0.7)] sm:max-w-none"
         showCloseButton={false}
       >
         <DialogTitle className="sr-only">{title}</DialogTitle>
 
         <button
           aria-label={SITE_CONTENT.talks.closeLabel}
-          className="absolute -top-11 right-0 flex h-9 w-9 items-center justify-center border border-rule bg-bg-2/80 text-ink-3 backdrop-blur-md transition-colors duration-200 hover:border-gold hover:text-gold max-md:top-2 max-md:right-2 max-md:border-gold/40"
+          className="absolute -top-11 right-0 flex h-9 w-9 items-center justify-center border border-rule bg-bg-2/80 text-ink-3 backdrop-blur-md transition-colors duration-200 hover:border-gold hover:text-gold"
           onClick={() => setIsOpen(false)}
           type="button"
         >

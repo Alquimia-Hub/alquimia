@@ -27,7 +27,7 @@ export async function ReposSection() {
       <ScrollReveal className="mt-12 flex justify-center max-md:mt-10">
         <Button
           asChild
-          className="btn-whatsapp inline-flex h-auto cursor-pointer items-center justify-center gap-4 border border-gold/40 bg-transparent px-9 py-5 font-[family-name:var(--font-im-fell)] text-[12px] text-ink-2 uppercase tracking-[0.3em] hover:bg-transparent max-md:w-full max-md:px-6 max-md:text-[11px]"
+          className="btn-whatsapp inline-flex h-auto cursor-pointer items-center justify-center gap-4 border border-gold/40 bg-transparent px-9 py-5 font-[family-name:var(--font-im-fell)] text-[12px] text-ink-2 uppercase tracking-[0.3em] hover:bg-transparent max-md:w-full max-md:gap-3 max-md:px-4 max-md:text-[10px] max-md:tracking-[0.18em]"
         >
           <a
             href={SOCIAL_LINKS.github}
