@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SITE_CONTENT } from "@/lib/constants";
+import { SocialLinks } from "./social-links";
 
 export function LandingFooter() {
   return (
@@ -17,7 +18,10 @@ export function LandingFooter() {
         </Link>
         <span>{SITE_CONTENT.footer.year}</span>
       </div>
-      <div>{SITE_CONTENT.footer.craft}</div>
+      <div className="flex items-center gap-5 max-md:flex-col max-md:gap-2.5">
+        <span>{SITE_CONTENT.footer.craft}</span>
+        <SocialLinks className="-mr-2 max-md:mr-0" />
+      </div>
     </footer>
   );
 }
