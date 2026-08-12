@@ -1,9 +1,20 @@
+export const GITHUB_ORG = "Alquimia-Hub";
+
+export const SOCIAL_LINKS = {
+  github: `https://github.com/${GITHUB_ORG}`,
+  x: "https://x.com/alquimia_hub",
+} as const;
+
 export const SITE_CONTENT = {
   brand: "Alquimia",
   year: "Anno MMXXVI",
 
   nav: {
     marca: "Marca",
+    repos: "Código",
+    charlas: "Charlas",
+    githubLabel: "Alquimia en GitHub",
+    xLabel: "Alquimia en X",
   },
 
   hero: {
@@ -44,6 +55,33 @@ export const SITE_CONTENT = {
   quote: {
     text: "La tragedia de la vida es que nos hacemos viejos demasiado pronto y sabios demasiado tarde.",
     author: "Benjamin Franklin",
+  },
+
+  repos: {
+    eyebrow: "Código Abierto",
+    title: "El Laboratorio",
+    subtitle:
+      "Todo lo que construimos es público. Entrá, copiá, rompé y mejorá — no hace falta permiso.",
+    cta: "Ver la organización en GitHub",
+    cardCta: "Ver repositorio",
+    starsLabel: "estrellas",
+    emptyLabel: "Un experimento de la comunidad.",
+    liveLabel: "Demo",
+  },
+
+  talks: {
+    eyebrow: "En Vivo",
+    title: "Charlas",
+    subtitle:
+      "Lo que contamos en conferencias y meetups. Mirá los videos sin salir del sitio.",
+    playLabel: "Reproducir",
+    closeLabel: "Cerrar video",
+    soon: {
+      title: "Próximamente",
+      description:
+        "Estamos preparando las siguientes charlas. Sumate a la comunidad para enterarte antes que nadie.",
+      cta: "Unirse al Discord",
+    },
   },
 
   footer: {

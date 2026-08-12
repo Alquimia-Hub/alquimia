@@ -98,6 +98,10 @@
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 /* Entrance animations */
 @keyframes fade-in {
   from {
@@ -254,6 +258,23 @@
   .btn-whatsapp {
     animation: none !important;
   }
+
+  .repo-card,
+  .talk-card,
+  .carousel-arrow,
+  .play-core {
+    transition: none !important;
+  }
+
+  .repo-card:hover,
+  .talk-card:hover,
+  .group:hover .play-core {
+    transform: none !important;
+  }
+
+  html {
+    scroll-behavior: auto;
+  }
 }
 
 /* Background effects */
@@ -329,6 +350,89 @@
     0 0 0 1px var(--bg),
     0 0 0 2px var(--rule),
     0 8px 40px color-mix(in oklch, var(--gold) 15%, transparent);
+  transform: translateY(-1px);
+}
+
+/* Cards — repositories & talks */
+.repo-card,
+.talk-card {
+  transition:
+    border-color 0.35s var(--ease-out-quart),
+    background-color 0.35s var(--ease-out-quart),
+    box-shadow 0.4s var(--ease-out-quart),
+    transform 0.35s var(--ease-out-quart);
+}
+
+.repo-card:hover,
+.talk-card:hover,
+.repo-card:focus-visible,
+.talk-card:focus-visible {
+  background-color: color-mix(in oklch, var(--gold) 5%, var(--bg-2));
+  border-color: color-mix(in oklch, var(--gold) 45%, transparent);
+  box-shadow: 0 16px 54px color-mix(in oklch, var(--gold) 12%, transparent);
+  transform: translateY(-3px);
+}
+
+.repo-card:focus-visible,
+.talk-card:focus-visible,
+.carousel-arrow:focus-visible,
+.social-link:focus-visible {
+  outline: 1px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* Play affordance inside a talk thumbnail */
+.play-core {
+  box-shadow: 0 0 34px color-mix(in oklch, var(--gold) 35%, transparent);
+  transition:
+    transform 0.3s var(--ease-out-quart),
+    background-color 0.3s var(--ease-out-quart),
+    box-shadow 0.3s var(--ease-out-quart);
+}
+
+.group:hover .play-core {
+  background-color: var(--gold-2);
+  box-shadow: 0 0 52px color-mix(in oklch, var(--gold-2) 50%, transparent);
+  transform: scale(1.1);
+}
+
+/* Carousel arrows */
+.carousel-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  font-size: 15px;
+  color: var(--ink-3);
+  cursor: pointer;
+  border: 1px solid var(--rule-2);
+  transition:
+    border-color 0.25s var(--ease-out-quart),
+    background-color 0.25s var(--ease-out-quart),
+    color 0.25s var(--ease-out-quart),
+    opacity 0.25s var(--ease-out-quart);
+}
+
+.carousel-arrow:hover:not(:disabled) {
+  color: var(--gold);
+  background-color: color-mix(in oklch, var(--gold) 8%, transparent);
+  border-color: var(--gold);
+}
+
+.carousel-arrow:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
+}
+
+/* Social icon links */
+.social-link {
+  transition:
+    color 0.25s var(--ease-out-quart),
+    transform 0.25s var(--ease-out-quart);
+}
+
+.social-link:hover {
   transform: translateY(-1px);
 }
 
