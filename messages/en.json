@@ -1,0 +1,187 @@
+{
+  "Metadata": {
+    "title": "Alquimia | Community",
+    "description": "An open, free community where we share knowledge about artificial intelligence, automation and productivity.",
+    "brandTitle": "Alquimia | Brand",
+    "brandDescription": "The visual elements of Alquimia. Download the logo, copy the colors and browse the typography.",
+    "ogAlt": "Alquimia — Open community on AI, automation and productivity",
+    "ogTagline": "Open community on AI, automation and productivity"
+  },
+  "Common": {
+    "brand": "Alquimia",
+    "year": "Anno MMXXVI"
+  },
+  "Nav": {
+    "repos": "Code",
+    "talks": "Talks",
+    "brand": "Brand",
+    "githubLabel": "Alquimia on GitHub",
+    "xLabel": "Alquimia on X"
+  },
+  "LocaleSwitcher": {
+    "label": "Change language",
+    "es": "ES",
+    "en": "EN",
+    "esName": "Spanish",
+    "enName": "English"
+  },
+  "Hero": {
+    "eyebrow": "Open Community",
+    "title": "Alquim",
+    "titleAccent": "ia",
+    "titleSrSuffix": " — Open community on AI and productivity",
+    "subtitle": "An open, free community where we share knowledge about artificial intelligence, automation and productivity."
+  },
+  "Cta": {
+    "button": "Join the Discord",
+    "whatsappButton": "Join the WhatsApp",
+    "note": "open to all"
+  },
+  "Pillars": {
+    "inteligencia": {
+      "title": "Intelligence",
+      "description": "models · papers · prompts"
+    },
+    "automatizacion": {
+      "title": "Automation",
+      "description": "workflows · agents · integrations"
+    },
+    "productividad": {
+      "title": "Productivity",
+      "description": "systems · habits · methods"
+    }
+  },
+  "Quote": {
+    "text": "The tragedy of life is that we get old too soon and wise too late.",
+    "author": "Benjamin Franklin"
+  },
+  "Repos": {
+    "eyebrow": "Open Source",
+    "title": "The Laboratory",
+    "subtitle": "Everything we build is public. Come in, copy it, break it and improve it — no permission needed.",
+    "cta": "View the organization on GitHub",
+    "cardCta": "View repository",
+    "starsLabel": "stars",
+    "emptyLabel": "A community experiment.",
+    "liveLabel": "Demo",
+    "carouselLabel": "Alquimia repositories",
+    "prevLabel": "Previous repositories",
+    "nextLabel": "Next repositories",
+    "descriptions": {
+      "alquimia": "The community site. The very page you are looking at, open from end to end.",
+      "alquimia-cli": "The community in your terminal: one command and the socials, links and news are at hand.",
+      "ai-payments": "Demos of agents that pay on their own: A2A, A2B and A2C payments on opBNB with the AI SDK.",
+      "slides": "The deck we give our talks with: full-screen slides built on the web, ready to reuse.",
+      "videos": "The Alquimia promo video, made 100% in code with Remotion and the brand palette.",
+      "discussions": "The community's open forum: questions, ideas and experiments in progress."
+    },
+    "topics": {
+      "alquimia": "nextjs, site",
+      "alquimia-cli": "cli, node",
+      "ai-payments": "agents, crypto, ai sdk",
+      "slides": "slides, talks",
+      "videos": "remotion, video",
+      "discussions": "community"
+    }
+  },
+  "Talks": {
+    "eyebrow": "Live",
+    "title": "Talks",
+    "subtitle": "What we share at conferences and meetups. Watch the videos without leaving the site.",
+    "playLabel": "Play",
+    "closeLabel": "Close video",
+    "thumbnailAlt": "Talk thumbnail: {title}",
+    "carouselLabel": "Alquimia talks",
+    "prevLabel": "Previous talks",
+    "nextLabel": "Next talks",
+    "soon": {
+      "title": "Coming soon",
+      "description": "We are preparing the next talks. Join the community to hear about them before anyone else.",
+      "cta": "Join the Discord"
+    },
+    "items": {
+      "agentes-ia-opbnb": {
+        "title": "AI Agents on opBNB for Fintechs",
+        "event": "X Space · BNB Chain × Alquimia",
+        "date": "May 2026",
+        "speakers": "Brian Sasbon · Emmanuel Martínez",
+        "description": "How to build autonomous agents that execute on-chain: real use cases, automation and a live demo."
+      }
+    }
+  },
+  "Footer": {
+    "tagline": "Alquimia — a community of modern arts",
+    "year": "· MMXXVI ·",
+    "craft": "Forged with ink and patience",
+    "brand": "Brand"
+  },
+  "Brand": {
+    "eyebrow": "Identity",
+    "title": "Brand",
+    "subtitle": "The visual elements of Alquimia. Download the logo, copy the colors and browse the typography.",
+    "sections": {
+      "logo": "Logo",
+      "colors": "Colors",
+      "typography": "Typography"
+    },
+    "logoVariants": {
+      "icon": {
+        "name": "Symbol",
+        "desc": "Just the sigil, for icons and avatars."
+      },
+      "horizontal": {
+        "name": "Horizontal",
+        "desc": "Sigil and name in line — the primary mark."
+      },
+      "stacked": {
+        "name": "Stacked",
+        "desc": "Square composition for social profiles."
+      },
+      "wordmark": {
+        "name": "Wordmark",
+        "desc": "Just the name, in its original engraving."
+      }
+    },
+    "actions": {
+      "downloadSvg": "SVG",
+      "downloadPng": "PNG",
+      "copySvg": "Copy SVG",
+      "copyMarkup": "Copy markup",
+      "copy": "Copy",
+      "copied": "Copied",
+      "size": "Size",
+      "color": "Color",
+      "viewBrand": "View brand",
+      "downloadPngLight": "Light",
+      "downloadPngDark": "Dark"
+    },
+    "colorGroups": {
+      "backgrounds": "Backgrounds",
+      "ink": "Ink",
+      "accents": "Accents"
+    },
+    "colorNotes": {
+      "bg": "Primary background",
+      "bg-2": "Raised surfaces",
+      "bg-3": "Cards and borders",
+      "ink": "Primary text",
+      "ink-2": "Secondary text",
+      "ink-3": "Supporting text",
+      "ink-4": "Borders and rules only",
+      "gold": "Primary accent",
+      "gold-2": "Luminous accent",
+      "copper": "Warm accent"
+    },
+    "typographyRoles": {
+      "display": "Display",
+      "body": "Body",
+      "ornament": "Ornament",
+      "mono": "Mono"
+    },
+    "pangram": "The quick brown fox jumps over the lazy dog.",
+    "aaLabel": "AA",
+    "aaaLabel": "AAA",
+    "decorativeLabel": "decorative",
+    "googleFontsLabel": "Google Fonts"
+  }
+}

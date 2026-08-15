@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { Fragment } from "react";
 import {
   ContextMenuContent,
@@ -9,6 +8,7 @@ import {
   ContextMenuLabel,
   ContextMenuSeparator,
 } from "@/components/ui/context-menu";
+import { Link, useRouter } from "@/i18n/navigation";
 import { copySvgMarkup, downloadPng, downloadSvg } from "@/lib/brand/download";
 import {
   type LogoVariantId,
@@ -16,7 +16,6 @@ import {
   PNG_SIZES,
   type PngColorKey,
 } from "@/lib/brand/tokens";
-import { SITE_CONTENT } from "@/lib/constants";
 
 interface Props {
   showViewBrand?: boolean;
@@ -28,7 +27,7 @@ export function LogoContextMenuContent({
   showViewBrand = true,
 }: Props) {
   const router = useRouter();
-  const a = SITE_CONTENT.brandPage.actions;
+  const t = useTranslations("Brand.actions");
   const colorKeys = Object.keys(PNG_COLORS) as PngColorKey[];
 
   return (
@@ -38,7 +37,7 @@ export function LogoContextMenuContent({
           downloadSvg(variant);
         }}
       >
-        {a.downloadSvg}
+        {t("downloadSvg")}
       </ContextMenuItem>
 
       <ContextMenuSeparator />
@@ -46,8 +45,8 @@ export function LogoContextMenuContent({
       {colorKeys.map((color) => (
         <Fragment key={color}>
           <ContextMenuLabel className="text-[10px] text-ink-3 uppercase tracking-[0.25em]">
-            {a.downloadPng} ·{" "}
-            {color === "light" ? a.downloadPngLight : a.downloadPngDark}
+            {t("downloadPng")} ·{" "}
+            {color === "light" ? t("downloadPngLight") : t("downloadPngDark")}
           </ContextMenuLabel>
           {PNG_SIZES.map((size) => (
             <ContextMenuItem
@@ -70,7 +69,7 @@ export function LogoContextMenuContent({
           copySvgMarkup(variant);
         }}
       >
-        {a.copySvg}
+        {t("copySvg")}
       </ContextMenuItem>
 
       {showViewBrand ? (
@@ -84,7 +83,7 @@ export function LogoContextMenuContent({
                 router.push("/brand");
               }}
             >
-              {a.viewBrand}
+              {t("viewBrand")}
             </Link>
           </ContextMenuItem>
         </>

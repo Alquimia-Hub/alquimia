@@ -22,7 +22,16 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+You can start editing the page by modifying `app/[locale]/page.tsx`. The page auto-updates as you edit the file.
+
+## Internationalization
+
+The site ships in Spanish and English via [next-intl](https://next-intl.dev).
+
+- **Copy** lives in `messages/es.json` and `messages/en.json` — never hardcode user-facing text in a component.
+- **Routing** is configured in `i18n/routing.ts`. Spanish is the default and keeps the bare URLs (`/`, `/brand`); English is prefixed (`/en`, `/en/brand`). First-time visitors are routed by their `accept-language` header, and the `NEXT_LOCALE` cookie remembers a manual choice.
+- **Internal links** must use `Link` / `useRouter` from `@/i18n/navigation` so the locale prefix is preserved.
+- **Talks and repos** keep only their stable ids in `lib/talks.ts` and `lib/github.ts`; their titles and descriptions are localized under `Talks.items.<id>` and `Repos.descriptions.<name>`.
 
 ## Learn More
 

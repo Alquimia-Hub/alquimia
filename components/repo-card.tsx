@@ -1,8 +1,10 @@
-import { SITE_CONTENT } from "@/lib/constants";
-import type { Repo } from "@/lib/github";
+import { useTranslations } from "next-intl";
+import type { DisplayRepo } from "@/lib/github";
 import { GithubIcon, RepoSigil } from "./icons";
 
 function StarCount({ stars }: { stars: number }) {
+  const t = useTranslations("Repos");
+
   if (stars === 0) {
     return null;
   }
@@ -13,12 +15,19 @@ function StarCount({ stars }: { stars: number }) {
         ✦
       </span>
       <span>{stars}</span>
-      <span className="sr-only">{SITE_CONTENT.repos.starsLabel}</span>
+      <span className="sr-only">{t("starsLabel")}</span>
     </span>
   );
 }
 
-export function RepoCard({ repo, index }: { repo: Repo; index: number }) {
+export function RepoCard({
+  repo,
+  index,
+}: {
+  repo: DisplayRepo;
+  index: number;
+}) {
+  const t = useTranslations("Repos");
   const meta = [repo.language, ...repo.topics].filter(Boolean).slice(0, 3);
 
   return (
@@ -37,7 +46,7 @@ export function RepoCard({ repo, index }: { repo: Repo; index: number }) {
         <div className="flex items-center gap-3">
           {repo.homepage && (
             <span className="font-[family-name:var(--font-im-fell)] text-[9px] text-ink-3 uppercase tracking-[0.24em]">
-              {SITE_CONTENT.repos.liveLabel}
+              {t("liveLabel")}
             </span>
           )}
           <StarCount stars={repo.stars} />
@@ -72,7 +81,7 @@ export function RepoCard({ repo, index }: { repo: Repo; index: number }) {
       <div className="mt-auto flex items-center justify-between border-rule-2 border-t pt-5 max-md:pt-4">
         <span className="flex items-center gap-2.5 font-[family-name:var(--font-im-fell)] text-[10px] text-ink-3 uppercase tracking-[0.3em] transition-colors duration-300 group-hover:text-gold">
           <GithubIcon className="h-3.5 w-3.5" />
-          {SITE_CONTENT.repos.cardCta}
+          {t("cardCta")}
         </span>
         <span
           aria-hidden="true"

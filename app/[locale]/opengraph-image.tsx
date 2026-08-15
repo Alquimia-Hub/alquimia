@@ -1,9 +1,9 @@
 import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
+import { loadMessages } from "@/i18n/messages";
+import { type Locale, routing } from "@/i18n/routing";
 
-export const alt =
-  "Alquimia — Comunidad abierta sobre IA, automatización y productividad";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -13,7 +13,27 @@ const INK_3 = "#9d8b6a";
 const GOLD = "#d99a3d";
 const RULE = "rgba(217, 154, 61, 0.25)";
 
-export default async function Image() {
+interface ImageProps {
+  params: Promise<{ locale: Locale }>;
+}
+
+// Metadata routes sit outside the `[locale]` layout, so they need their own
+// copy of the locale params.
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
+export async function generateImageMetadata({ params }: ImageProps) {
+  const { locale } = (await params) ?? {};
+  const { Metadata: copy } = await loadMessages(locale);
+
+  return [{ id: "og", alt: copy.ogAlt, size, contentType }];
+}
+
+export default async function Image({ params }: ImageProps) {
+  const { locale } = (await params) ?? {};
+  const { Metadata: copy } = await loadMessages(locale);
+
   const [cormorantRegular, cormorantItalic, imFell, alchemistPng] =
     await Promise.all([
       readFile(
@@ -174,7 +194,7 @@ export default async function Image() {
             display: "flex",
           }}
         >
-          Comunidad abierta sobre IA, automatización y productividad
+          {copy.ogTagline}
         </div>
       </div>
     </div>,

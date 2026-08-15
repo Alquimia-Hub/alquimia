@@ -1,14 +1,39 @@
+import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { BackgroundEffects } from "@/components/background-effects";
 import { ColorSwatches } from "@/components/brand/color-swatches";
 import { LogoCard } from "@/components/brand/logo-card";
 import { TypographySpecimens } from "@/components/brand/typography-specimens";
 import { LandingFooter } from "@/components/landing-footer";
 import { LandingHeader } from "@/components/landing-header";
+import type { Locale } from "@/i18n/routing";
+import { localeAlternates } from "@/lib/alternates";
 import { LOGO_VARIANTS } from "@/lib/brand/tokens";
-import { SITE_CONTENT } from "@/lib/constants";
 
-export default function BrandPage() {
-  const copy = SITE_CONTENT.brandPage;
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Metadata" });
+
+  return {
+    title: t("brandTitle"),
+    description: t("brandDescription"),
+    alternates: localeAlternates("/brand", locale),
+  };
+}
+
+export default async function BrandPage({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  const t = await getTranslations("Brand");
 
   return (
     <>
@@ -22,21 +47,21 @@ export default function BrandPage() {
             {/* Intro */}
             <header className="flex animate-entrance animate-fade-up flex-col items-center gap-3 text-center">
               <span className="font-[family-name:var(--font-im-fell)] text-[11px] text-ink-3 uppercase tracking-[0.4em]">
-                {copy.eyebrow}
+                {t("eyebrow")}
               </span>
               <h1
                 className="text-[clamp(44px,7vw,88px)] text-ink"
                 style={{ fontFamily: "var(--font-cormorant)" }}
               >
-                {copy.title}
+                {t("title")}
               </h1>
               <p className="max-w-xl font-[family-name:var(--font-eb-garamond)] text-[16px] text-ink-3 italic leading-relaxed">
-                {copy.subtitle}
+                {t("subtitle")}
               </p>
             </header>
 
             {/* Logo */}
-            <Section title={copy.sections.logo}>
+            <Section title={t("sections.logo")}>
               <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
                 {LOGO_VARIANTS.map((v) => (
                   <LogoCard key={v.id} variant={v.id} />
@@ -45,12 +70,12 @@ export default function BrandPage() {
             </Section>
 
             {/* Colors */}
-            <Section title={copy.sections.colors}>
+            <Section title={t("sections.colors")}>
               <ColorSwatches />
             </Section>
 
             {/* Typography */}
-            <Section title={copy.sections.typography}>
+            <Section title={t("sections.typography")}>
               <TypographySpecimens />
             </Section>
           </div>

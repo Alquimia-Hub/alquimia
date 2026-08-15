@@ -44,7 +44,10 @@
       }
     },
     {
-      "includes": ["app/twitter-image.tsx", "app/opengraph-image.tsx"],
+      "includes": [
+        "app/\\[locale\\]/twitter-image.tsx",
+        "app/\\[locale\\]/opengraph-image.tsx"
+      ],
       "linter": {
         "rules": {
           "performance": {

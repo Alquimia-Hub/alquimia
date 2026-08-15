@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { ContextMenu, ContextMenuTrigger } from "@/components/ui/context-menu";
 import { downloadPng, downloadSvg } from "@/lib/brand/download";
@@ -10,7 +11,6 @@ import {
   PNG_SIZES,
   type PngSize,
 } from "@/lib/brand/tokens";
-import { SITE_CONTENT } from "@/lib/constants";
 import { LogoContextMenuContent } from "./logo-context-menu";
 
 interface Props {
@@ -24,8 +24,8 @@ function aspectClassWide(isWide: boolean) {
 }
 
 export function LogoCard({ variant }: Props) {
-  const copy = SITE_CONTENT.brandPage;
-  const v = copy.logoVariants[variant];
+  const t = useTranslations("Brand");
+  const name = t(`logoVariants.${variant}.name`);
   const meta = LOGO_VARIANTS.find((x) => x.id === variant);
   const [pngSize, setPngSize] = useState<PngSize>(DEFAULT_PNG_SIZE);
 
@@ -52,7 +52,7 @@ export function LogoCard({ variant }: Props) {
             ].join(" ")}
           >
             <Image
-              alt={v.name}
+              alt={name}
               className="max-h-full max-w-full text-ink"
               height={meta.height}
               src={meta.svgPath}
@@ -64,10 +64,10 @@ export function LogoCard({ variant }: Props) {
           {/* Label */}
           <div className="flex flex-col gap-1">
             <h3 className="font-[family-name:var(--font-im-fell)] text-[11px] text-ink uppercase tracking-[0.3em]">
-              {v.name}
+              {name}
             </h3>
             <p className="font-[family-name:var(--font-eb-garamond)] text-[13px] text-ink-3 italic">
-              {v.desc}
+              {t(`logoVariants.${variant}.desc`)}
             </p>
           </div>
 
@@ -80,7 +80,7 @@ export function LogoCard({ variant }: Props) {
               }}
               type="button"
             >
-              {copy.actions.downloadSvg}
+              {t("actions.downloadSvg")}
             </button>
 
             <button
@@ -90,7 +90,7 @@ export function LogoCard({ variant }: Props) {
               }}
               type="button"
             >
-              {copy.actions.downloadPng}
+              {t("actions.downloadPng")}
             </button>
 
             <div className="ml-1 flex items-center gap-1 font-[family-name:var(--font-jetbrains)] text-[10px] text-ink-3">

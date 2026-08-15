@@ -1,13 +1,48 @@
+import { getTranslations } from "next-intl/server";
 import { Button } from "@/components/ui/button";
-import { SITE_CONTENT, SOCIAL_LINKS } from "@/lib/constants";
-import { fetchOrgRepos } from "@/lib/github";
+import { SOCIAL_LINKS } from "@/lib/constants";
+import {
+  type DisplayRepo,
+  fetchOrgRepos,
+  isCuratedRepo,
+  type Repo,
+} from "@/lib/github";
 import { GithubIcon } from "./icons";
 import { ReposCarousel } from "./repos-carousel";
 import { ScrollReveal } from "./scroll-reveal";
 import { SectionHeading } from "./section-heading";
 
+type ReposTranslator = Awaited<ReturnType<typeof getTranslations<"Repos">>>;
+
+function splitTopics(value: string): string[] {
+  return value.split(",").map((topic) => topic.trim());
+}
+
+/**
+ * Overlays our own localized copy on top of the GitHub payload. For curated
+ * repos our copy wins, since their GitHub description is empty or too terse to
+ * make a friendly card; everything else falls back to what the API returns.
+ */
+function localizeRepo(repo: Repo, t: ReposTranslator): DisplayRepo {
+  if (!isCuratedRepo(repo.name)) {
+    return { ...repo, description: repo.description ?? t("emptyLabel") };
+  }
+
+  const topics =
+    repo.topics.length > 0
+      ? repo.topics
+      : splitTopics(t(`topics.${repo.name}`));
+
+  return { ...repo, description: t(`descriptions.${repo.name}`), topics };
+}
+
 export async function ReposSection() {
-  const repos = await fetchOrgRepos();
+  const [repos, t] = await Promise.all([
+    fetchOrgRepos(),
+    getTranslations("Repos"),
+  ]);
+
+  const localizedRepos = repos.map((repo) => localizeRepo(repo, t));
 
   return (
     <section
@@ -15,13 +50,13 @@ export async function ReposSection() {
       id="repos"
     >
       <SectionHeading
-        eyebrow={SITE_CONTENT.repos.eyebrow}
-        subtitle={SITE_CONTENT.repos.subtitle}
-        title={SITE_CONTENT.repos.title}
+        eyebrow={t("eyebrow")}
+        subtitle={t("subtitle")}
+        title={t("title")}
       />
 
       <ScrollReveal className="mt-14 max-md:mt-10">
-        <ReposCarousel repos={repos} />
+        <ReposCarousel repos={localizedRepos} />
       </ScrollReveal>
 
       <ScrollReveal className="mt-12 flex justify-center max-md:mt-10">
@@ -35,7 +70,7 @@ export async function ReposSection() {
             target="_blank"
           >
             <GithubIcon className="h-[17px] w-[17px]" />
-            <span>{SITE_CONTENT.repos.cta}</span>
+            <span>{t("cta")}</span>
             <span className="font-serif text-[18px] italic tracking-normal">
               ⟶
             </span>

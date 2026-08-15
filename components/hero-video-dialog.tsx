@@ -7,6 +7,7 @@
  */
 
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 import { useState } from "react";
 import {
@@ -15,7 +16,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { SITE_CONTENT } from "@/lib/constants";
 import { PlayGlyph } from "./icons";
 
 export function HeroVideoDialog({
@@ -31,6 +31,7 @@ export function HeroVideoDialog({
   title: string;
   children: ReactNode;
 }) {
+  const t = useTranslations("Talks");
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -64,7 +65,7 @@ export function HeroVideoDialog({
               </span>
             </span>
 
-            <span className="sr-only">{SITE_CONTENT.talks.playLabel}</span>
+            <span className="sr-only">{t("playLabel")}</span>
           </span>
 
           {children}
@@ -78,7 +79,7 @@ export function HeroVideoDialog({
         <DialogTitle className="sr-only">{title}</DialogTitle>
 
         <button
-          aria-label={SITE_CONTENT.talks.closeLabel}
+          aria-label={t("closeLabel")}
           className="absolute -top-11 right-0 flex h-9 w-9 items-center justify-center border border-rule bg-bg-2/80 text-ink-3 backdrop-blur-md transition-colors duration-200 hover:border-gold hover:text-gold"
           onClick={() => setIsOpen(false)}
           type="button"

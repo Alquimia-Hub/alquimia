@@ -1,5 +1,21 @@
 export type ContrastGrade = "AAA" | "AA" | "AA-Large" | "FAIL";
 
+/** Token names double as message keys under `Brand.colorNotes`. */
+export const COLOR_TOKEN_NAMES = [
+  "bg",
+  "bg-2",
+  "bg-3",
+  "ink",
+  "ink-2",
+  "ink-3",
+  "ink-4",
+  "gold",
+  "gold-2",
+  "copper",
+] as const;
+
+export type ColorTokenName = (typeof COLOR_TOKEN_NAMES)[number];
+
 export interface ColorToken {
   contrast: ContrastGrade;
   contrastRatio: number;
@@ -7,8 +23,7 @@ export interface ColorToken {
   decorative?: boolean;
   group: "backgrounds" | "ink" | "accents";
   hex: string;
-  name: string;
-  notes?: string;
+  name: ColorTokenName;
 }
 
 export const COLOR_TOKENS: ColorToken[] = [
@@ -19,7 +34,6 @@ export const COLOR_TOKENS: ColorToken[] = [
     group: "backgrounds",
     contrast: "AAA",
     contrastRatio: 14.39,
-    notes: "Fondo principal",
   },
   {
     name: "bg-2",
@@ -28,7 +42,6 @@ export const COLOR_TOKENS: ColorToken[] = [
     group: "backgrounds",
     contrast: "AAA",
     contrastRatio: 13.84,
-    notes: "Superficies elevadas",
   },
   {
     name: "bg-3",
@@ -37,7 +50,6 @@ export const COLOR_TOKENS: ColorToken[] = [
     group: "backgrounds",
     contrast: "AAA",
     contrastRatio: 12.76,
-    notes: "Tarjetas y bordes",
   },
   {
     name: "ink",
@@ -46,7 +58,6 @@ export const COLOR_TOKENS: ColorToken[] = [
     group: "ink",
     contrast: "AAA",
     contrastRatio: 14.39,
-    notes: "Texto principal",
   },
   {
     name: "ink-2",
@@ -55,7 +66,6 @@ export const COLOR_TOKENS: ColorToken[] = [
     group: "ink",
     contrast: "AAA",
     contrastRatio: 10.03,
-    notes: "Texto secundario",
   },
   {
     name: "ink-3",
@@ -64,7 +74,6 @@ export const COLOR_TOKENS: ColorToken[] = [
     group: "ink",
     contrast: "AA",
     contrastRatio: 6.03,
-    notes: "Texto de apoyo",
   },
   {
     name: "ink-4",
@@ -74,7 +83,6 @@ export const COLOR_TOKENS: ColorToken[] = [
     contrast: "FAIL",
     contrastRatio: 2.01,
     decorative: true,
-    notes: "Solo bordes y reglas",
   },
   {
     name: "gold",
@@ -83,7 +91,6 @@ export const COLOR_TOKENS: ColorToken[] = [
     group: "accents",
     contrast: "AAA",
     contrastRatio: 8.23,
-    notes: "Acento primario",
   },
   {
     name: "gold-2",
@@ -92,7 +99,6 @@ export const COLOR_TOKENS: ColorToken[] = [
     group: "accents",
     contrast: "AAA",
     contrastRatio: 11.22,
-    notes: "Acento luminoso",
   },
   {
     name: "copper",
@@ -101,7 +107,6 @@ export const COLOR_TOKENS: ColorToken[] = [
     group: "accents",
     contrast: "AA",
     contrastRatio: 4.89,
-    notes: "Acento cálido",
   },
 ];
 

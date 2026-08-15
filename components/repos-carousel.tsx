@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import {
   Carousel,
@@ -7,16 +8,17 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
-import type { Repo } from "@/lib/github";
+import type { DisplayRepo } from "@/lib/github";
 import { CarouselControls } from "./carousel-controls";
 import { RepoCard } from "./repo-card";
 
-export function ReposCarousel({ repos }: { repos: readonly Repo[] }) {
+export function ReposCarousel({ repos }: { repos: readonly DisplayRepo[] }) {
+  const t = useTranslations("Repos");
   const [api, setApi] = useState<CarouselApi>();
 
   return (
     <Carousel
-      aria-label="Repositorios de Alquimia"
+      aria-label={t("carouselLabel")}
       className="w-full"
       opts={{ align: "start", containScroll: "trimSnaps" }}
       setApi={setApi}
@@ -34,8 +36,8 @@ export function ReposCarousel({ repos }: { repos: readonly Repo[] }) {
 
       <CarouselControls
         api={api}
-        nextLabel="Siguientes repositorios"
-        prevLabel="Repositorios anteriores"
+        nextLabel={t("nextLabel")}
+        prevLabel={t("prevLabel")}
       />
     </Carousel>
   );
