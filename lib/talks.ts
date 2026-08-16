@@ -1,25 +1,14 @@
-export interface Talk {
-  date: string;
-  description: string;
-  event: string;
-  id: string;
-  speakers: string;
-  title: string;
-  youtubeId: string;
-}
+/**
+ * Talks we've given, newest first. Only the stable identifiers live here — the
+ * title, event, date, speakers and description are localized in
+ * `messages/*.json` under `Talks.items.<id>`.
+ */
+export const TALKS = [
+  { id: "agentes-ia-opbnb", youtubeId: "zt5cvUjv-DM" },
+] as const;
 
-export const TALKS: readonly Talk[] = [
-  {
-    id: "agentes-ia-opbnb",
-    youtubeId: "zt5cvUjv-DM",
-    title: "Agentes de IA sobre opBNB para Fintechs",
-    event: "X Space · BNB Chain × Alquimia",
-    date: "Mayo 2026",
-    speakers: "Brian Sasbon · Emmanuel Martínez",
-    description:
-      "Cómo construir agentes autónomos que ejecutan on-chain: casos de uso reales, automatización y una demo en vivo.",
-  },
-];
+export type Talk = (typeof TALKS)[number];
+export type TalkId = Talk["id"];
 
 const THUMBNAIL_BASE = "https://i.ytimg.com/vi";
 

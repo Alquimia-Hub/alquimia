@@ -1,5 +1,5 @@
+import { useTranslations } from "next-intl";
 import { FONT_TOKENS, type FontToken } from "@/lib/brand/tokens";
-import { SITE_CONTENT } from "@/lib/constants";
 
 export function TypographySpecimens() {
   return (
@@ -51,7 +51,7 @@ function PangramSample({
 }
 
 function Specimen({ font }: { font: FontToken }) {
-  const copy = SITE_CONTENT.brandPage;
+  const t = useTranslations("Brand");
   const fontFamily = `var(${font.cssVar})`;
 
   return (
@@ -59,7 +59,7 @@ function Specimen({ font }: { font: FontToken }) {
       <header className="flex items-baseline justify-between gap-3">
         <div className="flex flex-col gap-1">
           <span className="font-[family-name:var(--font-im-fell)] text-[10px] text-ink-3 uppercase tracking-[0.3em]">
-            {copy.typographyRoles[font.role]}
+            {t(`typographyRoles.${font.role}`)}
           </span>
           <h3 className="text-[22px] text-ink" style={{ fontFamily }}>
             {font.name}
@@ -71,7 +71,7 @@ function Specimen({ font }: { font: FontToken }) {
           rel="noreferrer"
           target="_blank"
         >
-          {copy.googleFontsLabel} ↗
+          {t("googleFontsLabel")} ↗
         </a>
       </header>
 
@@ -79,7 +79,7 @@ function Specimen({ font }: { font: FontToken }) {
         <PangramSample
           font={font}
           fontFamily={fontFamily}
-          text={copy.pangram}
+          text={t("pangram")}
         />
 
         <div className="flex flex-wrap gap-x-5 gap-y-1 font-[family-name:var(--font-jetbrains)] text-[10px] text-ink-3">

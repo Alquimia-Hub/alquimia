@@ -1,9 +1,9 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { copyText } from "@/lib/brand/download";
 import { COLOR_TOKENS, type ColorToken } from "@/lib/brand/tokens";
-import { SITE_CONTENT } from "@/lib/constants";
 
 const GROUP_ORDER: ColorToken["group"][] = ["backgrounds", "ink", "accents"];
 
@@ -36,7 +36,7 @@ function resolveBadge(
 }
 
 export function ColorSwatches() {
-  const copy = SITE_CONTENT.brandPage;
+  const t = useTranslations("Brand");
 
   return (
     <div className="flex flex-col gap-10">
@@ -45,7 +45,7 @@ export function ColorSwatches() {
         return (
           <section className="flex flex-col gap-4" key={group}>
             <h3 className="font-[family-name:var(--font-im-fell)] text-[11px] text-ink-2 uppercase tracking-[0.3em]">
-              {copy.colorGroups[group]}
+              {t(`colorGroups.${group}`)}
             </h3>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {items.map((t) => (
@@ -60,7 +60,7 @@ export function ColorSwatches() {
 }
 
 function Swatch({ token }: { token: ColorToken }) {
-  const copy = SITE_CONTENT.brandPage;
+  const t = useTranslations("Brand");
   const [copied, setCopied] = useState(false);
   const isBg = token.group === "backgrounds";
 
@@ -74,11 +74,11 @@ function Swatch({ token }: { token: ColorToken }) {
     }
   }
 
-  const badge = resolveBadge(token.contrast, copy.aaaLabel, copy.aaLabel);
+  const badge = resolveBadge(token.contrast, t("aaaLabel"), t("aaLabel"));
 
   return (
     <button
-      aria-label={`${copy.actions.copy} ${token.hex}`}
+      aria-label={`${t("actions.copy")} ${token.hex}`}
       className="group relative flex items-stretch gap-4 rounded-sm border border-rule bg-bg-2 p-3 text-left transition-colors hover:border-gold/40 focus:outline-none focus-visible:border-gold"
       onClick={handleCopy}
       type="button"
@@ -95,16 +95,14 @@ function Swatch({ token }: { token: ColorToken }) {
           <span className="font-[family-name:var(--font-im-fell)] text-[11px] text-ink uppercase tracking-[0.25em]">
             {token.name}
           </span>
-          <BadgeTag label={token.decorative ? copy.decorativeLabel : badge} />
+          <BadgeTag label={token.decorative ? t("decorativeLabel") : badge} />
         </div>
         <span className="font-[family-name:var(--font-jetbrains)] text-[12px] text-ink-2">
-          {copied ? copy.actions.copied : token.hex}
+          {copied ? t("actions.copied") : token.hex}
         </span>
-        {token.notes ? (
-          <span className="font-[family-name:var(--font-eb-garamond)] text-[12px] text-ink-3 italic">
-            {token.notes}
-          </span>
-        ) : null}
+        <span className="font-[family-name:var(--font-eb-garamond)] text-[12px] text-ink-3 italic">
+          {t(`colorNotes.${token.name}`)}
+        </span>
       </div>
     </button>
   );

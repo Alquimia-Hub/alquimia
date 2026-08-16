@@ -1,13 +1,19 @@
-import { GITHUB_ORG, SITE_CONTENT } from "./constants";
+import { GITHUB_ORG } from "./constants";
 
 export interface Repo {
-  description: string;
+  /** GitHub's own description — may be missing or too terse to show as-is. */
+  description: string | null;
   homepage: string | null;
   language: string | null;
   name: string;
   stars: number;
   topics: readonly string[];
   url: string;
+}
+
+/** A repo whose card copy has already been resolved for the active locale. */
+export interface DisplayRepo extends Omit<Repo, "description"> {
+  description: string;
 }
 
 interface GithubApiRepo {
@@ -24,64 +30,40 @@ interface GithubApiRepo {
 }
 
 /**
- * Curated copy for the repos whose GitHub description is empty or too terse to
- * make a friendly card. Order here is the order shown in the carousel.
+ * Repos we write our own copy for, because their GitHub description is empty
+ * or too terse to make a friendly card. The localized description and topics
+ * live in `messages/*.json` under `Repos.descriptions` / `Repos.topics`; this
+ * list only fixes the order shown in the carousel.
  */
-const CURATED: readonly {
-  name: string;
-  description: string;
-  topics: readonly string[];
-}[] = [
-  {
-    name: "alquimia",
-    description:
-      "El sitio de la comunidad. La misma página que estás mirando, abierta de punta a punta.",
-    topics: ["nextjs", "sitio"],
-  },
-  {
-    name: "alquimia-cli",
-    description:
-      "La comunidad en tu terminal: un comando y tenés a mano las redes, los links y las novedades.",
-    topics: ["cli", "node"],
-  },
-  {
-    name: "ai-payments",
-    description:
-      "Demos de agentes que pagan solos: pagos A2A, A2B y A2C sobre opBNB con el AI SDK.",
-    topics: ["agentes", "cripto", "ai sdk"],
-  },
-  {
-    name: "slides",
-    description:
-      "El deck con el que damos charlas: slides a pantalla completa hechas en la web, listas para reusar.",
-    topics: ["slides", "charlas"],
-  },
-  {
-    name: "videos",
-    description:
-      "El video promo de Alquimia, hecho 100% con código usando Remotion y la paleta de la marca.",
-    topics: ["remotion", "video"],
-  },
-  {
-    name: "discussions",
-    description:
-      "El foro abierto de la comunidad: preguntas, ideas y experimentos en curso.",
-    topics: ["comunidad"],
-  },
-];
+const CURATED_NAMES = [
+  "alquimia",
+  "alquimia-cli",
+  "ai-payments",
+  "slides",
+  "videos",
+  "discussions",
+] as const;
 
-const CURATED_ORDER = new Map(CURATED.map((repo, index) => [repo.name, index]));
+export type CuratedRepoName = (typeof CURATED_NAMES)[number];
+
+export function isCuratedRepo(name: string): name is CuratedRepoName {
+  return (CURATED_NAMES as readonly string[]).includes(name);
+}
+
+const CURATED_ORDER = new Map<string, number>(
+  CURATED_NAMES.map((name, index) => [name, index])
+);
 const HIDDEN_REPOS = new Set([".github"]);
 const REVALIDATE_SECONDS = 3600;
 
-const fallbackRepos: readonly Repo[] = CURATED.map((repo) => ({
-  name: repo.name,
-  description: repo.description,
-  url: `https://github.com/${GITHUB_ORG}/${repo.name}`,
+const fallbackRepos: readonly Repo[] = CURATED_NAMES.map((name) => ({
+  name,
+  description: null,
+  url: `https://github.com/${GITHUB_ORG}/${name}`,
   homepage: null,
   language: null,
   stars: 0,
-  topics: repo.topics,
+  topics: [],
 }));
 
 function compareRepos(a: Repo, b: Repo): number {
@@ -94,21 +76,14 @@ function compareRepos(a: Repo, b: Repo): number {
 }
 
 function toRepo(apiRepo: GithubApiRepo): Repo {
-  const curated = CURATED.find((entry) => entry.name === apiRepo.name);
-  const apiTopics = apiRepo.topics ?? [];
-
   return {
     name: apiRepo.name,
-    description:
-      curated?.description ??
-      apiRepo.description ??
-      SITE_CONTENT.repos.emptyLabel,
+    description: apiRepo.description,
     url: apiRepo.html_url,
     homepage: apiRepo.homepage?.trim() ? apiRepo.homepage : null,
     language: apiRepo.language,
     stars: apiRepo.stargazers_count,
-    topics:
-      apiTopics.length > 0 ? apiTopics.slice(0, 3) : (curated?.topics ?? []),
+    topics: (apiRepo.topics ?? []).slice(0, 3),
   };
 }
 

@@ -1,8 +1,9 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { SITE_CONTENT } from "@/lib/constants";
+import { COMMUNITY_LINKS } from "@/lib/constants";
 import { DiscordIcon, WhatsAppIcon } from "./icons";
 
 const PARTICLE_COUNT = 18;
@@ -66,6 +67,7 @@ function useParticleBurst() {
 }
 
 export function CommunityCta() {
+  const t = useTranslations("Cta");
   const discord = useParticleBurst();
   const whatsapp = useParticleBurst();
 
@@ -83,12 +85,12 @@ export function CommunityCta() {
             onClick={discord.handleClick}
           >
             <a
-              href={SITE_CONTENT.cta.discordUrl}
+              href={COMMUNITY_LINKS.discord}
               rel="noopener noreferrer"
               target="_blank"
             >
               <DiscordIcon className="h-[18px] w-[18px]" />
-              <span>{SITE_CONTENT.cta.button}</span>
+              <span>{t("button")}</span>
               <span className="font-serif text-[20px] italic tracking-normal">
                 ⟶
               </span>
@@ -104,12 +106,12 @@ export function CommunityCta() {
             onClick={whatsapp.handleClick}
           >
             <a
-              href={SITE_CONTENT.cta.whatsappUrl}
+              href={COMMUNITY_LINKS.whatsapp}
               rel="noopener noreferrer"
               target="_blank"
             >
               <WhatsAppIcon className="h-[18px] w-[18px]" />
-              <span>{SITE_CONTENT.cta.whatsappButton}</span>
+              <span>{t("whatsappButton")}</span>
             </a>
           </Button>
         </div>
@@ -117,7 +119,7 @@ export function CommunityCta() {
 
       <p className="mt-4.5 font-[family-name:var(--font-eb-garamond)] text-[13px] text-ink-3 italic">
         <span className="mx-2.5 inline-block h-[3px] w-[3px] rotate-45 bg-gold align-middle" />
-        {SITE_CONTENT.cta.note}
+        {t("note")}
         <span className="mx-2.5 inline-block h-[3px] w-[3px] rotate-45 bg-gold align-middle" />
       </p>
     </div>

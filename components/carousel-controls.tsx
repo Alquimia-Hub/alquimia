@@ -53,12 +53,12 @@ function padIndex(value: number): string {
 
 export function CarouselControls({
   api,
-  prevLabel = "Anterior",
-  nextLabel = "Siguiente",
+  prevLabel,
+  nextLabel,
 }: {
   api: CarouselApi;
-  prevLabel?: string;
-  nextLabel?: string;
+  prevLabel: string;
+  nextLabel: string;
 }) {
   const { selectedIndex, snapCount, canScrollPrev, canScrollNext } =
     useCarouselState(api);
