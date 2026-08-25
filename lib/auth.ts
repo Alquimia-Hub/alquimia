@@ -17,6 +17,8 @@ import {
   isProductionDeployment,
 } from "@/lib/site-url";
 
+const CLIENT_IP_HEADERS = ["x-vercel-forwarded-for", "x-forwarded-for"];
+
 const ENGLISH_LOCALE_COOKIE = /(?:^|;\s*)NEXT_LOCALE=en(?:;|$)/;
 const ENGLISH_REFERER_PATH = /^https?:\/\/[^/]+\/en(?:\/|$|\?)/;
 const ENGLISH_ACCEPT_LANGUAGE = /(?:^|,)\s*en\b/i;
@@ -134,6 +136,12 @@ export const auth = betterAuth({
 
   database: drizzleAdapter(db, { provider: "pg", schema }),
 
+  advanced: {
+    ipAddress: {
+      ipAddressHeaders: CLIENT_IP_HEADERS,
+    },
+  },
+
   socialProviders: realSocialProviders(),
 
   account: {
@@ -202,7 +210,10 @@ export const auth = betterAuth({
   },
 
   plugins: [
-    admin(),
+    admin({
+      defaultRole: "user",
+      adminRoles: ["admin"],
+    }),
     ...infraPlugins(),
     ...oauthProxyPlugins(),
     ...devOAuthPlugins(),
