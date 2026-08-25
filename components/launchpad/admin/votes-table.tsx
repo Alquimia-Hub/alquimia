@@ -18,12 +18,10 @@ import { cn } from "@/lib/utils";
 interface VotesTableProps {
   active: number;
   dayAdded: number;
-  dayRemoved: number;
   page: number;
   pageCount: number;
   votes: AdminVote[];
   weekAdded: number;
-  weekRemoved: number;
 }
 
 const pageHref = (page: number) =>
@@ -33,19 +31,17 @@ export function VotesTable({
   votes,
   active,
   dayAdded,
-  dayRemoved,
   weekAdded,
-  weekRemoved,
   page,
   pageCount,
 }: VotesTableProps) {
   const t = useTranslations("Admin");
   const format = useFormatter();
 
-  const stats: { label: string; removed?: number; value: number }[] = [
+  const stats = [
     { label: t("votesActive"), value: active },
-    { label: t("votesLastDay"), removed: dayRemoved, value: dayAdded },
-    { label: t("votesLastWeek"), removed: weekRemoved, value: weekAdded },
+    { label: t("votesLastDay"), value: dayAdded },
+    { label: t("votesLastWeek"), value: weekAdded },
   ];
 
   return (
@@ -59,13 +55,8 @@ export function VotesTable({
             <dt className="m-0 font-[family-name:var(--font-jetbrains)] text-[10px] text-ink-3 uppercase tracking-[0.14em]">
               {stat.label}
             </dt>
-            <dd className="m-0 flex items-baseline gap-3 font-[family-name:var(--font-cormorant)] font-light text-3xl text-ink tabular-nums leading-none">
-              {stat.removed === undefined ? stat.value : `+${stat.value}`}
-              {stat.removed !== undefined && stat.removed > 0 && (
-                <span className="font-[family-name:var(--font-jetbrains)] text-ink-3 text-sm">
-                  −{stat.removed}
-                </span>
-              )}
+            <dd className="m-0 font-[family-name:var(--font-cormorant)] font-light text-3xl text-ink tabular-nums leading-none">
+              {stat.value}
             </dd>
           </div>
         ))}

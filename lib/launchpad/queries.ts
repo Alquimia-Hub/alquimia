@@ -404,9 +404,7 @@ export async function countVotesByPeriod() {
     db
       .select({
         dayAdded: eventsSince(dayAgo, "added"),
-        dayRemoved: eventsSince(dayAgo, "removed"),
         weekAdded: eventsSince(weekAgo, "added"),
-        weekRemoved: eventsSince(weekAgo, "removed"),
       })
       .from(voteEvent),
   ]);
@@ -414,9 +412,7 @@ export async function countVotesByPeriod() {
   return {
     active: active?.total ?? 0,
     dayAdded: events?.dayAdded ?? 0,
-    dayRemoved: events?.dayRemoved ?? 0,
     weekAdded: events?.weekAdded ?? 0,
-    weekRemoved: events?.weekRemoved ?? 0,
   };
 }
 

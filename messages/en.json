@@ -520,7 +520,8 @@
     "votesActive": "Active support",
     "columnAction": "Action",
     "actionAdded": "Supported",
-    "actionRemoved": "Withdrew support"
+    "actionRemoved": "Withdrew support",
+    "sections": "Panel sections"
   },
   "Error": {
     "title": "Something went wrong",

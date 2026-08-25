@@ -7,9 +7,7 @@ import { VotesTable } from "@/components/launchpad/admin/votes-table";
 import { BackLink } from "@/components/launchpad/back-link";
 import { SiteHeader } from "@/components/site-header";
 import { Toaster } from "@/components/ui/sonner";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { resolveLocale } from "@/i18n/locale";
-import type { ProjectStatus } from "@/lib/db/schema";
 import {
   countProjectsByStatus,
   countVotesByPeriod,
@@ -19,6 +17,7 @@ import {
 } from "@/lib/launchpad/queries";
 import { getViewer } from "@/lib/launchpad/session";
 import { adminFiltersSchema } from "@/lib/launchpad/validation";
+import { cn } from "@/lib/utils";
 
 export default async function AdminLaunchpadPage({
   params,
@@ -56,12 +55,6 @@ export default async function AdminLaunchpadPage({
     countVotesByPeriod(),
   ]);
 
-  const tabs: { count: number; label: string; value: ProjectStatus }[] = [
-    { value: "pending", label: t("tabPending"), count: counts.pending },
-    { value: "approved", label: t("tabApproved"), count: counts.approved },
-    { value: "rejected", label: t("tabRejected"), count: counts.rejected },
-  ];
-
   const activeTab = (() => {
     if (filters.votes) {
       return "votes";
@@ -69,6 +62,40 @@ export default async function AdminLaunchpadPage({
 
     return filters.reports ? "reports" : filters.tab;
   })();
+
+  const tabs: { count: number; href: string; label: string; value: string }[] =
+    [
+      {
+        value: "pending",
+        href: "?tab=pending",
+        label: t("tabPending"),
+        count: counts.pending,
+      },
+      {
+        value: "approved",
+        href: "?tab=approved",
+        label: t("tabApproved"),
+        count: counts.approved,
+      },
+      {
+        value: "rejected",
+        href: "?tab=rejected",
+        label: t("tabRejected"),
+        count: counts.rejected,
+      },
+      {
+        value: "reports",
+        href: "?reports=1",
+        label: t("tabReports"),
+        count: reports.length,
+      },
+      {
+        value: "votes",
+        href: "?votes=1",
+        label: t("tabVotes"),
+        count: voteCounts.active,
+      },
+    ];
 
   return (
     <>
@@ -85,77 +112,51 @@ export default async function AdminLaunchpadPage({
             <p className="mt-3 mb-0 text-ink-3">{t("subtitle")}</p>
           </header>
 
-          <Tabs value={activeTab}>
-            <TabsList className="w-full max-w-full justify-start overflow-x-auto bg-bg-2">
-              {tabs.map((tab) => (
-                <TabsTrigger
-                  asChild
-                  className="shrink-0"
-                  data-testid={`tab-${tab.value}`}
-                  key={tab.value}
-                  value={tab.value}
-                >
-                  <a href={`?tab=${tab.value}`}>
-                    {tab.label} ({tab.count})
-                  </a>
-                </TabsTrigger>
-              ))}
-              <TabsTrigger
-                asChild
-                className="shrink-0"
-                data-testid="tab-reports"
-                value="reports"
+          <nav
+            aria-label={t("sections")}
+            className="flex gap-1 overflow-x-auto border border-rule-2 bg-bg-2 p-1"
+          >
+            {tabs.map((tab) => (
+              <a
+                aria-current={tab.value === activeTab ? "page" : undefined}
+                className={cn(
+                  "shrink-0 whitespace-nowrap px-3 py-1.5 text-sm transition-colors duration-200",
+                  tab.value === activeTab
+                    ? "bg-gold/15 text-gold-2"
+                    : "text-ink-2 hover:bg-surface-hover hover:text-ink"
+                )}
+                data-testid={`tab-${tab.value}`}
+                href={tab.href}
+                key={tab.value}
               >
-                <a href="?reports=1">
-                  {t("tabReports")} ({reports.length})
-                </a>
-              </TabsTrigger>
-              <TabsTrigger
-                asChild
-                className="shrink-0"
-                data-testid="tab-votes"
-                value="votes"
-              >
-                <a href="?votes=1">
-                  {t("tabVotes")} ({voteCounts.active})
-                </a>
-              </TabsTrigger>
-            </TabsList>
+                {tab.label} ({tab.count})
+              </a>
+            ))}
+          </nav>
 
-            {activeTab === "votes" && (
-              <TabsContent className="mt-6" value="votes">
-                <VotesTable
-                  active={voteCounts.active}
-                  dayAdded={voteCounts.dayAdded}
-                  dayRemoved={voteCounts.dayRemoved}
-                  page={filters.page}
-                  pageCount={votes.pageCount}
-                  votes={votes.items}
-                  weekAdded={voteCounts.weekAdded}
-                  weekRemoved={voteCounts.weekRemoved}
-                />
-              </TabsContent>
-            )}
+          {activeTab === "votes" && (
+            <VotesTable
+              active={voteCounts.active}
+              dayAdded={voteCounts.dayAdded}
+              page={filters.page}
+              pageCount={votes.pageCount}
+              votes={votes.items}
+              weekAdded={voteCounts.weekAdded}
+            />
+          )}
 
-            {activeTab === "reports" && (
-              <TabsContent className="mt-6" value="reports">
-                <ReportsList reports={reports} />
-              </TabsContent>
-            )}
+          {activeTab === "reports" && <ReportsList reports={reports} />}
 
-            {activeTab === filters.tab && (
-              <TabsContent className="mt-6" value={filters.tab}>
-                <ProjectsTable
-                  page={filters.page}
-                  pageCount={projects.pageCount}
-                  projects={projects.items}
-                  query={filters.q ?? ""}
-                  tab={filters.tab}
-                  total={projects.total}
-                />
-              </TabsContent>
-            )}
-          </Tabs>
+          {activeTab === filters.tab && (
+            <ProjectsTable
+              page={filters.page}
+              pageCount={projects.pageCount}
+              projects={projects.items}
+              query={filters.q ?? ""}
+              tab={filters.tab}
+              total={projects.total}
+            />
+          )}
         </main>
       </div>
 

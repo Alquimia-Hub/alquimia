@@ -520,7 +520,8 @@
     "votesActive": "Apoyos activos",
     "columnAction": "Acción",
     "actionAdded": "Apoyó",
-    "actionRemoved": "Quitó el apoyo"
+    "actionRemoved": "Quitó el apoyo",
+    "sections": "Secciones del panel"
   },
   "Error": {
     "title": "Algo salió mal",
