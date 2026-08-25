@@ -1,3 +1,4 @@
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import {
@@ -40,6 +41,8 @@ const jetbrains = JetBrains_Mono({
   weight: ["400", "500"],
   variable: "--font-jetbrains",
 });
+
+const GA_MEASUREMENT_ID = "G-XJPFB512TT";
 
 const OG_LOCALES = {
   es: "es_ES",
@@ -131,7 +134,12 @@ export default async function LocaleLayout({
     >
       <body className="bg-bg font-sans antialiased">
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
-        {process.env.NODE_ENV === "production" && <Analytics />}
+        {process.env.NODE_ENV === "production" && (
+          <>
+            <Analytics />
+            <GoogleAnalytics gaId={GA_MEASUREMENT_ID} />
+          </>
+        )}
       </body>
     </html>
   );
