@@ -86,10 +86,11 @@ export default async function AdminLaunchpadPage({
           </header>
 
           <Tabs value={activeTab}>
-            <TabsList className="bg-bg-2">
+            <TabsList className="w-full max-w-full justify-start overflow-x-auto bg-bg-2">
               {tabs.map((tab) => (
                 <TabsTrigger
                   asChild
+                  className="shrink-0"
                   data-testid={`tab-${tab.value}`}
                   key={tab.value}
                   value={tab.value}
@@ -99,12 +100,22 @@ export default async function AdminLaunchpadPage({
                   </a>
                 </TabsTrigger>
               ))}
-              <TabsTrigger asChild data-testid="tab-reports" value="reports">
+              <TabsTrigger
+                asChild
+                className="shrink-0"
+                data-testid="tab-reports"
+                value="reports"
+              >
                 <a href="?reports=1">
                   {t("tabReports")} ({reports.length})
                 </a>
               </TabsTrigger>
-              <TabsTrigger asChild data-testid="tab-votes" value="votes">
+              <TabsTrigger
+                asChild
+                className="shrink-0"
+                data-testid="tab-votes"
+                value="votes"
+              >
                 <a href="?votes=1">
                   {t("tabVotes")} ({voteCounts.active})
                 </a>

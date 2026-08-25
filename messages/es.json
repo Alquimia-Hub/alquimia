@@ -27,7 +27,8 @@
     "resources": "Recursos",
     "back": "Volver",
     "language": "Idioma",
-    "alquimista": "Alquimista"
+    "alquimista": "Alquimista",
+    "menu": "Menú"
   },
   "LocaleSwitcher": {
     "label": "Cambiar idioma",

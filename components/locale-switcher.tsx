@@ -12,7 +12,7 @@ import { Link, usePathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 
-export function LocaleSwitcher() {
+export function LocaleSwitcher({ className }: { className?: string }) {
   const t = useTranslations("LocaleSwitcher");
   const tNav = useTranslations("Nav");
   const active = useLocale();
@@ -22,7 +22,10 @@ export function LocaleSwitcher() {
     <DropdownMenu>
       <DropdownMenuTrigger
         aria-label={tNav("language")}
-        className="nav-link flex items-center gap-1 px-2 py-2 text-ink-3 outline-none transition-colors duration-200 hover:text-gold"
+        className={cn(
+          "nav-link flex items-center gap-1 px-2 py-2 text-ink-3 outline-none transition-colors duration-200 hover:text-gold",
+          className
+        )}
         data-testid="locale-switcher"
       >
         {t(active)}
