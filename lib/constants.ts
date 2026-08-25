@@ -2,6 +2,8 @@ export const SITE_URL = "https://alquimia.community";
 
 export const GITHUB_ORG = "Alquimia-Hub";
 
+export const CONTACT_EMAIL = "contact@alquimia.community";
+
 export const SOCIAL_LINKS = {
   github: `https://github.com/${GITHUB_ORG}`,
   x: "https://x.com/alquimia_hub",
