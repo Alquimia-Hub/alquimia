@@ -8,6 +8,10 @@ const serverEnvSchema = z.object({
   BETTER_AUTH_SECRET: z.string().min(1),
   BETTER_AUTH_URL: z.url(),
 
+  BETTER_AUTH_API_KEY: z.string().optional(),
+  BETTER_AUTH_API_URL: z.url().optional(),
+  BETTER_AUTH_KV_URL: z.url().optional(),
+
   GOOGLE_CLIENT_ID: z.string().optional(),
   GOOGLE_CLIENT_SECRET: z.string().optional(),
 
@@ -32,6 +36,9 @@ const parsed = serverEnvSchema.safeParse({
   BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET,
 
   BETTER_AUTH_URL: process.env.BETTER_AUTH_URL || deploymentUrl(),
+  BETTER_AUTH_API_KEY: process.env.BETTER_AUTH_API_KEY || undefined,
+  BETTER_AUTH_API_URL: process.env.BETTER_AUTH_API_URL || undefined,
+  BETTER_AUTH_KV_URL: process.env.BETTER_AUTH_KV_URL || undefined,
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || undefined,
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || undefined,
   DISCORD_CLIENT_ID: process.env.DISCORD_CLIENT_ID || undefined,

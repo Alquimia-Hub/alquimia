@@ -106,21 +106,26 @@ export function sendAdminNewSubmissionEmail(args: {
   projectName: string;
   ownerName: string;
   ownerEmail: string;
+  isResubmission?: boolean;
 }) {
   if (!env.RESEND_ADMIN_EMAIL) {
     return Promise.resolve();
   }
 
   const locale: EmailLocale = "es";
+  const copy = emailCopy(locale).adminSubmission;
 
   return send({
     to: env.RESEND_ADMIN_EMAIL,
-    subject: emailCopy(locale).adminSubmission.subject(args.projectName),
+    subject: args.isResubmission
+      ? copy.resubmissionSubject(args.projectName)
+      : copy.subject(args.projectName),
     react: AdminNewSubmissionEmail({
       locale,
       projectName: args.projectName,
       ownerName: args.ownerName,
       ownerEmail: args.ownerEmail,
+      isResubmission: args.isResubmission,
       adminUrl: absoluteUrl("/admin/launchpad"),
     }),
   });

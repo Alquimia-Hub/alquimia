@@ -5,12 +5,16 @@ import { useFormatter, useTranslations } from "next-intl";
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "@/i18n/navigation";
 import { resolveReport } from "@/lib/launchpad/actions";
 import type { AdminReport } from "@/lib/launchpad/queries";
+import { useActionError } from "../use-action-error";
 
 export function ReportsList({ reports }: { reports: AdminReport[] }) {
   const t = useTranslations("Admin");
   const format = useFormatter();
+  const translateError = useActionError();
+  const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   const resolve = (reportId: string, action: "dismiss" | "send-to-review") => {
@@ -19,8 +23,9 @@ export function ReportsList({ reports }: { reports: AdminReport[] }) {
 
       if (result.ok) {
         toast.success(t("resolved"));
+        router.refresh();
       } else {
-        toast.error(result.error);
+        toast.error(translateError(result.error));
       }
     });
   };

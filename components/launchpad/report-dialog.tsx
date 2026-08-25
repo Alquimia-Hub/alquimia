@@ -17,9 +17,11 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { reportProject } from "@/lib/launchpad/actions";
 import { PROJECT_LIMITS } from "@/lib/launchpad/constants";
+import { useActionError } from "./use-action-error";
 
 export function ReportDialog({ projectId }: { projectId: string }) {
   const t = useTranslations("LaunchpadDetail");
+  const translateError = useActionError();
   const [open, setOpen] = useState(false);
   const [reason, setReason] = useState("");
   const [isPending, startTransition] = useTransition();
@@ -33,7 +35,7 @@ export function ReportDialog({ projectId }: { projectId: string }) {
         setOpen(false);
         setReason("");
       } else {
-        toast.error(result.error);
+        toast.error(translateError(result.error));
       }
     });
   };

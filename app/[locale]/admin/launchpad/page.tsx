@@ -1,4 +1,6 @@
+import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { SignInRequired } from "@/components/auth/sign-in-required";
 import { ProjectsTable } from "@/components/launchpad/admin/projects-table";
 import { ReportsList } from "@/components/launchpad/admin/reports-list";
 import { BackLink } from "@/components/launchpad/back-link";
@@ -6,28 +8,52 @@ import { SiteHeader } from "@/components/site-header";
 import { Toaster } from "@/components/ui/sonner";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { resolveLocale } from "@/i18n/locale";
-import { redirect } from "@/i18n/navigation";
-import { listOpenReports, listProjectsForAdmin } from "@/lib/launchpad/queries";
+import type { ProjectStatus } from "@/lib/db/schema";
+import {
+  countProjectsByStatus,
+  listOpenReports,
+  listProjectsForAdmin,
+} from "@/lib/launchpad/queries";
 import { getViewer } from "@/lib/launchpad/session";
+import { adminFiltersSchema } from "@/lib/launchpad/validation";
 
 export default async function AdminLaunchpadPage({
   params,
+  searchParams,
 }: PageProps<"/[locale]/admin/launchpad">) {
-  const locale = await resolveLocale(params);
+  await resolveLocale(params);
   const viewer = await getViewer();
 
-  if (viewer?.role !== "admin") {
-    redirect({ href: "/launchpad", locale });
-    return null;
+  if (!viewer) {
+    return (
+      <div className="flex min-h-screen flex-col bg-bg">
+        <SiteHeader />
+        <main className="mx-auto w-full max-w-2xl flex-1 px-6">
+          <SignInRequired callbackURL="/admin/launchpad" />
+        </main>
+      </div>
+    );
   }
 
-  const [t, pending, approved, rejected, reports] = await Promise.all([
+  if (viewer.role !== "admin") {
+    notFound();
+  }
+
+  const parsed = adminFiltersSchema.safeParse(await searchParams);
+  const filters = parsed.success ? parsed.data : adminFiltersSchema.parse({});
+
+  const [t, counts, projects, reports] = await Promise.all([
     getTranslations("Admin"),
-    listProjectsForAdmin("pending"),
-    listProjectsForAdmin("approved"),
-    listProjectsForAdmin("rejected"),
+    countProjectsByStatus(),
+    listProjectsForAdmin(filters.tab, filters.page, filters.q),
     listOpenReports(),
   ]);
+
+  const tabs: { count: number; label: string; value: ProjectStatus }[] = [
+    { value: "pending", label: t("tabPending"), count: counts.pending },
+    { value: "approved", label: t("tabApproved"), count: counts.approved },
+    { value: "rejected", label: t("tabRejected"), count: counts.rejected },
+  ];
 
   return (
     <>
@@ -44,34 +70,43 @@ export default async function AdminLaunchpadPage({
             <p className="mt-3 mb-0 text-ink-3">{t("subtitle")}</p>
           </header>
 
-          <Tabs defaultValue="pending">
+          <Tabs value={filters.reports ? "reports" : filters.tab}>
             <TabsList className="bg-bg-2">
-              <TabsTrigger data-testid="tab-pending" value="pending">
-                {t("tabPending")} ({pending.length})
-              </TabsTrigger>
-              <TabsTrigger data-testid="tab-approved" value="approved">
-                {t("tabApproved")} ({approved.length})
-              </TabsTrigger>
-              <TabsTrigger data-testid="tab-rejected" value="rejected">
-                {t("tabRejected")} ({rejected.length})
-              </TabsTrigger>
-              <TabsTrigger data-testid="tab-reports" value="reports">
-                {t("tabReports")} ({reports.length})
+              {tabs.map((tab) => (
+                <TabsTrigger
+                  asChild
+                  data-testid={`tab-${tab.value}`}
+                  key={tab.value}
+                  value={tab.value}
+                >
+                  <a href={`?tab=${tab.value}`}>
+                    {tab.label} ({tab.count})
+                  </a>
+                </TabsTrigger>
+              ))}
+              <TabsTrigger asChild data-testid="tab-reports" value="reports">
+                <a href="?reports=1">
+                  {t("tabReports")} ({reports.length})
+                </a>
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent className="mt-6" value="pending">
-              <ProjectsTable projects={pending} />
-            </TabsContent>
-            <TabsContent className="mt-6" value="approved">
-              <ProjectsTable projects={approved} />
-            </TabsContent>
-            <TabsContent className="mt-6" value="rejected">
-              <ProjectsTable projects={rejected} />
-            </TabsContent>
-            <TabsContent className="mt-6" value="reports">
-              <ReportsList reports={reports} />
-            </TabsContent>
+            {filters.reports ? (
+              <TabsContent className="mt-6" value="reports">
+                <ReportsList reports={reports} />
+              </TabsContent>
+            ) : (
+              <TabsContent className="mt-6" value={filters.tab}>
+                <ProjectsTable
+                  page={filters.page}
+                  pageCount={projects.pageCount}
+                  projects={projects.items}
+                  query={filters.q ?? ""}
+                  tab={filters.tab}
+                  total={projects.total}
+                />
+              </TabsContent>
+            )}
           </Tabs>
         </main>
       </div>

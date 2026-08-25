@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "next dev",
     "setup:local": "node scripts/setup-local.mjs",
-    "build": "next build",
+    "build": "drizzle-kit migrate && next build",
     "start": "next start",
     "lint": "ultracite check",
     "check": "ultracite check && node scripts/check-messages.mjs",
@@ -27,6 +27,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@better-auth/infra": "^0.4.2",
     "@hookform/resolvers": "^5.9.1",
     "@neondatabase/serverless": "^1.1.0",
     "@radix-ui/react-accordion": "1.2.12",

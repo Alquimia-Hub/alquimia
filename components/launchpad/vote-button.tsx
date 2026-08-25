@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2, Sparkles, Triangle } from "lucide-react";
+import { Sparkles, Triangle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useOptimistic, useState, useTransition } from "react";
 import { toast } from "sonner";
@@ -16,6 +16,7 @@ import {
   hasDismissedSuperVotePrompt,
   SuperVotePrompt,
 } from "./super-vote-prompt";
+import { useActionError } from "./use-action-error";
 
 const VOTE_LABELS = {
   user: { idle: "support", voted: "supported" },
@@ -26,6 +27,7 @@ interface VoteButtonProps {
   hasVoted: boolean;
   isAlquimista: boolean;
   isAuthenticated: boolean;
+  isOwner?: boolean;
   projectId: string;
   score: number;
   size?: "sm" | "lg";
@@ -37,10 +39,12 @@ export function VoteButton({
   hasVoted,
   isAuthenticated,
   isAlquimista,
+  isOwner = false,
   size = "sm",
 }: VoteButtonProps) {
   const t = useTranslations("LaunchpadVote");
-  const [isPending, startTransition] = useTransition();
+  const translateError = useActionError();
+  const [, startTransition] = useTransition();
   const [signInOpen, setSignInOpen] = useState(false);
   const [superVoteOpen, setSuperVoteOpen] = useState(false);
 
@@ -60,6 +64,10 @@ export function VoteButton({
       return;
     }
 
+    if (isOwner) {
+      return;
+    }
+
     const isNewVote = !optimistic.hasVoted;
 
     startTransition(async () => {
@@ -67,7 +75,7 @@ export function VoteButton({
       const result = await toggleVote(projectId);
 
       if (!result.ok) {
-        toast.error(result.error);
+        toast.error(translateError(result.error));
         return;
       }
 
@@ -88,10 +96,18 @@ export function VoteButton({
     ]
   );
 
+  const ariaLabel = (() => {
+    if (isOwner) {
+      return t("ownProject");
+    }
+
+    return isAuthenticated ? label : t("loginToVote");
+  })();
+
   return (
     <>
       <Button
-        aria-label={isAuthenticated ? label : t("loginToVote")}
+        aria-label={ariaLabel}
         aria-pressed={optimistic.hasVoted}
         className={cn(
           "group h-auto flex-col gap-0.5 border font-[family-name:var(--font-jetbrains)] tabular-nums transition-colors",
@@ -101,15 +117,12 @@ export function VoteButton({
             : "border-rule bg-transparent text-ink-2 hover:border-gold/60 hover:text-gold-2"
         )}
         data-testid={`vote-${projectId}`}
-        disabled={isPending}
+        disabled={isOwner}
         onClick={handleClick}
+        title={isOwner ? t("ownProject") : undefined}
         variant="ghost"
       >
-        <VoteIcon
-          hasVoted={optimistic.hasVoted}
-          isAlquimista={isAlquimista}
-          isPending={isPending}
-        />
+        <VoteIcon hasVoted={optimistic.hasVoted} isAlquimista={isAlquimista} />
         <span className={size === "sm" ? "text-sm" : "text-base"}>
           {optimistic.score}
         </span>
@@ -122,18 +135,12 @@ export function VoteButton({
 }
 
 function VoteIcon({
-  isPending,
   isAlquimista,
   hasVoted,
 }: {
-  isPending: boolean;
   isAlquimista: boolean;
   hasVoted: boolean;
 }) {
-  if (isPending) {
-    return <Loader2 className="size-4 animate-spin" />;
-  }
-
   const className = cn("size-4", hasVoted && "fill-gold/40");
 
   return isAlquimista ? (

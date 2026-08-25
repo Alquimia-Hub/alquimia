@@ -8,10 +8,13 @@ import { resolveLocale } from "@/i18n/locale";
 import { Link } from "@/i18n/navigation";
 import { localeAlternates } from "@/lib/alternates";
 import { db } from "@/lib/db";
-import { vote } from "@/lib/db/schema";
+import { project, vote } from "@/lib/db/schema";
 import { listApprovedProjects } from "@/lib/launchpad/queries";
 import { getViewer } from "@/lib/launchpad/session";
-import { projectFiltersSchema } from "@/lib/launchpad/validation";
+import {
+  type ProjectFilters as Filters,
+  projectFiltersSchema,
+} from "@/lib/launchpad/validation";
 
 export async function generateMetadata({
   params,
@@ -39,6 +42,28 @@ async function votedProjectIds(userId: string, projectIds: string[]) {
   return new Set(rows.map((row) => row.projectId));
 }
 
+async function ownedProjectIds(userId: string, projectIds: string[]) {
+  if (projectIds.length === 0) {
+    return new Set<string>();
+  }
+
+  const rows = await db
+    .select({ id: project.id })
+    .from(project)
+    .where(and(eq(project.ownerId, userId), inArray(project.id, projectIds)));
+
+  return new Set(rows.map((row) => row.id));
+}
+
+function pageQuery(filters: Filters, page: number) {
+  return {
+    ...(filters.q ? { q: filters.q } : {}),
+    ...(filters.category ? { category: filters.category } : {}),
+    ...(filters.sort === "votes" ? {} : { sort: filters.sort }),
+    ...(page > 1 ? { page: String(page) } : {}),
+  };
+}
+
 export default async function LaunchpadPage({
   params,
   searchParams,
@@ -46,7 +71,11 @@ export default async function LaunchpadPage({
   await resolveLocale(params);
 
   const t = await getTranslations("Launchpad");
-  const filters = projectFiltersSchema.parse(await searchParams);
+
+  const parsedFilters = projectFiltersSchema.safeParse(await searchParams);
+  const filters = parsedFilters.success
+    ? parsedFilters.data
+    : projectFiltersSchema.parse({});
 
   const [viewer, { items, total, pageCount }] = await Promise.all([
     getViewer(),
@@ -55,6 +84,13 @@ export default async function LaunchpadPage({
 
   const voted = viewer
     ? await votedProjectIds(
+        viewer.id,
+        items.map((item) => item.id)
+      )
+    : new Set<string>();
+
+  const ownedIds = viewer
+    ? await ownedProjectIds(
         viewer.id,
         items.map((item) => item.id)
       )
@@ -106,6 +142,7 @@ export default async function LaunchpadPage({
               hasVoted={voted.has(item.id)}
               isAlquimista={viewer?.isAlquimista ?? false}
               isAuthenticated={Boolean(viewer)}
+              isOwner={ownedIds.has(item.id)}
               key={item.id}
               project={item}
             />
@@ -125,7 +162,7 @@ export default async function LaunchpadPage({
               <Link
                 href={{
                   pathname: "/launchpad",
-                  query: { ...filters, page: filters.page - 1 },
+                  query: pageQuery(filters, filters.page - 1),
                 }}
               >
                 {t("previous")}
@@ -149,7 +186,7 @@ export default async function LaunchpadPage({
               <Link
                 href={{
                   pathname: "/launchpad",
-                  query: { ...filters, page: filters.page + 1 },
+                  query: pageQuery(filters, filters.page + 1),
                 }}
               >
                 {t("next")}

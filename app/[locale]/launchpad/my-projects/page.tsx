@@ -1,11 +1,13 @@
 import Image from "next/image";
 import { getTranslations } from "next-intl/server";
+import { SignInRequired } from "@/components/auth/sign-in-required";
 import { BackLink } from "@/components/launchpad/back-link";
 import { CategoryChip } from "@/components/launchpad/category-chip";
+import { DeleteProjectButton } from "@/components/launchpad/delete-project-button";
 import { StatusChip } from "@/components/launchpad/status-chip";
 import { Button } from "@/components/ui/button";
 import { resolveLocale } from "@/i18n/locale";
-import { Link, redirect } from "@/i18n/navigation";
+import { Link } from "@/i18n/navigation";
 import { MAX_PROJECTS_PER_USER } from "@/lib/launchpad/constants";
 import { listUserProjects } from "@/lib/launchpad/queries";
 import { getViewer } from "@/lib/launchpad/session";
@@ -13,12 +15,11 @@ import { getViewer } from "@/lib/launchpad/session";
 export default async function MyProjectsPage({
   params,
 }: PageProps<"/[locale]/launchpad/my-projects">) {
-  const locale = await resolveLocale(params);
+  await resolveLocale(params);
   const viewer = await getViewer();
 
   if (!viewer) {
-    redirect({ href: "/launchpad", locale });
-    return null;
+    return <SignInRequired callbackURL="/launchpad/my-projects" />;
   }
 
   const [t, tLaunchpad, projects] = await Promise.all([
@@ -41,16 +42,18 @@ export default async function MyProjectsPage({
           <p className="mt-3 mb-0 text-ink-3">{t("subtitle")}</p>
         </div>
 
-        {slotsLeft > 0 && (
-          <div className="flex items-center gap-3">
-            <span className="font-[family-name:var(--font-jetbrains)] text-[11px] text-ink-4 uppercase tracking-[0.12em]">
-              {t("slotsLeft", { count: slotsLeft })}
-            </span>
+        <div className="flex items-center gap-3">
+          <span className="font-[family-name:var(--font-jetbrains)] text-[11px] text-ink-4 uppercase tracking-[0.12em]">
+            {slotsLeft > 0
+              ? t("slotsLeft", { count: slotsLeft })
+              : t("slotsFull", { max: MAX_PROJECTS_PER_USER })}
+          </span>
+          {slotsLeft > 0 && (
             <Button asChild size="sm">
               <Link href="/launchpad/new">{tLaunchpad("submitProject")}</Link>
             </Button>
-          </div>
-        )}
+          )}
+        </div>
       </header>
 
       {projects.length === 0 ? (
@@ -104,7 +107,7 @@ export default async function MyProjectsPage({
                 )}
               </div>
 
-              <div className="flex shrink-0 gap-2">
+              <div className="flex shrink-0 flex-wrap gap-2">
                 <Button asChild size="sm" variant="ghost">
                   <Link href={`/launchpad/${project.slug}`}>{t("view")}</Link>
                 </Button>
@@ -113,6 +116,11 @@ export default async function MyProjectsPage({
                     {t("edit")}
                   </Link>
                 </Button>
+                <DeleteProjectButton
+                  disabled={project.status === "approved"}
+                  projectId={project.id}
+                  projectName={project.name}
+                />
               </div>
             </li>
           ))}

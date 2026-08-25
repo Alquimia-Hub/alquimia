@@ -1,10 +1,11 @@
 "use client";
 
 import { Loader2, Sparkles } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useFormatter, useTranslations } from "next-intl";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
+import { useActionError } from "@/components/launchpad/use-action-error";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
 import { COMMUNITY_LINKS } from "@/lib/constants";
@@ -19,17 +20,22 @@ interface AlquimistaCardProps {
   checkedAt: Date | null;
   hasDiscordLinked: boolean;
   isAlquimista: boolean;
+  isStale: boolean;
+
+  linkState: "error" | "linked" | null;
 }
 
 export function AlquimistaCard({
   isAlquimista,
   hasDiscordLinked,
   checkedAt,
+  isStale,
+  linkState,
 }: AlquimistaCardProps) {
   const t = useTranslations("Account");
+  const translateError = useActionError();
   const format = useFormatter();
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   const [linking, setLinking] = useState(false);
 
@@ -39,8 +45,8 @@ export function AlquimistaCard({
     await authClient.linkSocial({
       provider: DISCORD_PROVIDER,
       scopes: DISCORD_SCOPES,
-
       callbackURL: `${window.location.pathname}?discord=linked`,
+      errorCallbackURL: `${window.location.pathname}?discord=error`,
     });
   };
 
@@ -49,7 +55,7 @@ export function AlquimistaCard({
       const result = await revalidateAlquimistaBadge();
 
       if (!result.ok) {
-        toast.error(result.error);
+        toast.error(translateError(result.error));
         return;
       }
 
@@ -57,31 +63,58 @@ export function AlquimistaCard({
         toast.success(t("badgeVerified"));
       } else if (result.data.reason === "not-member") {
         toast.error(t("badgeNotMember"));
+      } else if (result.data.reason === "already-claimed") {
+        toast.error(t("badgeAlreadyClaimed"));
       } else if (result.data.reason === "unavailable") {
         toast.error(t("badgeUnavailable"));
       }
     });
   };
 
-  const justLinked = searchParams.get("discord") === "linked";
+  const justLinked = linkState === "linked";
+
+  const linkFailed = linkState === "error";
   const autoChecked = useRef(false);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: corre una sola vez al volver del callback, no en cada render
+  const needsAutoCheck = justLinked || (hasDiscordLinked && isStale);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: corre una sola vez por visita, no en cada render
   useEffect(() => {
-    if (!justLinked || autoChecked.current) {
+    if (!needsAutoCheck || autoChecked.current) {
       return;
     }
 
     autoChecked.current = true;
     revalidate();
-    router.replace(window.location.pathname);
-  }, [justLinked]);
+
+    if (justLinked) {
+      router.replace(window.location.pathname);
+    }
+  }, [needsAutoCheck]);
+
+  const isActive = isAlquimista && !isStale;
+
+  const badgeHeadline = (() => {
+    if (isAlquimista && isStale) {
+      return t("badgeStale");
+    }
+
+    return isAlquimista ? t("badgeVerified") : t("badgeMissing");
+  })();
+
+  const badgeBody = (() => {
+    if (isAlquimista && isStale) {
+      return t("badgeStaleBody");
+    }
+
+    return isAlquimista ? t("badgeVerifiedBody") : t("badgeMissingBody");
+  })();
 
   return (
     <section
       className={cn(
         "flex flex-col gap-4 border px-6 py-6",
-        isAlquimista ? "border-gold/40 bg-gold/5" : "border-rule-2 bg-bg-2/60"
+        isActive ? "border-gold/40 bg-gold/5" : "border-rule-2 bg-bg-2/60"
       )}
       data-testid="alquimista-card"
     >
@@ -90,7 +123,7 @@ export function AlquimistaCard({
           aria-hidden="true"
           className={cn(
             "size-5",
-            isAlquimista ? "fill-gold/40 text-gold" : "text-ink-4"
+            isActive ? "fill-gold/40 text-gold" : "text-ink-4"
           )}
         />
         <h2 className="m-0 font-[family-name:var(--font-cormorant)] font-light text-ink text-xl">
@@ -100,12 +133,20 @@ export function AlquimistaCard({
 
       <div>
         <p className="m-0 font-medium text-ink" data-testid="badge-state">
-          {isAlquimista ? t("badgeVerified") : t("badgeMissing")}
+          {badgeHeadline}
         </p>
-        <p className="mt-1 mb-0 text-ink-3 text-sm">
-          {isAlquimista ? t("badgeVerifiedBody") : t("badgeMissingBody")}
-        </p>
+        <p className="mt-1 mb-0 text-ink-3 text-sm">{badgeBody}</p>
       </div>
+
+      {linkFailed && (
+        <p
+          className="m-0 border border-destructive/40 bg-destructive/5 px-4 py-3 text-destructive text-sm"
+          data-testid="badge-link-error"
+          role="alert"
+        >
+          {t("badgeAlreadyClaimed")}
+        </p>
+      )}
 
       {checkedAt && (
         <p className="m-0 font-[family-name:var(--font-jetbrains)] text-[10px] text-ink-4 uppercase tracking-[0.12em]">
@@ -142,7 +183,7 @@ export function AlquimistaCard({
           </Button>
         )}
 
-        {!isAlquimista && (
+        {!isActive && (
           <Button asChild size="sm" variant="ghost">
             <a href={COMMUNITY_LINKS.discord} rel="noopener" target="_blank">
               {t("joinDiscord")}

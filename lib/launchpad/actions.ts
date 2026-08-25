@@ -1,9 +1,9 @@
 "use server";
 
-import { and, count, eq, gte, inArray, sql } from "drizzle-orm";
+import { and, count, eq, inArray, ne, sql } from "drizzle-orm";
 import { nanoid } from "nanoid";
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
+import type { EmailLocale } from "@/emails/copy";
 import { db } from "@/lib/db";
 import { project, projectCategory, report, user, vote } from "@/lib/db/schema";
 import {
@@ -11,47 +11,99 @@ import {
   sendProjectApprovedEmail,
   sendProjectRejectedEmail,
 } from "@/lib/mail/send";
+import { type ActionResult, fail, ok } from "./action-result";
 import {
+  ALQUIMISTA_CHECK_TTL_MS,
   MAX_PROJECTS_PER_USER,
+  RATE_LIMITS,
   VOTE_WEIGHT_ALQUIMISTA,
   VOTE_WEIGHT_DEFAULT,
 } from "./constants";
 import { refreshAlquimistaBadge } from "./discord";
-import { requireAdmin, requireUser } from "./session";
-import { slugify } from "./slug";
+import { consumeRateLimit, pruneRateLimits } from "./rate-limit";
+import {
+  ForbiddenError,
+  requireAdmin,
+  requireUser,
+  UnauthorizedError,
+} from "./session";
+import { isReservedSlug, slugify } from "./slug";
+import { deleteProjectLogo } from "./storage";
 import {
   approveProjectsSchema,
   normalizeOptionalLinks,
   projectFormSchema,
+  REVIEWABLE_FIELDS,
   rejectProjectSchema,
   reportProjectSchema,
 } from "./validation";
 
-export type ActionResult<T = undefined> =
-  | { ok: true; data: T }
-  | { ok: false; error: string };
+const UNIQUE_VIOLATION = "23505";
 
-const ok = <T>(data: T): ActionResult<T> => ({ ok: true, data });
-const fail = (error: string): ActionResult<never> => ({ ok: false, error });
+function isUniqueViolation(error: unknown): boolean {
+  let current = error;
 
-function failValidation(error: z.ZodError, message: string) {
-  if (process.env.NODE_ENV === "production") {
-    return fail(message);
+  for (let depth = 0; depth < 5; depth++) {
+    if (typeof current !== "object" || current === null) {
+      return false;
+    }
+
+    if ((current as { code?: string }).code === UNIQUE_VIOLATION) {
+      return true;
+    }
+
+    current = (current as { cause?: unknown }).cause;
   }
 
-  return fail(`${message} — ${z.prettifyError(error)}`);
+  return false;
 }
 
-const HOUR_MS = 60 * 60 * 1000;
-const MINUTE_MS = 60 * 1000;
-const DAY_MS = 24 * HOUR_MS;
+async function withActionErrors<T>(body: () => Promise<ActionResult<T>>) {
+  try {
+    return await body();
+  } catch (error) {
+    if (error instanceof UnauthorizedError) {
+      return fail("unauthorized");
+    }
 
-function invalidateLanding() {
+    if (error instanceof ForbiddenError) {
+      return fail("forbidden");
+    }
+
+    process.stderr.write(`[launchpad] ${String(error)}\n`);
+
+    return fail("unexpected");
+  }
+}
+
+async function withinRateLimit(
+  scope: keyof typeof RATE_LIMITS,
+  subject: string
+) {
+  const { limit: max, windowMs } = RATE_LIMITS[scope];
+  const allowed = await consumeRateLimit(scope, subject, max, windowMs);
+
+  await pruneRateLimits();
+
+  return allowed;
+}
+
+function invalidate(slug?: string) {
   revalidatePath("/[locale]", "page");
+  revalidatePath("/[locale]/launchpad", "page");
+  revalidatePath("/[locale]/launchpad/my-projects", "page");
+
+  if (slug) {
+    revalidatePath(`/[locale]/launchpad/${slug}`, "page");
+  }
 }
+
+const ALQUIMISTA_TTL_DAYS = Math.round(
+  ALQUIMISTA_CHECK_TTL_MS / (24 * 60 * 60 * 1000)
+);
 
 const WEIGHT_CASE = sql.raw(
-  `case when u.is_alquimista then ${VOTE_WEIGHT_ALQUIMISTA} else ${VOTE_WEIGHT_DEFAULT} end`
+  `case when u.is_alquimista and u.alquimista_checked_at > now() - interval '${ALQUIMISTA_TTL_DAYS} days' then ${VOTE_WEIGHT_ALQUIMISTA} else ${VOTE_WEIGHT_DEFAULT} end`
 );
 
 async function recalculateProjectScore(projectId: string) {
@@ -61,8 +113,7 @@ async function recalculateProjectScore(projectId: string) {
         select sum(${WEIGHT_CASE})
         from ${vote} v join ${user} u on u.id = v.user_id
         where v.project_id = ${projectId}
-      ), 0),
-      vote_count = (select count(*) from ${vote} v where v.project_id = ${projectId})
+      ), 0)
     where ${project.id} = ${projectId}
   `);
 }
@@ -79,282 +130,407 @@ async function recalculateScoresForVoter(userId: string) {
   `);
 }
 
-const since = (windowMs: number) => new Date(Date.now() - windowMs);
+const SLUG_SUFFIX_LENGTH = 5;
 
-async function uniqueSlug(name: string) {
+async function candidateSlug(name: string, withSuffix: boolean) {
   const base = slugify(name) || "proyecto";
-  const [existing] = await db
-    .select({ slug: project.slug })
-    .from(project)
-    .where(eq(project.slug, base))
-    .limit(1);
+  const needsSuffix = withSuffix || isReservedSlug(base);
 
-  return existing ? `${base}-${nanoid(5).toLowerCase()}` : base;
+  if (!needsSuffix) {
+    const [existing] = await db
+      .select({ slug: project.slug })
+      .from(project)
+      .where(eq(project.slug, base))
+      .limit(1);
+
+    if (!existing) {
+      return base;
+    }
+  }
+
+  return `${base}-${nanoid(SLUG_SUFFIX_LENGTH).toLowerCase()}`;
 }
 
-async function replaceCategories(projectId: string, categoryIds: string[]) {
-  await db
-    .delete(projectCategory)
-    .where(eq(projectCategory.projectId, projectId));
+const MAX_SLUG_ATTEMPTS = 5;
 
-  await db
-    .insert(projectCategory)
-    .values(categoryIds.map((categoryId) => ({ projectId, categoryId })));
+async function insertProjectWithSlug(
+  values: Omit<typeof project.$inferInsert, "slug">,
+  name: string,
+  categoryIds: string[]
+) {
+  for (let attempt = 0; attempt < MAX_SLUG_ATTEMPTS; attempt++) {
+    const slug = await candidateSlug(name, attempt > 0);
+
+    try {
+      return await db.transaction(async (tx) => {
+        await tx.insert(project).values({ ...values, slug });
+        await tx.insert(projectCategory).values(
+          categoryIds.map((categoryId) => ({
+            projectId: values.id as string,
+            categoryId,
+          }))
+        );
+
+        return slug;
+      });
+    } catch (error) {
+      if (!isUniqueViolation(error)) {
+        throw error;
+      }
+    }
+  }
+
+  return null;
 }
 
 export async function createProject(
   input: unknown
 ): Promise<ActionResult<{ slug: string }>> {
-  const currentUser = await requireUser();
-  const parsed = projectFormSchema.safeParse(input);
+  return await withActionErrors(async () => {
+    const currentUser = await requireUser();
+    const parsed = projectFormSchema.safeParse(input);
 
-  if (!parsed.success) {
-    return failValidation(parsed.error, "Revisa los datos del formulario");
-  }
+    if (!parsed.success) {
+      return fail("invalidForm");
+    }
 
-  const [existing] = await db
-    .select({ total: count() })
-    .from(project)
-    .where(eq(project.ownerId, currentUser.id));
+    if (!(await withinRateLimit("createProject", currentUser.id))) {
+      return fail("tooFast");
+    }
 
-  if ((existing?.total ?? 0) >= MAX_PROJECTS_PER_USER) {
-    return fail(`Llegaste al maximo de ${MAX_PROJECTS_PER_USER} proyectos`);
-  }
+    const [existing] = await db
+      .select({ total: count() })
+      .from(project)
+      .where(eq(project.ownerId, currentUser.id));
 
-  const [recent] = await db
-    .select({ total: count() })
-    .from(project)
-    .where(
-      and(
-        eq(project.ownerId, currentUser.id),
-        gte(project.createdAt, since(HOUR_MS))
-      )
+    if ((existing?.total ?? 0) >= MAX_PROJECTS_PER_USER) {
+      return fail("projectLimitReached", { max: MAX_PROJECTS_PER_USER });
+    }
+
+    const { categoryIds, ...values } = parsed.data;
+    const now = new Date();
+
+    const slug = await insertProjectWithSlug(
+      {
+        ...values,
+        ...normalizeOptionalLinks(parsed.data),
+        id: nanoid(),
+        ownerId: currentUser.id,
+        status: "pending",
+        submittedAt: now,
+      },
+      values.name,
+      categoryIds
     );
 
-  if ((recent?.total ?? 0) >= 3) {
-    return fail("Estas creando proyectos muy seguido. Proba en un rato.");
-  }
+    if (!slug) {
+      return fail("slugTaken");
+    }
 
-  const { categoryIds, ...values } = parsed.data;
-  const columns = { ...values, ...normalizeOptionalLinks(parsed.data) };
-  const id = nanoid();
-  const slug = await uniqueSlug(values.name);
-  const now = new Date();
+    await sendAdminNewSubmissionEmail({
+      projectName: values.name,
+      ownerName: currentUser.name,
+      ownerEmail: currentUser.email,
+      isResubmission: false,
+    });
 
-  await db.insert(project).values({
-    ...columns,
-    id,
-    slug,
-    ownerId: currentUser.id,
-    status: "pending",
-    submittedAt: now,
+    invalidate();
+
+    return ok({ slug });
   });
-
-  await replaceCategories(id, categoryIds);
-
-  await sendAdminNewSubmissionEmail({
-    projectName: values.name,
-    ownerName: currentUser.name,
-    ownerEmail: currentUser.email,
-  });
-
-  invalidateLanding();
-
-  return ok({ slug });
 }
-
-const IDENTITY_FIELDS = [
-  "name",
-  "logoUrl",
-  "websiteUrl",
-  "xUrl",
-  "githubUrl",
-  "linkedinUrl",
-  "instagramUrl",
-  "tiktokUrl",
-  "discordUrl",
-] as const;
 
 export async function updateProject(
   projectId: string,
   input: unknown
-): Promise<ActionResult<{ slug: string; requiresReview: boolean }>> {
-  const currentUser = await requireUser();
-  const parsed = projectFormSchema.safeParse(input);
+): Promise<ActionResult<{ requiresReview: boolean; slug: string }>> {
+  return await withActionErrors(async () => {
+    const currentUser = await requireUser();
+    const parsed = projectFormSchema.safeParse(input);
 
-  if (!parsed.success) {
-    return failValidation(parsed.error, "Revisa los datos del formulario");
-  }
+    if (!parsed.success) {
+      return fail("invalidForm");
+    }
 
-  const [current] = await db
-    .select()
-    .from(project)
-    .where(eq(project.id, projectId))
-    .limit(1);
+    if (!(await withinRateLimit("updateProject", currentUser.id))) {
+      return fail("tooFast");
+    }
 
-  if (!current) {
-    return fail("El proyecto no existe");
-  }
+    const [current] = await db
+      .select()
+      .from(project)
+      .where(eq(project.id, projectId))
+      .limit(1);
 
-  if (current.ownerId !== currentUser.id) {
-    return fail("Solo el autor puede editar este proyecto");
-  }
+    if (!current) {
+      return fail("notFound");
+    }
 
-  const { categoryIds, ...values } = parsed.data;
-  const columns = { ...values, ...normalizeOptionalLinks(parsed.data) };
+    if (current.ownerId !== currentUser.id) {
+      return fail("notOwner");
+    }
 
-  const identityChanged = IDENTITY_FIELDS.some(
-    (field) => (columns[field] ?? null) !== (current[field] ?? null)
-  );
+    const { categoryIds, ...values } = parsed.data;
+    const columns = { ...values, ...normalizeOptionalLinks(parsed.data) };
 
-  const requiresReview = current.status === "approved" && identityChanged;
-  const nextStatus =
-    current.status === "approved" && !identityChanged ? "approved" : "pending";
+    const contentChanged = REVIEWABLE_FIELDS.some(
+      (field) => (columns[field] ?? null) !== (current[field] ?? null)
+    );
 
-  await db
-    .update(project)
-    .set({
-      ...columns,
-      status: nextStatus,
-      rejectionReason: null,
-      submittedAt: nextStatus === "pending" ? new Date() : current.submittedAt,
-    })
-    .where(eq(project.id, projectId));
+    const [previousCategories, nextCategories] = [
+      new Set(await currentCategoryIds(projectId)),
+      new Set(categoryIds),
+    ];
 
-  await replaceCategories(projectId, categoryIds);
+    const categoriesChanged =
+      previousCategories.size !== nextCategories.size ||
+      [...nextCategories].some((id) => !previousCategories.has(id));
 
-  invalidateLanding();
+    const changed = contentChanged || categoriesChanged;
+    const wasApproved = current.status === "approved";
+    const requiresReview = wasApproved && changed;
+    const nextStatus = wasApproved && !changed ? "approved" : "pending";
 
-  return ok({ slug: current.slug, requiresReview });
+    await db.transaction(async (tx) => {
+      await tx
+        .update(project)
+        .set({
+          ...columns,
+          status: nextStatus,
+          rejectionReason: null,
+          submittedAt:
+            nextStatus === "pending" ? new Date() : current.submittedAt,
+        })
+        .where(eq(project.id, projectId));
+
+      await tx
+        .delete(projectCategory)
+        .where(eq(projectCategory.projectId, projectId));
+
+      await tx
+        .insert(projectCategory)
+        .values(categoryIds.map((categoryId) => ({ projectId, categoryId })));
+    });
+
+    if (columns.logoUrl !== current.logoUrl) {
+      await deleteProjectLogo(current.logoUrl);
+    }
+
+    if (requiresReview || (current.status === "rejected" && changed)) {
+      await sendAdminNewSubmissionEmail({
+        projectName: columns.name,
+        ownerName: currentUser.name,
+        ownerEmail: currentUser.email,
+        isResubmission: true,
+      });
+    }
+
+    invalidate(current.slug);
+
+    return ok({ slug: current.slug, requiresReview });
+  });
+}
+
+async function currentCategoryIds(projectId: string) {
+  const rows = await db
+    .select({ categoryId: projectCategory.categoryId })
+    .from(projectCategory)
+    .where(eq(projectCategory.projectId, projectId));
+
+  return rows.map((row) => row.categoryId);
+}
+
+export async function deleteProject(
+  projectId: string
+): Promise<ActionResult<undefined>> {
+  return await withActionErrors(async () => {
+    const currentUser = await requireUser();
+
+    if (!(await withinRateLimit("deleteProject", currentUser.id))) {
+      return fail("tooFast");
+    }
+
+    const [current] = await db
+      .select({
+        ownerId: project.ownerId,
+        slug: project.slug,
+        status: project.status,
+        logoUrl: project.logoUrl,
+      })
+      .from(project)
+      .where(eq(project.id, projectId))
+      .limit(1);
+
+    if (!current) {
+      return fail("notFound");
+    }
+
+    const owns = current.ownerId === currentUser.id;
+
+    if (!(owns || currentUser.role === "admin")) {
+      return fail("notOwner");
+    }
+
+    if (current.status === "approved" && !(currentUser.role === "admin")) {
+      return fail("cannotDeleteApproved");
+    }
+
+    await db.delete(project).where(eq(project.id, projectId));
+    await deleteProjectLogo(current.logoUrl);
+
+    invalidate(current.slug);
+
+    return ok(undefined);
+  });
 }
 
 export async function toggleVote(
   projectId: string
 ): Promise<ActionResult<{ voted: boolean }>> {
-  const currentUser = await requireUser();
+  return await withActionErrors(async () => {
+    const currentUser = await requireUser();
 
-  const [target] = await db
-    .select({ slug: project.slug, status: project.status })
-    .from(project)
-    .where(eq(project.id, projectId))
-    .limit(1);
+    if (!(await withinRateLimit("vote", currentUser.id))) {
+      return fail("tooFast");
+    }
 
-  if (!target || target.status !== "approved") {
-    return fail("Este proyecto todavia no esta publicado");
-  }
+    const [target] = await db
+      .select({
+        slug: project.slug,
+        status: project.status,
+        ownerId: project.ownerId,
+      })
+      .from(project)
+      .where(eq(project.id, projectId))
+      .limit(1);
 
-  const [recent] = await db
-    .select({ total: count() })
-    .from(vote)
-    .where(
-      and(
-        eq(vote.userId, currentUser.id),
-        gte(vote.createdAt, since(MINUTE_MS))
+    if (!target || target.status !== "approved") {
+      return fail("notPublished");
+    }
+
+    if (target.ownerId === currentUser.id) {
+      return fail("cannotVoteOwnProject");
+    }
+
+    const deleted = await db
+      .delete(vote)
+      .where(
+        and(eq(vote.projectId, projectId), eq(vote.userId, currentUser.id))
       )
-    );
+      .returning({ projectId: vote.projectId });
 
-  if ((recent?.total ?? 0) >= 20) {
-    return fail("Demasiados votos seguidos. Espera un momento.");
-  }
+    const voted = deleted.length === 0;
 
-  const deleted = await db
-    .delete(vote)
-    .where(and(eq(vote.projectId, projectId), eq(vote.userId, currentUser.id)))
-    .returning({ projectId: vote.projectId });
+    if (voted) {
+      await db
+        .insert(vote)
+        .values({ projectId, userId: currentUser.id })
+        .onConflictDoNothing();
+    }
 
-  const voted = deleted.length === 0;
+    await recalculateProjectScore(projectId);
+    invalidate(target.slug);
 
-  if (voted) {
-    await db
-      .insert(vote)
-      .values({ projectId, userId: currentUser.id })
-      .onConflictDoNothing();
-  }
-
-  await recalculateProjectScore(projectId);
-  invalidateLanding();
-
-  return ok({ voted });
+    return ok({ voted });
+  });
 }
 
 export async function approveProjects(
   input: unknown
 ): Promise<ActionResult<{ approved: number }>> {
-  const admin = await requireAdmin();
-  const parsed = approveProjectsSchema.safeParse(input);
+  return await withActionErrors(async () => {
+    const admin = await requireAdmin();
+    const parsed = approveProjectsSchema.safeParse(input);
 
-  if (!parsed.success) {
-    return fail("Seleccion invalida");
-  }
+    if (!parsed.success) {
+      return fail("invalidForm");
+    }
 
-  const updated = await db
-    .update(project)
-    .set({
-      status: "approved",
-      rejectionReason: null,
-      approvedAt: new Date(),
-      reviewedById: admin.id,
-    })
-    .where(inArray(project.id, parsed.data.projectIds))
-    .returning({
-      id: project.id,
-      name: project.name,
-      slug: project.slug,
-      ownerId: project.ownerId,
-    });
+    const now = new Date();
 
-  await notifyOwners(updated, (owner, row) =>
-    sendProjectApprovedEmail({
-      to: owner.email,
-      locale: "es",
-      projectName: row.name,
-      projectSlug: row.slug,
-    })
-  );
+    const updated = await db
+      .update(project)
+      .set({
+        status: "approved",
+        rejectionReason: null,
+        approvedAt: now,
+        reviewedAt: now,
+        reviewedById: admin.id,
+      })
+      .where(
+        and(
+          inArray(project.id, parsed.data.projectIds),
+          ne(project.status, "approved")
+        )
+      )
+      .returning({
+        id: project.id,
+        name: project.name,
+        slug: project.slug,
+        ownerId: project.ownerId,
+      });
 
-  invalidateLanding();
+    await notifyOwners(updated, (owner, row) =>
+      sendProjectApprovedEmail({
+        to: owner.email,
+        locale: owner.locale,
+        projectName: row.name,
+        projectSlug: row.slug,
+      })
+    );
 
-  return ok({ approved: updated.length });
+    invalidate();
+
+    return ok({ approved: updated.length });
+  });
 }
 
 export async function rejectProjects(
   input: unknown
 ): Promise<ActionResult<{ rejected: number }>> {
-  const admin = await requireAdmin();
-  const parsed = rejectProjectSchema.safeParse(input);
+  return await withActionErrors(async () => {
+    const admin = await requireAdmin();
+    const parsed = rejectProjectSchema.safeParse(input);
 
-  if (!parsed.success) {
-    return fail("Falta el motivo del rechazo");
-  }
+    if (!parsed.success) {
+      return fail("invalidForm");
+    }
 
-  const updated = await db
-    .update(project)
-    .set({
-      status: "rejected",
-      rejectionReason: parsed.data.reason,
-      reviewedById: admin.id,
-    })
-    .where(inArray(project.id, parsed.data.projectIds))
-    .returning({
-      id: project.id,
-      name: project.name,
-      slug: project.slug,
-      ownerId: project.ownerId,
-    });
+    const updated = await db
+      .update(project)
+      .set({
+        status: "rejected",
+        rejectionReason: parsed.data.reason,
+        reviewedAt: new Date(),
+        reviewedById: admin.id,
+      })
+      .where(
+        and(
+          inArray(project.id, parsed.data.projectIds),
+          ne(project.status, "rejected")
+        )
+      )
+      .returning({
+        id: project.id,
+        name: project.name,
+        slug: project.slug,
+        ownerId: project.ownerId,
+      });
 
-  await notifyOwners(updated, (owner, row) =>
-    sendProjectRejectedEmail({
-      to: owner.email,
-      locale: "es",
-      projectName: row.name,
-      projectSlug: row.slug,
-      reason: parsed.data.reason,
-    })
-  );
+    await notifyOwners(updated, (owner, row) =>
+      sendProjectRejectedEmail({
+        to: owner.email,
+        locale: owner.locale,
+        projectName: row.name,
+        projectSlug: row.slug,
+        reason: parsed.data.reason,
+      })
+    );
 
-  invalidateLanding();
+    invalidate();
 
-  return ok({ rejected: updated.length });
+    return ok({ rejected: updated.length });
+  });
 }
 
 interface OwnedRow {
@@ -364,16 +540,21 @@ interface OwnedRow {
   slug: string;
 }
 
+interface Owner {
+  email: string;
+  locale: EmailLocale;
+}
+
 async function notifyOwners(
   rows: OwnedRow[],
-  send: (owner: { email: string }, row: OwnedRow) => Promise<void>
+  send: (owner: Owner, row: OwnedRow) => Promise<void>
 ) {
   if (rows.length === 0) {
     return;
   }
 
   const owners = await db
-    .select({ id: user.id, email: user.email })
+    .select({ id: user.id, email: user.email, locale: user.locale })
     .from(user)
     .where(
       inArray(
@@ -387,7 +568,16 @@ async function notifyOwners(
   await Promise.all(
     rows.map((row) => {
       const owner = byId.get(row.ownerId);
-      return owner ? send(owner, row) : Promise.resolve();
+
+      return owner
+        ? send(
+            {
+              email: owner.email,
+              locale: owner.locale === "en" ? "en" : "es",
+            },
+            row
+          )
+        : Promise.resolve();
     })
   );
 }
@@ -395,83 +585,111 @@ async function notifyOwners(
 export async function reportProject(
   input: unknown
 ): Promise<ActionResult<undefined>> {
-  const currentUser = await requireUser();
-  const parsed = reportProjectSchema.safeParse(input);
+  return await withActionErrors(async () => {
+    const currentUser = await requireUser();
+    const parsed = reportProjectSchema.safeParse(input);
 
-  if (!parsed.success) {
-    return fail("Conta un poco mas sobre el problema");
-  }
+    if (!parsed.success) {
+      return fail("invalidForm");
+    }
 
-  const [recent] = await db
-    .select({ total: count() })
-    .from(report)
-    .where(
-      and(
-        eq(report.reporterId, currentUser.id),
-        gte(report.createdAt, since(DAY_MS))
-      )
-    );
+    if (!(await withinRateLimit("report", currentUser.id))) {
+      return fail("tooFast");
+    }
 
-  if ((recent?.total ?? 0) >= 5) {
-    return fail("Ya enviaste varios reportes hoy");
-  }
+    const [target] = await db
+      .select({ id: project.id, status: project.status })
+      .from(project)
+      .where(eq(project.id, parsed.data.projectId))
+      .limit(1);
 
-  await db.insert(report).values({
-    id: nanoid(),
-    projectId: parsed.data.projectId,
-    reporterId: currentUser.id,
-    reason: parsed.data.reason,
+    if (!target || target.status !== "approved") {
+      return fail("notPublished");
+    }
+
+    try {
+      await db.insert(report).values({
+        id: nanoid(),
+        projectId: parsed.data.projectId,
+        reporterId: currentUser.id,
+        reason: parsed.data.reason,
+      });
+    } catch (error) {
+      if (isUniqueViolation(error)) {
+        return fail("alreadyReported");
+      }
+
+      throw error;
+    }
+
+    return ok(undefined);
   });
-
-  return ok(undefined);
 }
 
 export async function resolveReport(
   reportId: string,
   action: "dismiss" | "send-to-review"
 ): Promise<ActionResult<undefined>> {
-  await requireAdmin();
+  return await withActionErrors(async () => {
+    const admin = await requireAdmin();
 
-  const [target] = await db
-    .select({ projectId: report.projectId })
-    .from(report)
-    .where(eq(report.id, reportId))
-    .limit(1);
+    const [target] = await db
+      .select({ projectId: report.projectId })
+      .from(report)
+      .where(eq(report.id, reportId))
+      .limit(1);
 
-  if (!target) {
-    return fail("El reporte no existe");
-  }
+    if (!target) {
+      return fail("notFound");
+    }
 
-  await db
-    .update(report)
-    .set({
-      status: action === "dismiss" ? "dismissed" : "actioned",
-      resolvedAt: new Date(),
-    })
-    .where(eq(report.id, reportId));
-
-  if (action === "send-to-review") {
     await db
-      .update(project)
-      .set({ status: "pending", submittedAt: new Date() })
-      .where(eq(project.id, target.projectId));
-  }
+      .update(report)
+      .set({
+        status: action === "dismiss" ? "dismissed" : "actioned",
+        resolvedAt: new Date(),
+      })
+      .where(eq(report.id, reportId));
 
-  invalidateLanding();
+    if (action === "send-to-review") {
+      const [moved] = await db
+        .update(project)
+        .set({
+          status: "pending",
+          submittedAt: new Date(),
+          reviewedById: admin.id,
+        })
+        .where(eq(project.id, target.projectId))
+        .returning({ slug: project.slug });
 
-  return ok(undefined);
+      invalidate(moved?.slug);
+    }
+
+    revalidatePath("/[locale]/admin/launchpad", "page");
+
+    return ok(undefined);
+  });
 }
 
 export async function revalidateAlquimistaBadge(): Promise<
   ActionResult<{ isAlquimista: boolean; reason: string }>
 > {
-  const currentUser = await requireUser();
-  const { isAlquimista, result } = await refreshAlquimistaBadge(currentUser.id);
+  return await withActionErrors(async () => {
+    const currentUser = await requireUser();
 
-  await recalculateScoresForVoter(currentUser.id);
+    if (!(await withinRateLimit("badgeRefresh", currentUser.id))) {
+      return fail("tooFast");
+    }
 
-  invalidateLanding();
-  revalidatePath("/cuenta", "page");
+    const { isAlquimista, result } = await refreshAlquimistaBadge(
+      currentUser.id
+    );
 
-  return ok({ isAlquimista, reason: result.status });
+    await recalculateScoresForVoter(currentUser.id);
+
+    invalidate();
+    revalidatePath("/[locale]/account", "page");
+
+    return ok({ isAlquimista, reason: result.status });
+  });
 }

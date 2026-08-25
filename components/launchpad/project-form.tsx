@@ -25,14 +25,18 @@ import {
 } from "@/lib/launchpad/categories";
 import { PROJECT_LIMITS } from "@/lib/launchpad/constants";
 import {
+  normalizeUrlInput,
   OPTIONAL_LINK_FIELDS,
+  type ProjectFormInput,
   type ProjectFormValues,
   projectFormSchema,
+  REVIEWABLE_FIELDS,
 } from "@/lib/launchpad/validation";
 import { cn } from "@/lib/utils";
 import { FieldError } from "./field-error";
 import { LogoField } from "./logo-field";
 import { ReviewWarningDialog } from "./review-warning-dialog";
+import { useActionError } from "./use-action-error";
 
 const SOCIAL_LABELS: Record<(typeof OPTIONAL_LINK_FIELDS)[number], string> = {
   xUrl: "X",
@@ -43,14 +47,7 @@ const SOCIAL_LABELS: Record<(typeof OPTIONAL_LINK_FIELDS)[number], string> = {
   discordUrl: "Discord",
 };
 
-const IDENTITY_FIELDS = [
-  "name",
-  "logoUrl",
-  "websiteUrl",
-  ...OPTIONAL_LINK_FIELDS,
-] as const;
-
-const EMPTY_VALUES: ProjectFormValues = {
+const EMPTY_VALUES: ProjectFormInput = {
   name: "",
   tagline: "",
   description: "",
@@ -66,7 +63,7 @@ const EMPTY_VALUES: ProjectFormValues = {
 };
 
 interface ProjectFormProps {
-  defaultValues?: Partial<ProjectFormValues>;
+  defaultValues?: Partial<ProjectFormInput>;
 
   isPublished?: boolean;
 
@@ -80,10 +77,11 @@ export function ProjectForm({
 }: ProjectFormProps) {
   const t = useTranslations("LaunchpadForm");
   const router = useRouter();
+  const translateError = useActionError();
   const [isPending, startTransition] = useTransition();
   const [confirmOpen, setConfirmOpen] = useState(false);
 
-  const form = useForm<ProjectFormValues>({
+  const form = useForm<ProjectFormInput, unknown, ProjectFormValues>({
     resolver: zodResolver(projectFormSchema),
     defaultValues: { ...EMPTY_VALUES, ...defaultValues },
     mode: "onBlur",
@@ -96,8 +94,17 @@ export function ProjectForm({
         : await createProject(values);
 
       if (!result.ok) {
-        toast.error(result.error);
+        toast.error(translateError(result.error));
         return;
+      }
+
+      if (projectId) {
+        toast.success(t("savedTitle"), {
+          description:
+            "requiresReview" in result.data && result.data.requiresReview
+              ? t("savedBackToReview")
+              : undefined,
+        });
       }
 
       const query = projectId ? "" : "?submitted=1";
@@ -107,16 +114,24 @@ export function ProjectForm({
   };
 
   const onSubmit = (values: ProjectFormValues) => {
-    const changesIdentity = IDENTITY_FIELDS.some(
+    const changesContent = REVIEWABLE_FIELDS.some(
       (field) => values[field] !== (defaultValues?.[field] ?? "")
     );
 
-    if (isPublished && changesIdentity) {
+    if (isPublished && changesContent) {
       setConfirmOpen(true);
       return;
     }
 
     save(values);
+  };
+
+  const focusFirstError = () => {
+    const [firstField] = Object.keys(form.formState.errors);
+
+    if (firstField) {
+      form.setFocus(firstField as keyof ProjectFormInput);
+    }
   };
 
   const selected = form.watch("categoryIds");
@@ -270,6 +285,10 @@ export function ProjectForm({
                   placeholder="https://"
                   type="url"
                   {...field}
+                  onBlur={() => {
+                    field.onChange(normalizeUrlInput(field.value));
+                    field.onBlur();
+                  }}
                 />
               </FormControl>
               <FieldError message={fieldState.error?.message} />
@@ -297,6 +316,10 @@ export function ProjectForm({
                         placeholder="https://"
                         type="url"
                         {...field}
+                        onBlur={() => {
+                          field.onChange(normalizeUrlInput(field.value));
+                          field.onBlur();
+                        }}
                       />
                     </FormControl>
                     <FieldError message={fieldState.error?.message} />
@@ -324,6 +347,13 @@ export function ProjectForm({
               <p className="mt-0.5 mb-0 text-ink-3 text-sm">
                 {t("errorSummaryHint")}
               </p>
+              <button
+                className="mt-1 bg-transparent p-0 text-destructive text-sm underline underline-offset-2"
+                onClick={focusFirstError}
+                type="button"
+              >
+                {t("errorSummaryJump")}
+              </button>
             </div>
           </div>
         )}

@@ -36,7 +36,9 @@ export const EMAIL_COPY = {
     },
     adminSubmission: {
       subject: (name: string) => `Nuevo proyecto en la cola: ${name}`,
+      resubmissionSubject: (name: string) => `Vuelve a la cola: ${name}`,
       heading: "Proyecto nuevo para revisar",
+      resubmissionHeading: "Un proyecto editado volvio a la cola",
       by: "Enviado por",
       cta: "Abrir el panel",
     },
@@ -74,7 +76,9 @@ export const EMAIL_COPY = {
     },
     adminSubmission: {
       subject: (name: string) => `New project in the queue: ${name}`,
+      resubmissionSubject: (name: string) => `Back in the queue: ${name}`,
       heading: "New project to review",
+      resubmissionHeading: "An edited project is back in the queue",
       by: "Submitted by",
       cta: "Open the panel",
     },

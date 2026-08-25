@@ -1,9 +1,9 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { SignInRequired } from "@/components/auth/sign-in-required";
 import { BackLink } from "@/components/launchpad/back-link";
 import { ProjectForm } from "@/components/launchpad/project-form";
 import { resolveLocale } from "@/i18n/locale";
-import { redirect } from "@/i18n/navigation";
 import type { CategoryId } from "@/lib/launchpad/categories";
 import { getProjectBySlug } from "@/lib/launchpad/queries";
 import { getViewer } from "@/lib/launchpad/session";
@@ -11,7 +11,7 @@ import { getViewer } from "@/lib/launchpad/session";
 export default async function EditProjectPage({
   params,
 }: PageProps<"/[locale]/launchpad/[slug]/edit">) {
-  const locale = await resolveLocale(params);
+  await resolveLocale(params);
   const { slug } = await params;
 
   const [viewer, project] = await Promise.all([
@@ -23,9 +23,12 @@ export default async function EditProjectPage({
     notFound();
   }
 
-  if (!viewer || viewer.id !== project.ownerId) {
-    redirect({ href: "/launchpad", locale });
-    return null;
+  if (!viewer) {
+    return <SignInRequired callbackURL={`/launchpad/${slug}/edit`} />;
+  }
+
+  if (viewer.id !== project.ownerId) {
+    notFound();
   }
 
   const t = await getTranslations("LaunchpadForm");

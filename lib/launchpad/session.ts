@@ -14,14 +14,14 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
 
 export class UnauthorizedError extends Error {
   constructor() {
-    super("Necesitas iniciar sesion");
+    super("unauthorized");
     this.name = "UnauthorizedError";
   }
 }
 
 export class ForbiddenError extends Error {
   constructor() {
-    super("No tenes permisos para esta accion");
+    super("forbidden");
     this.name = "ForbiddenError";
   }
 }
@@ -55,6 +55,7 @@ export interface Viewer {
   id: string;
   image: string | null;
   isAlquimista: boolean;
+  locale: string;
   name: string;
   role: string;
 }
@@ -70,6 +71,7 @@ export function toViewer(user: SessionUser | null): Viewer | null {
     email: user.email,
     image: user.image ?? null,
     role: user.role ?? "user",
+    locale: user.locale ?? "es",
     isAlquimista: user.isAlquimista ?? false,
     alquimistaCheckedAt: user.alquimistaCheckedAt ?? null,
   };

@@ -30,3 +30,6 @@ export function publicUrl(): string {
 }
 
 export const isPreviewDeployment = () => process.env.VERCEL_ENV === "preview";
+
+export const isProductionDeployment = () =>
+  process.env.VERCEL_ENV === "production";

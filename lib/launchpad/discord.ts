@@ -1,5 +1,5 @@
 import "server-only";
-import { eq } from "drizzle-orm";
+import { and, eq, ne } from "drizzle-orm";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -29,6 +29,7 @@ export type MembershipResult =
   | { status: "member"; discordUserId: string; roles: string[] }
   | { status: "not-member"; discordUserId: string }
   | { status: "not-linked" }
+  | { status: "already-claimed" }
   | { status: "unavailable" };
 
 interface DiscordAccount {
@@ -61,6 +62,8 @@ async function findDiscordAccount(
       }
     : null;
 }
+
+const NOT_MEMBER_STATUS = 404;
 
 export async function checkGuildMembership(
   userId: string
@@ -96,7 +99,7 @@ export async function checkGuildMembership(
     return { status: "unavailable" };
   }
 
-  if ([401, 403, 404].includes(response.status)) {
+  if (response.status === NOT_MEMBER_STATUS) {
     return { status: "not-member", discordUserId: discordAccount.accountId };
   }
 
@@ -113,6 +116,19 @@ export async function checkGuildMembership(
   };
 }
 
+async function isClaimedByAnotherUser(
+  discordUserId: string,
+  userId: string
+): Promise<boolean> {
+  const [row] = await db
+    .select({ id: user.id })
+    .from(user)
+    .where(and(eq(user.discordUserId, discordUserId), ne(user.id, userId)))
+    .limit(1);
+
+  return Boolean(row);
+}
+
 export async function refreshAlquimistaBadge(userId: string) {
   const result = await checkGuildMembership(userId);
 
@@ -125,6 +141,15 @@ export async function refreshAlquimistaBadge(userId: string) {
     return { isAlquimista: current?.isAlquimista ?? false, result };
   }
 
+  const discordUserId = "discordUserId" in result ? result.discordUserId : null;
+
+  if (discordUserId && (await isClaimedByAnotherUser(discordUserId, userId))) {
+    return {
+      isAlquimista: false,
+      result: { status: "already-claimed" } as MembershipResult,
+    };
+  }
+
   const isAlquimista = result.status === "member";
 
   await db
@@ -132,7 +157,7 @@ export async function refreshAlquimistaBadge(userId: string) {
     .set({
       isAlquimista,
       alquimistaCheckedAt: new Date(),
-      discordUserId: "discordUserId" in result ? result.discordUserId : null,
+      discordUserId,
     })
     .where(eq(user.id, userId));
 

@@ -1,8 +1,13 @@
 import "server-only";
-import { and, count, desc, eq, inArray, sql } from "drizzle-orm";
+import { and, count, desc, eq, ilike, inArray, or, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
+import type { ProjectStatus } from "@/lib/db/schema";
 import { project, projectCategory, report, user, vote } from "@/lib/db/schema";
-import { LANDING_TOP_PROJECTS, PROJECTS_PER_PAGE } from "./constants";
+import {
+  ADMIN_PROJECTS_PER_PAGE,
+  LANDING_TOP_PROJECTS,
+  PROJECTS_PER_PAGE,
+} from "./constants";
 import type { ProjectFilters } from "./validation";
 
 const publicColumns = {
@@ -49,12 +54,33 @@ export interface ProjectListItem {
   voteScore: number;
 }
 
+const TSQUERY_SEPARATOR = /\s+/;
+const TSQUERY_UNSAFE = /[^\p{L}\p{N}]+/gu;
+
+function prefixTsQuery(input: string) {
+  const terms = input
+    .split(TSQUERY_SEPARATOR)
+    .map((term) => term.replace(TSQUERY_UNSAFE, ""))
+    .filter(Boolean);
+
+  return terms.length > 0 ? terms.map((term) => `${term}:*`).join(" & ") : null;
+}
+
 export async function listApprovedProjects(filters: ProjectFilters) {
   const conditions = [eq(project.status, "approved")];
 
   if (filters.q) {
+    const tsQuery = prefixTsQuery(filters.q);
+
+    const byName = ilike(project.name, `%${filters.q}%`);
+
     conditions.push(
-      sql`${project.searchVector} @@ plainto_tsquery('spanish', ${filters.q})`
+      tsQuery
+        ? (or(
+            sql`${project.searchVector} @@ to_tsquery('simple', ${tsQuery})`,
+            byName
+          ) ?? byName)
+        : byName
     );
   }
 
@@ -92,10 +118,12 @@ export async function listApprovedProjects(filters: ProjectFilters) {
     categoryIds: categories.get(row.id) ?? [],
   }));
 
+  const total = totals?.total ?? 0;
+
   return {
     items,
-    total: totals?.total ?? 0,
-    pageCount: Math.max(1, Math.ceil((totals?.total ?? 0) / PROJECTS_PER_PAGE)),
+    total,
+    pageCount: Math.max(1, Math.ceil(total / PROJECTS_PER_PAGE)),
   };
 }
 
@@ -171,6 +199,8 @@ export async function listUserProjects(userId: string) {
   }));
 }
 
+export type UserProject = Awaited<ReturnType<typeof listUserProjects>>[number];
+
 export async function countUserProjects(userId: string) {
   const [row] = await db
     .select({ total: count() })
@@ -181,49 +211,100 @@ export async function countUserProjects(userId: string) {
 }
 
 export async function listProjectsForAdmin(
-  status?: "draft" | "pending" | "approved" | "rejected"
+  status: ProjectStatus,
+  page = 1,
+  search?: string
 ) {
-  const rows = await db
-    .select({
-      id: project.id,
-      slug: project.slug,
-      name: project.name,
-      tagline: project.tagline,
-      description: project.description,
-      logoUrl: project.logoUrl,
-      websiteUrl: project.websiteUrl,
-      xUrl: project.xUrl,
-      githubUrl: project.githubUrl,
-      linkedinUrl: project.linkedinUrl,
-      instagramUrl: project.instagramUrl,
-      tiktokUrl: project.tiktokUrl,
-      discordUrl: project.discordUrl,
-      status: project.status,
-      rejectionReason: project.rejectionReason,
-      voteScore: project.voteScore,
-      createdAt: project.createdAt,
-      submittedAt: project.submittedAt,
-      ownerName: user.name,
-      ownerEmail: user.email,
-      ownerImage: user.image,
-      ownerIsAlquimista: user.isAlquimista,
-    })
-    .from(project)
-    .innerJoin(user, eq(project.ownerId, user.id))
-    .where(status ? eq(project.status, status) : undefined)
-    .orderBy(desc(project.submittedAt), desc(project.createdAt));
+  const conditions = [eq(project.status, status)];
+
+  if (search) {
+    const needle = `%${search}%`;
+
+    const byName = ilike(project.name, needle);
+
+    conditions.push(
+      or(byName, ilike(user.name, needle), ilike(user.email, needle)) ?? byName
+    );
+  }
+
+  const where = and(...conditions);
+  const offset = (page - 1) * ADMIN_PROJECTS_PER_PAGE;
+
+  const [rows, [totals]] = await Promise.all([
+    db
+      .select({
+        id: project.id,
+        slug: project.slug,
+        name: project.name,
+        tagline: project.tagline,
+        description: project.description,
+        logoUrl: project.logoUrl,
+        websiteUrl: project.websiteUrl,
+        xUrl: project.xUrl,
+        githubUrl: project.githubUrl,
+        linkedinUrl: project.linkedinUrl,
+        instagramUrl: project.instagramUrl,
+        tiktokUrl: project.tiktokUrl,
+        discordUrl: project.discordUrl,
+        status: project.status,
+        rejectionReason: project.rejectionReason,
+        voteScore: project.voteScore,
+        createdAt: project.createdAt,
+        submittedAt: project.submittedAt,
+        reviewedAt: project.reviewedAt,
+        reviewedByName: sql<
+          string | null
+        >`(select r.name from ${user} r where r.id = ${project.reviewedById})`,
+        ownerName: user.name,
+        ownerEmail: user.email,
+        ownerImage: user.image,
+        ownerIsAlquimista: user.isAlquimista,
+      })
+      .from(project)
+      .innerJoin(user, eq(project.ownerId, user.id))
+      .where(where)
+      .orderBy(desc(project.submittedAt), desc(project.createdAt))
+      .limit(ADMIN_PROJECTS_PER_PAGE)
+      .offset(offset),
+    db
+      .select({ total: count() })
+      .from(project)
+      .innerJoin(user, eq(project.ownerId, user.id))
+      .where(where),
+  ]);
 
   const categories = await categoriesByProject(rows.map((row) => row.id));
 
-  return rows.map((row) => ({
-    ...row,
-    categoryIds: categories.get(row.id) ?? [],
-  }));
+  const total = totals?.total ?? 0;
+
+  return {
+    items: rows.map((row) => ({
+      ...row,
+      categoryIds: categories.get(row.id) ?? [],
+    })),
+    total,
+    pageCount: Math.max(1, Math.ceil(total / ADMIN_PROJECTS_PER_PAGE)),
+  };
 }
 
 export type AdminProject = Awaited<
   ReturnType<typeof listProjectsForAdmin>
->[number];
+>["items"][number];
+
+export async function countProjectsByStatus() {
+  const rows = await db
+    .select({ status: project.status, total: count() })
+    .from(project)
+    .groupBy(project.status);
+
+  const byStatus = new Map(rows.map((row) => [row.status, row.total]));
+
+  return {
+    pending: byStatus.get("pending") ?? 0,
+    approved: byStatus.get("approved") ?? 0,
+    rejected: byStatus.get("rejected") ?? 0,
+  };
+}
 
 export async function listOpenReports() {
   return await db

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { CategoryChip } from "@/components/launchpad/category-chip";
+import { DeleteProjectButton } from "@/components/launchpad/delete-project-button";
 import { ReportDialog } from "@/components/launchpad/report-dialog";
 import { ShareOnX } from "@/components/launchpad/share-on-x";
 import { StatusChip } from "@/components/launchpad/status-chip";
@@ -36,8 +37,12 @@ export async function generateMetadata({
   const { locale, slug } = await params;
   const project = await getProjectBySlug(slug);
 
-  if (!project || project.status !== "approved") {
+  if (!project) {
     return {};
+  }
+
+  if (project.status !== "approved") {
+    return { robots: { index: false, follow: false } };
   }
 
   return {
@@ -187,6 +192,7 @@ export default async function ProjectDetailPage({
             hasVoted={voted}
             isAlquimista={viewer?.isAlquimista ?? false}
             isAuthenticated={Boolean(viewer)}
+            isOwner={isOwner}
             projectId={project.id}
             score={project.voteScore}
             size="lg"
@@ -258,12 +264,21 @@ export default async function ProjectDetailPage({
 
           <div className="flex flex-wrap gap-2">
             {isOwner && (
-              <Button asChild size="sm" variant="outline">
-                <Link href={`/launchpad/${slug}/edit`}>
-                  <Pencil className="size-4" />
-                  {tDetail("editProject")}
-                </Link>
-              </Button>
+              <>
+                <Button asChild size="sm" variant="outline">
+                  <Link href={`/launchpad/${slug}/edit`}>
+                    <Pencil className="size-4" />
+                    {tDetail("editProject")}
+                  </Link>
+                </Button>
+                {project.status !== "approved" && (
+                  <DeleteProjectButton
+                    projectId={project.id}
+                    projectName={project.name}
+                    redirectTo="/launchpad/my-projects"
+                  />
+                )}
+              </>
             )}
             {viewer && !isOwner && project.status === "approved" && (
               <ReportDialog projectId={project.id} />

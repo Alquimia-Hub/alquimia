@@ -1,8 +1,8 @@
 import { getTranslations } from "next-intl/server";
+import { SignInRequired } from "@/components/auth/sign-in-required";
 import { BackLink } from "@/components/launchpad/back-link";
 import { ProjectForm } from "@/components/launchpad/project-form";
 import { resolveLocale } from "@/i18n/locale";
-import { redirect } from "@/i18n/navigation";
 import { MAX_PROJECTS_PER_USER } from "@/lib/launchpad/constants";
 import { countUserProjects } from "@/lib/launchpad/queries";
 import { getViewer } from "@/lib/launchpad/session";
@@ -10,12 +10,11 @@ import { getViewer } from "@/lib/launchpad/session";
 export default async function NewProjectPage({
   params,
 }: PageProps<"/[locale]/launchpad/new">) {
-  const locale = await resolveLocale(params);
+  await resolveLocale(params);
   const viewer = await getViewer();
 
   if (!viewer) {
-    redirect({ href: "/launchpad", locale });
-    return null;
+    return <SignInRequired callbackURL="/launchpad/new" />;
   }
 
   const t = await getTranslations("LaunchpadForm");

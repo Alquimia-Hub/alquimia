@@ -8,6 +8,7 @@ interface ProjectCardProps {
   hasVoted: boolean;
   isAlquimista: boolean;
   isAuthenticated: boolean;
+  isOwner?: boolean;
   project: ProjectListItem;
 }
 
@@ -16,6 +17,7 @@ export function ProjectCard({
   hasVoted,
   isAuthenticated,
   isAlquimista,
+  isOwner = false,
 }: ProjectCardProps) {
   return (
     <article className="group relative flex gap-4 border border-rule-2 bg-bg-2/60 p-4 transition-colors hover:border-rule">
@@ -56,6 +58,7 @@ export function ProjectCard({
           hasVoted={hasVoted}
           isAlquimista={isAlquimista}
           isAuthenticated={isAuthenticated}
+          isOwner={isOwner}
           projectId={project.id}
           score={project.voteScore}
         />

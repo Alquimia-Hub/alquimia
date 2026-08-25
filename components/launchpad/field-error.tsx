@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { useFormField } from "@/components/ui/form";
 import { MAX_CATEGORIES_PER_PROJECT } from "@/lib/launchpad/categories";
 import { PROJECT_LIMITS } from "@/lib/launchpad/constants";
 
@@ -13,6 +14,7 @@ const MAX_BY_ERROR: Record<string, number> = {
 
 export function FieldError({ message }: { message?: string }) {
   const t = useTranslations("LaunchpadForm.errors");
+  const { formMessageId } = useFormField();
 
   if (!message) {
     return null;
@@ -23,5 +25,9 @@ export function FieldError({ message }: { message?: string }) {
     ? t(key, { max: MAX_BY_ERROR[message] ?? 0 })
     : message;
 
-  return <p className="m-0 font-medium text-destructive text-sm">{text}</p>;
+  return (
+    <p className="m-0 font-medium text-destructive text-sm" id={formMessageId}>
+      {text}
+    </p>
+  );
 }

@@ -1,5 +1,6 @@
 import { relations, sql } from "drizzle-orm";
 import {
+  bigint,
   customType,
   index,
   integer,
@@ -8,6 +9,7 @@ import {
   primaryKey,
   text,
   timestamp,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 import { user } from "./auth";
 
@@ -16,7 +18,6 @@ const tsvector = customType<{ data: string; driverData: string }>({
 });
 
 export const projectStatus = pgEnum("project_status", [
-  "draft",
   "pending",
   "approved",
   "rejected",
@@ -51,7 +52,7 @@ export const project = pgTable(
     tiktokUrl: text("tiktok_url"),
     discordUrl: text("discord_url"),
 
-    status: projectStatus("status").default("draft").notNull(),
+    status: projectStatus("status").default("pending").notNull(),
 
     rejectionReason: text("rejection_reason"),
 
@@ -63,18 +64,20 @@ export const project = pgTable(
     }),
 
     voteScore: integer("vote_score").default(0).notNull(),
-    voteCount: integer("vote_count").default(0).notNull(),
 
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("updated_at")
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
       .defaultNow()
       .$onUpdate(() => new Date())
       .notNull(),
-    submittedAt: timestamp("submitted_at"),
-    approvedAt: timestamp("approved_at"),
+    submittedAt: timestamp("submitted_at", { withTimezone: true }),
+    approvedAt: timestamp("approved_at", { withTimezone: true }),
+    reviewedAt: timestamp("reviewed_at", { withTimezone: true }),
 
     searchVector: tsvector("search_vector").generatedAlwaysAs(
-      sql`to_tsvector('spanish', coalesce(name, '') || ' ' || coalesce(tagline, '') || ' ' || coalesce(description, ''))`
+      sql`to_tsvector('simple', coalesce(name, '') || ' ' || coalesce(tagline, '') || ' ' || coalesce(description, ''))`
     ),
   },
   (table) => [
@@ -111,7 +114,9 @@ export const vote = pgTable(
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
   },
   (table) => [
     primaryKey({ columns: [table.projectId, table.userId] }),
@@ -131,17 +136,32 @@ export const report = pgTable(
       .references(() => user.id, { onDelete: "cascade" }),
     reason: text("reason").notNull(),
     status: reportStatus("status").default("open").notNull(),
-    createdAt: timestamp("created_at").defaultNow().notNull(),
-    resolvedAt: timestamp("resolved_at"),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    resolvedAt: timestamp("resolved_at", { withTimezone: true }),
   },
   (table) => [
     index("report_status_idx").on(table.status),
     index("report_project_id_idx").on(table.projectId),
+    uniqueIndex("report_open_unique_idx")
+      .on(table.projectId, table.reporterId)
+      .where(sql`${table.status} = 'open'`),
   ]
 );
 
+export const rateLimit = pgTable("rate_limit", {
+  key: text("key").primaryKey(),
+  count: integer("count").default(0).notNull(),
+  expiresAt: bigint("expires_at", { mode: "number" }).notNull(),
+});
+
 export const projectRelations = relations(project, ({ one, many }) => ({
   owner: one(user, { fields: [project.ownerId], references: [user.id] }),
+  reviewedBy: one(user, {
+    fields: [project.reviewedById],
+    references: [user.id],
+  }),
   categories: many(projectCategory),
   votes: many(vote),
   reports: many(report),
@@ -182,5 +202,6 @@ export const reportRelations = relations(report, ({ one }) => ({
 }));
 
 export type Project = typeof project.$inferSelect;
+export type ProjectStatus = Project["status"];
 export type Category = typeof category.$inferSelect;
 export type Report = typeof report.$inferSelect;

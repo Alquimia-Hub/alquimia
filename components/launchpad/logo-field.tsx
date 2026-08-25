@@ -18,6 +18,7 @@ interface LogoFieldProps {
 
 export function LogoField({ value, onChange, error }: LogoFieldProps) {
   const t = useTranslations("LaunchpadForm");
+  const tErrors = useTranslations("LaunchpadErrors");
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
 
@@ -40,7 +41,9 @@ export function LogoField({ value, onChange, error }: LogoFieldProps) {
       };
 
       if (!(response.ok && payload.url)) {
-        toast.error(payload.error ?? t("errorGeneric"));
+        const key = payload.error as Parameters<typeof tErrors>[0] | undefined;
+
+        toast.error(key && tErrors.has(key) ? tErrors(key) : t("errorGeneric"));
         return;
       }
 

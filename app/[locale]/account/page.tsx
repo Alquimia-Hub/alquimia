@@ -1,30 +1,51 @@
 import { LayoutGrid, Shield } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { AlquimistaCard } from "@/components/auth/alquimista-card";
+import { SignInRequired } from "@/components/auth/sign-in-required";
 import { BackLink } from "@/components/launchpad/back-link";
 import { SiteHeader } from "@/components/site-header";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 import { resolveLocale } from "@/i18n/locale";
-import { Link, redirect } from "@/i18n/navigation";
-import { hasDiscordAccount } from "@/lib/launchpad/discord";
+import { Link } from "@/i18n/navigation";
+import { hasDiscordAccount, isBadgeStale } from "@/lib/launchpad/discord";
+import { countPendingProjects } from "@/lib/launchpad/queries";
 import { getViewer } from "@/lib/launchpad/session";
+
+const readLinkState = (value: unknown): "error" | "linked" | null => {
+  if (value === "linked" || value === "error") {
+    return value;
+  }
+
+  return null;
+};
 
 export default async function AccountPage({
   params,
+  searchParams,
 }: PageProps<"/[locale]/account">) {
-  const locale = await resolveLocale(params);
+  await resolveLocale(params);
   const viewer = await getViewer();
 
   if (!viewer) {
-    redirect({ href: "/launchpad", locale });
-    return null;
+    return (
+      <div className="flex min-h-screen flex-col bg-bg">
+        <SiteHeader />
+        <main className="mx-auto w-full max-w-2xl flex-1 px-6">
+          <SignInRequired callbackURL="/account" />
+        </main>
+      </div>
+    );
   }
 
-  const [t, discordLinked] = await Promise.all([
+  const linkState = readLinkState((await searchParams).discord);
+
+  const [t, tAdmin, discordLinked, pendingCount] = await Promise.all([
     getTranslations("Account"),
+    getTranslations("Admin"),
     hasDiscordAccount(viewer.id),
+    viewer.role === "admin" ? countPendingProjects() : Promise.resolve(0),
   ]);
 
   return (
@@ -59,6 +80,8 @@ export default async function AccountPage({
             checkedAt={viewer.alquimistaCheckedAt}
             hasDiscordLinked={discordLinked}
             isAlquimista={viewer.isAlquimista}
+            isStale={isBadgeStale(viewer.alquimistaCheckedAt)}
+            linkState={linkState}
           />
 
           <div className="flex flex-wrap gap-2">
@@ -74,6 +97,14 @@ export default async function AccountPage({
                 <Link href="/admin/launchpad">
                   <Shield className="size-4" />
                   {t("adminPanel")}
+                  {pendingCount > 0 && (
+                    <span
+                      className="ml-1 border border-amber-500/40 bg-amber-500/10 px-1.5 py-0.5 font-[family-name:var(--font-jetbrains)] text-[10px] text-amber-200 tabular-nums"
+                      title={tAdmin("pendingBadge", { count: pendingCount })}
+                    >
+                      {pendingCount}
+                    </span>
+                  )}
                 </Link>
               </Button>
             )}

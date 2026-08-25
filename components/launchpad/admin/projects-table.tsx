@@ -3,7 +3,7 @@
 import { Check, Loader2, X } from "lucide-react";
 import Image from "next/image";
 import { useFormatter, useTranslations } from "next-intl";
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { CategoryChip } from "@/components/launchpad/category-chip";
 import { StatusChip } from "@/components/launchpad/status-chip";
@@ -18,36 +18,82 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useRouter } from "@/i18n/navigation";
 import { approveProjects, rejectProjects } from "@/lib/launchpad/actions";
 import type { AdminProject } from "@/lib/launchpad/queries";
+import { useActionError } from "../use-action-error";
 import { ProjectSheet } from "./project-sheet";
 import { RejectDialog } from "./reject-dialog";
 
-export function ProjectsTable({ projects }: { projects: AdminProject[] }) {
+const SEARCH_DEBOUNCE_MS = 300;
+
+function pageHref(tab: string, query: string, page: number) {
+  const params = new URLSearchParams({ tab });
+
+  if (query) {
+    params.set("q", query);
+  }
+
+  if (page > 1) {
+    params.set("page", String(page));
+  }
+
+  return `?${params.toString()}`;
+}
+
+interface ProjectsTableProps {
+  page: number;
+  pageCount: number;
+  projects: AdminProject[];
+  query: string;
+  tab: string;
+  total: number;
+}
+
+export function ProjectsTable({
+  projects,
+  page,
+  pageCount,
+  total,
+  query: activeQuery,
+  tab,
+}: ProjectsTableProps) {
   const t = useTranslations("Admin");
   const format = useFormatter();
+  const router = useRouter();
+  const translateError = useActionError();
   const [isPending, startTransition] = useTransition();
 
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(activeQuery);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [openProject, setOpenProject] = useState<AdminProject | null>(null);
 
   const [rejectTargets, setRejectTargets] = useState<string[] | null>(null);
 
-  const visible = useMemo(() => {
-    const needle = query.trim().toLowerCase();
+  const pushQuery = useRef((value: string) => {
+    const params = new URLSearchParams({ tab });
 
-    if (!needle) {
-      return projects;
+    if (value) {
+      params.set("q", value);
     }
 
-    return projects.filter(
-      (project) =>
-        project.name.toLowerCase().includes(needle) ||
-        project.ownerName.toLowerCase().includes(needle) ||
-        project.ownerEmail.toLowerCase().includes(needle)
+    router.replace(`/admin/launchpad?${params.toString()}`, { scroll: false });
+  });
+
+  useEffect(() => {
+    if (query === activeQuery) {
+      return;
+    }
+
+    const timeout = setTimeout(
+      () => pushQuery.current(query),
+      SEARCH_DEBOUNCE_MS
     );
-  }, [projects, query]);
+
+    return () => clearTimeout(timeout);
+  }, [query, activeQuery]);
+
+  const visible = projects;
 
   const allVisibleSelected =
     visible.length > 0 && visible.every((project) => selected.has(project.id));
@@ -90,8 +136,9 @@ export function ProjectsTable({ projects }: { projects: AdminProject[] }) {
         toast.success(t("approved", { count: result.data.approved }));
         setSelected(new Set());
         setOpenProject(null);
+        router.refresh();
       } else {
-        toast.error(result.error);
+        toast.error(translateError(result.error));
       }
     });
   };
@@ -105,8 +152,9 @@ export function ProjectsTable({ projects }: { projects: AdminProject[] }) {
         setSelected(new Set());
         setRejectTargets(null);
         setOpenProject(null);
+        router.refresh();
       } else {
-        toast.error(result.error);
+        toast.error(translateError(result.error));
       }
     });
   };
@@ -265,6 +313,48 @@ export function ProjectsTable({ projects }: { projects: AdminProject[] }) {
           </TableBody>
         </Table>
       </div>
+
+      <nav className="flex items-center justify-between gap-4">
+        <span className="font-[family-name:var(--font-jetbrains)] text-[11px] text-ink-4 uppercase tracking-[0.12em]">
+          {t("resultCount", { count: total })}
+        </span>
+
+        {pageCount > 1 && (
+          <div className="flex items-center gap-4">
+            <Button
+              asChild={page > 1}
+              disabled={page === 1}
+              size="sm"
+              variant="ghost"
+            >
+              {page > 1 ? (
+                <a href={pageHref(tab, activeQuery, page - 1)}>
+                  {t("previous")}
+                </a>
+              ) : (
+                <span>{t("previous")}</span>
+              )}
+            </Button>
+
+            <span className="font-[family-name:var(--font-jetbrains)] text-[11px] text-ink-4 tabular-nums">
+              {t("pageOf", { page, total: pageCount })}
+            </span>
+
+            <Button
+              asChild={page < pageCount}
+              disabled={page === pageCount}
+              size="sm"
+              variant="ghost"
+            >
+              {page < pageCount ? (
+                <a href={pageHref(tab, activeQuery, page + 1)}>{t("next")}</a>
+              ) : (
+                <span>{t("next")}</span>
+              )}
+            </Button>
+          </div>
+        )}
+      </nav>
 
       <ProjectSheet
         onApprove={(id) => approve([id])}

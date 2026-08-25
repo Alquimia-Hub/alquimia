@@ -234,7 +234,8 @@
     "alquimistaHint": "Your vote counts double as an Alquimista",
     "loginToVote": "Sign in to support",
     "points": "{count, plural, one {# point} other {# points}}",
-    "error": "We couldn't register your support"
+    "error": "We couldn't register your support",
+    "ownProject": "You can't support your own project"
   },
   "LaunchpadDetail": {
     "about": "About the project",
@@ -253,7 +254,8 @@
     "reportPlaceholder": "E.g. the site doesn't exist, the project isn't real…",
     "reportSubmit": "Send report",
     "reportSent": "Thanks, we'll look into it",
-    "shareOnX": "Share on X"
+    "shareOnX": "Share on X",
+    "ownProject": "This is your project"
   },
   "LaunchpadForm": {
     "createTitle": "Submit a project",
@@ -292,11 +294,15 @@
       "websiteRequired": "We need the link to your site",
       "urlInvalid": "It has to be a link starting with https://",
       "categoriesRequired": "Pick at least one category",
-      "categoriesTooMany": "You can pick up to {max} categories"
+      "categoriesTooMany": "You can pick up to {max} categories",
+      "logoNotUploaded": "Upload the logo here — we can't use an image hosted somewhere else"
     },
     "charCount": "{count} of {max}",
     "errorSummaryTitle": "{count, plural, one {# field needs} other {# fields need}} fixing",
-    "errorSummaryHint": "Check what's marked in red above."
+    "errorSummaryHint": "Check what's marked in red above.",
+    "savedTitle": "Changes saved",
+    "savedBackToReview": "Your project is back in review and goes live again once we approve it.",
+    "errorSummaryJump": "Go to the first error"
   },
   "LaunchpadSuccess": {
     "title": "Your project is under review",
@@ -315,10 +321,17 @@
     "edit": "Edit",
     "view": "View",
     "reason": "Reason",
-    "slotsLeft": "{count, plural, one {# slot left} other {# slots left}}"
+    "slotsLeft": "{count, plural, one {# slot left} other {# slots left}}",
+    "delete": "Delete",
+    "deleteTitle": "Delete “{project}”?",
+    "deleteBody": "This deletes the project and everything attached to it. It can't be undone.",
+    "deleteConfirm": "Yes, delete",
+    "deleteCancel": "Cancel",
+    "deleted": "Project deleted",
+    "deleteBlocked": "Published projects are taken down by the team.",
+    "slotsFull": "You've used your {max} slots. Delete one to publish another."
   },
   "LaunchpadStatus": {
-    "draft": "Draft",
     "pending": "Under review",
     "approved": "Published",
     "rejected": "Needs changes"
@@ -347,7 +360,11 @@
     "joinDiscord": "Join the Discord",
     "signOut": "Sign out",
     "myProjects": "My projects",
-    "adminPanel": "Admin panel"
+    "adminPanel": "Admin panel",
+    "badgeStale": "Your verification expired",
+    "badgeStaleBody": "It's been more than 7 days since we last checked with Discord, so your votes are worth one again. Revalidate to get the badge back.",
+    "badgeAlreadyClaimed": "That Discord account is already linked to another Alquimia user.",
+    "badgeChecking": "Revalidating your badge…"
   },
   "Auth": {
     "signIn": "Sign in",
@@ -359,7 +376,10 @@
     "discordDev": "Discord (local stub)",
     "devNotice": "Local development providers",
     "error": "We couldn't sign you in",
-    "account": "My account"
+    "account": "My account",
+    "requiredTitle": "Sign in to continue",
+    "requiredBody": "You need an account to publish and support projects on the Launchpad.",
+    "backToLaunchpad": "Back to the Launchpad"
   },
   "Admin": {
     "title": "Launchpad panel",
@@ -397,7 +417,16 @@
     "resolved": "Report resolved",
     "error": "We couldn't complete the action",
     "openProject": "Open card",
-    "noAccess": "You don't have access to this section"
+    "noAccess": "You don't have access to this section",
+    "reviewedBy": "Reviewed by {name}",
+    "notReviewed": "Not reviewed",
+    "previous": "Previous",
+    "next": "Next",
+    "pageOf": "Page {page} of {total}",
+    "resultCount": "{count, plural, =0 {No projects} one {# project} other {# projects}}",
+    "pendingBadge": "{count, plural, one {# project waiting for review} other {# projects waiting for review}}",
+    "deleteProject": "Delete project",
+    "deleted": "Project deleted"
   },
   "Error": {
     "title": "Something went wrong",
@@ -425,5 +454,22 @@
     "join": "Join the Discord",
     "skip": "Not now",
     "dontShow": "Don't show again"
+  },
+  "LaunchpadErrors": {
+    "unauthorized": "Your session expired. Sign in again to continue.",
+    "forbidden": "You don't have permission to do this.",
+    "notFound": "That project no longer exists.",
+    "notOwner": "Only the author can edit this project.",
+    "invalidForm": "Check the form fields.",
+    "projectLimitReached": "You've reached the limit of {max} projects. Delete one to publish another.",
+    "tooFast": "You're going too fast. Try again in a bit.",
+    "notPublished": "This project isn't published yet.",
+    "cannotVoteOwnProject": "You can't support your own project.",
+    "alreadyReported": "You already reported this project and we're still looking into it.",
+    "cannotDeleteApproved": "Published projects are taken down by the team. Get in touch or report it.",
+    "slugTaken": "We couldn't generate an address for that name. Try a different one.",
+    "unexpected": "Something went wrong. Try again.",
+    "logoTooLarge": "The logo is over the 1 MB limit.",
+    "logoBadFormat": "The logo must be a WebP, PNG or JPG image."
   }
 }

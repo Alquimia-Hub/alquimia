@@ -4,6 +4,7 @@ import { type EmailLocale, emailCopy } from "./copy";
 
 export interface AdminNewSubmissionEmailProps {
   adminUrl: string;
+  isResubmission?: boolean;
   locale?: EmailLocale;
   ownerEmail: string;
   ownerName: string;
@@ -16,12 +17,19 @@ export function AdminNewSubmissionEmail({
   ownerName,
   ownerEmail,
   adminUrl,
+  isResubmission = false,
 }: AdminNewSubmissionEmailProps) {
   const copy = emailCopy(locale).adminSubmission;
 
+  const subject = isResubmission
+    ? copy.resubmissionSubject(projectName)
+    : copy.subject(projectName);
+
+  const heading = isResubmission ? copy.resubmissionHeading : copy.heading;
+
   return (
-    <EmailLayout locale={locale} preview={copy.subject(projectName)}>
-      <Text className={emailStyles.heading}>{copy.heading}</Text>
+    <EmailLayout locale={locale} preview={subject}>
+      <Text className={emailStyles.heading}>{heading}</Text>
       <Text className={emailStyles.paragraph}>{projectName}</Text>
       <Text className={emailStyles.paragraph}>
         {copy.by}: {ownerName} ({ownerEmail})

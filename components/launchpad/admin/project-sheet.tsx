@@ -137,6 +137,15 @@ export function ProjectSheet({
                 </ul>
               </section>
 
+              <p className="m-0 font-[family-name:var(--font-jetbrains)] text-[10px] text-ink-4 uppercase tracking-[0.12em]">
+                {project.reviewedByName
+                  ? t("reviewedBy", { name: project.reviewedByName })
+                  : t("notReviewed")}
+                {project.reviewedAt
+                  ? ` · ${format.dateTime(project.reviewedAt, { dateStyle: "short" })}`
+                  : ""}
+              </p>
+
               {project.rejectionReason && (
                 <p className="m-0 border-red-500/40 border-l-2 pl-3 text-red-200 text-sm">
                   {project.rejectionReason}
