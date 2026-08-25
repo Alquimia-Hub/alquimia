@@ -12,6 +12,8 @@ export const PROJECTS_PER_PAGE = 24;
 
 export const ADMIN_PROJECTS_PER_PAGE = 25;
 
+export const ADMIN_VOTES_PER_PAGE = 50;
+
 export const LANDING_TOP_PROJECTS = 3;
 
 export const PROJECT_LIMITS = {

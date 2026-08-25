@@ -1,14 +1,28 @@
 import "server-only";
-import { and, count, desc, eq, ilike, inArray, or, sql } from "drizzle-orm";
+import {
+  and,
+  count,
+  desc,
+  eq,
+  gte,
+  ilike,
+  inArray,
+  or,
+  sql,
+} from "drizzle-orm";
 import { db } from "@/lib/db";
 import type { ProjectStatus } from "@/lib/db/schema";
 import { project, projectCategory, report, user, vote } from "@/lib/db/schema";
 import {
   ADMIN_PROJECTS_PER_PAGE,
+  ADMIN_VOTES_PER_PAGE,
   LANDING_TOP_PROJECTS,
   PROJECTS_PER_PAGE,
 } from "./constants";
 import type { ProjectFilters } from "./validation";
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+const WEEK_MS = 7 * DAY_MS;
 
 const publicColumns = {
   id: project.id,
@@ -328,6 +342,71 @@ export async function listOpenReports() {
 }
 
 export type AdminReport = Awaited<ReturnType<typeof listOpenReports>>[number];
+
+export async function listVotesForAdmin(page: number) {
+  const offset = (page - 1) * ADMIN_VOTES_PER_PAGE;
+
+  const [items, [totals]] = await Promise.all([
+    db
+      .select({
+        createdAt: vote.createdAt,
+        projectId: project.id,
+        projectName: project.name,
+        projectSlug: project.slug,
+        voterEmail: user.email,
+        voterHideAvatar: user.hideAvatar,
+        voterId: user.id,
+        voterImage: user.image,
+        voterIsAlquimista: user.isAlquimista,
+        voterName: user.name,
+      })
+      .from(vote)
+      .innerJoin(project, eq(vote.projectId, project.id))
+      .innerJoin(user, eq(vote.userId, user.id))
+      .orderBy(desc(vote.createdAt))
+      .limit(ADMIN_VOTES_PER_PAGE)
+      .offset(offset),
+    db.select({ total: count() }).from(vote),
+  ]);
+
+  const total = totals?.total ?? 0;
+
+  return {
+    items,
+    total,
+    pageCount: Math.max(1, Math.ceil(total / ADMIN_VOTES_PER_PAGE)),
+  };
+}
+
+export type AdminVote = Awaited<
+  ReturnType<typeof listVotesForAdmin>
+>["items"][number];
+
+export async function countVotesByPeriod() {
+  const now = Date.now();
+  const dayAgo = new Date(now - DAY_MS);
+  const weekAgo = new Date(now - WEEK_MS);
+
+  const [row] = await db
+    .select({
+      total: count(),
+      lastDay:
+        sql<number>`count(*) filter (where ${gte(vote.createdAt, dayAgo)})`.mapWith(
+          Number
+        ),
+      lastWeek:
+        sql<number>`count(*) filter (where ${gte(vote.createdAt, weekAgo)})`.mapWith(
+          Number
+        ),
+    })
+    .from(vote);
+
+  return {
+    total: row?.total ?? 0,
+    lastDay: row?.lastDay ?? 0,
+    lastWeek: row?.lastWeek ?? 0,
+  };
+}
 
 export async function countPendingProjects() {
   const [row] = await db

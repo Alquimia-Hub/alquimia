@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import { SignInRequired } from "@/components/auth/sign-in-required";
 import { ProjectsTable } from "@/components/launchpad/admin/projects-table";
 import { ReportsList } from "@/components/launchpad/admin/reports-list";
+import { VotesTable } from "@/components/launchpad/admin/votes-table";
 import { BackLink } from "@/components/launchpad/back-link";
 import { SiteHeader } from "@/components/site-header";
 import { Toaster } from "@/components/ui/sonner";
@@ -11,8 +12,10 @@ import { resolveLocale } from "@/i18n/locale";
 import type { ProjectStatus } from "@/lib/db/schema";
 import {
   countProjectsByStatus,
+  countVotesByPeriod,
   listOpenReports,
   listProjectsForAdmin,
+  listVotesForAdmin,
 } from "@/lib/launchpad/queries";
 import { getViewer } from "@/lib/launchpad/session";
 import { adminFiltersSchema } from "@/lib/launchpad/validation";
@@ -42,11 +45,15 @@ export default async function AdminLaunchpadPage({
   const parsed = adminFiltersSchema.safeParse(await searchParams);
   const filters = parsed.success ? parsed.data : adminFiltersSchema.parse({});
 
-  const [t, counts, projects, reports] = await Promise.all([
+  const [t, counts, projects, reports, votes, voteCounts] = await Promise.all([
     getTranslations("Admin"),
     countProjectsByStatus(),
     listProjectsForAdmin(filters.tab, filters.page, filters.q),
     listOpenReports(),
+    filters.votes
+      ? listVotesForAdmin(filters.page)
+      : Promise.resolve({ items: [], total: 0, pageCount: 1 }),
+    countVotesByPeriod(),
   ]);
 
   const tabs: { count: number; label: string; value: ProjectStatus }[] = [
@@ -54,6 +61,14 @@ export default async function AdminLaunchpadPage({
     { value: "approved", label: t("tabApproved"), count: counts.approved },
     { value: "rejected", label: t("tabRejected"), count: counts.rejected },
   ];
+
+  const activeTab = (() => {
+    if (filters.votes) {
+      return "votes";
+    }
+
+    return filters.reports ? "reports" : filters.tab;
+  })();
 
   return (
     <>
@@ -70,7 +85,7 @@ export default async function AdminLaunchpadPage({
             <p className="mt-3 mb-0 text-ink-3">{t("subtitle")}</p>
           </header>
 
-          <Tabs value={filters.reports ? "reports" : filters.tab}>
+          <Tabs value={activeTab}>
             <TabsList className="bg-bg-2">
               {tabs.map((tab) => (
                 <TabsTrigger
@@ -89,13 +104,33 @@ export default async function AdminLaunchpadPage({
                   {t("tabReports")} ({reports.length})
                 </a>
               </TabsTrigger>
+              <TabsTrigger asChild data-testid="tab-votes" value="votes">
+                <a href="?votes=1">
+                  {t("tabVotes")} ({voteCounts.total})
+                </a>
+              </TabsTrigger>
             </TabsList>
 
-            {filters.reports ? (
+            {activeTab === "votes" && (
+              <TabsContent className="mt-6" value="votes">
+                <VotesTable
+                  lastDay={voteCounts.lastDay}
+                  lastWeek={voteCounts.lastWeek}
+                  page={filters.page}
+                  pageCount={votes.pageCount}
+                  total={voteCounts.total}
+                  votes={votes.items}
+                />
+              </TabsContent>
+            )}
+
+            {activeTab === "reports" && (
               <TabsContent className="mt-6" value="reports">
                 <ReportsList reports={reports} />
               </TabsContent>
-            ) : (
+            )}
+
+            {activeTab === filters.tab && (
               <TabsContent className="mt-6" value={filters.tab}>
                 <ProjectsTable
                   page={filters.page}

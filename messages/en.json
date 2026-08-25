@@ -505,7 +505,18 @@
     "resultCount": "{count, plural, =0 {No projects} one {# project} other {# projects}}",
     "pendingBadge": "{count, plural, one {# project waiting for review} other {# projects waiting for review}}",
     "deleteProject": "Delete project",
-    "deleted": "Project deleted"
+    "deleted": "Project deleted",
+    "tabVotes": "Support",
+    "votesTotal": "Total support",
+    "votesLastDay": "Last 24 hours",
+    "votesLastWeek": "Last 7 days",
+    "votesEmpty": "No support yet",
+    "columnWhen": "Date and time",
+    "columnVoter": "User",
+    "columnAlquimista": "Alchemist",
+    "columnWeight": "Worth",
+    "isAlquimista": "Yes",
+    "notAlquimista": "No"
   },
   "Error": {
     "title": "Something went wrong",
