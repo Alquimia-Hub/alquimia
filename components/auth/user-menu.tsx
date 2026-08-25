@@ -12,9 +12,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Link, useRouter } from "@/i18n/navigation";
 import { authClient } from "@/lib/auth-client";
 import { SignInDialog } from "./sign-in-dialog";
+
+const SIGN_IN_LABEL =
+  "font-[family-name:var(--font-im-fell)] text-[10px] tracking-[0.3em]";
 
 export function UserMenu() {
   const t = useTranslations("Auth");
@@ -24,7 +28,18 @@ export function UserMenu() {
   const { data: session, isPending } = authClient.useSession();
 
   if (isPending) {
-    return <span aria-hidden="true" className="size-7" />;
+    return (
+      <span
+        aria-label={t("loading")}
+        className="relative inline-flex h-7 items-center"
+        role="status"
+      >
+        <span aria-hidden="true" className={`invisible px-3 ${SIGN_IN_LABEL}`}>
+          {t("signIn")}
+        </span>
+        <Skeleton className="absolute inset-0 rounded-full bg-bg-3" />
+      </span>
+    );
   }
 
   const user = session?.user;
@@ -33,7 +48,7 @@ export function UserMenu() {
     return (
       <>
         <Button
-          className="font-[family-name:var(--font-im-fell)] text-[10px] tracking-[0.3em]"
+          className={SIGN_IN_LABEL}
           data-testid="header-signin"
           onClick={() => setSignInOpen(true)}
           size="sm"

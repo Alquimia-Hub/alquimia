@@ -374,6 +374,7 @@
   },
   "Auth": {
     "signIn": "Iniciar sesión",
+    "loading": "Cargando",
     "signInTitle": "Entrá a Alquimia",
     "signInBody": "Usá tu cuenta de Google o Discord. No pedimos contraseña.",
     "google": "Continuar con Google",
