@@ -35,8 +35,8 @@ Un directorio de proyectos hecho por y para la comunidad.
   hace falta corregir algo, te llega el motivo por mail y lo podés reenviar.
 - **La comunidad apoya.** Cualquier usuario logueado puede apoyar un proyecto una
   vez. El ranking se arma con esos apoyos y se actualiza al instante.
-- **Los Alquimistas valen doble.** Si verificás que sos parte de nuestro Discord,
-  ganás el badge de *Alquimista* y tus apoyos cuentan el doble. El badge se
+- **Los Alquimistas valen x3.** Si verificás que sos parte de nuestro Discord,
+  ganás el badge de *Alquimista* y tus apoyos cuentan el triple. El badge se
   revalida solo: si dejás el server, tus votos vuelven a valer uno.
 - **Se busca y se filtra.** Búsqueda por palabra clave y filtros por categoría,
   con las diez categorías que cubren desde negocios hasta diseño.

@@ -167,7 +167,7 @@ export function VoteButton({
         <Tooltip>
           <TooltipTrigger asChild>{button}</TooltipTrigger>
           <TooltipContent className="border-elixir/40" side="left">
-            {t("doubleHint")}
+            {t("alquimistaHint")}
           </TooltipContent>
         </Tooltip>
       ) : (

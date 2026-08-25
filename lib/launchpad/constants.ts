@@ -1,7 +1,7 @@
 export const MAX_PROJECTS_PER_USER = 5;
 
 export const VOTE_WEIGHT_DEFAULT = 1;
-export const VOTE_WEIGHT_ALQUIMISTA = 2;
+export const VOTE_WEIGHT_ALQUIMISTA = 3;
 
 export const ALQUIMISTA_CHECK_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 

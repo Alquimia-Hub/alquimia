@@ -36,6 +36,13 @@
       "when": 1787683683716,
       "tag": "0004_last_marvel_boy",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1787770083716,
+      "tag": "0005_shiny_wither",
+      "breakpoints": true
     }
   ]
 }
