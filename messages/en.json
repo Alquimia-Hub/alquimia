@@ -5,7 +5,11 @@
     "brandTitle": "Alquimia | Brand",
     "brandDescription": "The visual elements of Alquimia. Download the logo, copy the colors and browse the typography.",
     "ogAlt": "Alquimia — Open community on AI, automation and productivity",
-    "ogTagline": "Open community on AI, automation and productivity"
+    "ogTagline": "Open community on AI, automation and productivity",
+    "termsTitle": "Alquimia | Terms and conditions",
+    "termsDescription": "How Alquimia works, what can be published on the Launchpad and what we expect from everyone taking part.",
+    "privacyTitle": "Alquimia | Privacy policy",
+    "privacyDescription": "What data we keep, what we use it for and how to ask us to delete it."
   },
   "Common": {
     "brand": "Alquimia",
@@ -117,7 +121,9 @@
     "tagline": "Alquimia — a community of modern arts",
     "year": "· MMXXVI ·",
     "craft": "Forged with ink and patience",
-    "brand": "Brand"
+    "brand": "Brand",
+    "terms": "Terms",
+    "privacy": "Privacy"
   },
   "Brand": {
     "eyebrow": "Identity",
@@ -379,7 +385,8 @@
     "account": "My account",
     "requiredTitle": "Sign in to continue",
     "requiredBody": "You need an account to publish and support projects on the Launchpad.",
-    "backToLaunchpad": "Back to the Launchpad"
+    "backToLaunchpad": "Back to the Launchpad",
+    "legalHint": "By signing in you accept the <terms>terms and conditions</terms> and the <privacy>privacy policy</privacy>."
   },
   "Admin": {
     "title": "Launchpad panel",
@@ -471,5 +478,184 @@
     "unexpected": "Something went wrong. Try again.",
     "logoTooLarge": "The logo is over the 1 MB limit.",
     "logoBadFormat": "The logo must be a WebP, PNG or JPG image."
+  },
+  "Terms": {
+    "eyebrow": "Legal",
+    "title": "Terms and conditions",
+    "updated": "Last updated: August 25, 2026",
+    "intro": "These terms explain how Alquimia works and what we expect from everyone taking part. By using the site or publishing a project on the Launchpad, you agree to what follows.",
+    "sections": {
+      "about": {
+        "title": "What Alquimia is",
+        "body": [
+          "Alquimia is an open, free community about artificial intelligence, automation and productivity. We are not an incorporated legal entity or a company: we are a group of people keeping a community alive.",
+          "A team of administrators runs the platform and its infrastructure, which includes the public site and the Launchpad, a project directory built by the community."
+        ]
+      },
+      "account": {
+        "title": "Your account",
+        "body": [
+          "To publish a project or support others you need to sign in with Google or Discord. You must be at least 13 years old to use the site.",
+          "You are responsible for the activity on your account and for the information you upload. Don't impersonate other people or create multiple accounts."
+        ]
+      },
+      "publishing": {
+        "title": "Publishing on the Launchpad",
+        "body": [
+          "Any registered person can submit a project. By doing so you confirm that you have the right to use and publish everything you upload: name, description, logo and links.",
+          "Projects are reviewed before being published. We may approve them, ask for corrections or reject them. When we reject something, we always try to explain why by email.",
+          "You can edit or unpublish your project at any time from your account."
+        ]
+      },
+      "content": {
+        "title": "Content we don't accept",
+        "body": [
+          "You may not publish illegal, misleading or fraudulent content, spam, malware, material that infringes third-party rights, sexually explicit content, or anything promoting hate, violence or harassment.",
+          "We also don't accept projects that exist only to run hidden advertising or inflate metrics."
+        ]
+      },
+      "votes": {
+        "title": "Support and ranking",
+        "body": [
+          "Each person can support a project once. Those who verify they are part of our Discord earn the Alquimista badge and their support counts double.",
+          "Manipulating the ranking with fake accounts, bots, incentives or artificial coordination is not allowed. If we detect manipulation we may void the support and unpublish the project."
+        ]
+      },
+      "ownership": {
+        "title": "Content and ownership",
+        "body": [
+          "What you publish stays yours. By publishing it you give us permission to display it on the site and share it through community channels such as Discord and social media.",
+          "Each project's trademarks and logos belong to their owners. The Alquimia name and visual identity belong to the community; the brand page holds the files and usage guidelines."
+        ]
+      },
+      "moderation": {
+        "title": "Moderation",
+        "body": [
+          "We may edit, unpublish or delete content, and suspend or close accounts that break these terms or harm the community. When we can, we let you know first; in urgent cases we act first."
+        ]
+      },
+      "thirdParties": {
+        "title": "Third-party links and projects",
+        "body": [
+          "The site links to projects and pages we don't control. A project being listed on the Launchpad doesn't mean we endorse it, that we audited it, or that we guarantee anything about it.",
+          "Before hiring, buying from or sharing data with a listed project, evaluate it yourself."
+        ]
+      },
+      "warranty": {
+        "title": "No warranties",
+        "body": [
+          "The site is provided as is and as available. We don't guarantee it will work without interruptions or errors, and we may change, pause or discontinue any part of it at any time.",
+          "This is a community project kept running by volunteer effort: we do our best to look after your information and the published content, but we recommend keeping your own copy of anything that matters to you."
+        ]
+      },
+      "liability": {
+        "title": "Liability",
+        "body": [
+          "To the fullest extent permitted by law, neither Alquimia nor its administrators are liable for damages arising from your use of the site, from content loss, or from your interaction with projects published by third parties."
+        ]
+      },
+      "changes": {
+        "title": "Changes to these terms",
+        "body": [
+          "We may update these terms as the site changes. The date above marks the latest version, and if a change is significant we announce it on the site. Continuing to use Alquimia after a change means you accept it."
+        ]
+      }
+    },
+    "contact": {
+      "title": "Contact",
+      "body": "For any question about these terms, write to us at"
+    }
+  },
+  "Privacy": {
+    "eyebrow": "Legal",
+    "title": "Privacy policy",
+    "updated": "Last updated: August 25, 2026",
+    "intro": "This policy explains what data we keep, what we use it for, and how you can ask us to delete it. We aim to ask for the minimum needed to make the site work.",
+    "sections": {
+      "who": {
+        "title": "Who we are",
+        "body": [
+          "Alquimia is an open community with no incorporated legal entity. The community administrators run the platform, the infrastructure and the data stored in it."
+        ]
+      },
+      "data": {
+        "title": "What data we keep",
+        "body": [
+          "Account: when you sign in with Google or Discord we receive and store your name, your email, your profile picture and that account's identifier. We never store your password.",
+          "Content: the projects you publish (name, description, logo, categories and links), the support you give and the reports you send.",
+          "Discord: if you verify the Alquimista badge, we store your Discord identifier and check whether you are still a member of the server in order to revalidate it.",
+          "Technical data: to keep your session and prevent abuse we store the IP address, the browser and the dates of your active sessions. We also measure site usage in an aggregated, anonymous way."
+        ]
+      },
+      "use": {
+        "title": "What we use it for",
+        "body": [
+          "To create and maintain your account, publish and moderate Launchpad projects, count support and build the ranking, email you notices about your account and your projects, prevent spam and abuse, and understand in general terms how the site is used so we can improve it.",
+          "We don't sell or rent your data, we don't run advertising with it, and we don't use it to build commercial profiles."
+        ]
+      },
+      "public": {
+        "title": "What is public",
+        "body": [
+          "Approved projects are public, along with the name and profile picture of whoever published them. Your email address is never shown publicly.",
+          "Support is shown as a total; we don't publish who supported what."
+        ]
+      },
+      "cookies": {
+        "title": "Cookies",
+        "body": [
+          "We only use necessary cookies: one to keep you signed in and another to remember the language you chose. We don't use advertising or cross-site tracking cookies."
+        ]
+      },
+      "sharing": {
+        "title": "Who we share it with",
+        "body": [
+          "We share data only with the providers that keep the site running, and only for that purpose: Vercel (hosting, usage measurement and image storage), Neon (database), Better Auth (sessions and abuse protection), Google and Discord (sign-in) and Resend (email delivery).",
+          "We may also share information if required by a competent authority or if it is necessary to protect the community."
+        ]
+      },
+      "storage": {
+        "title": "Where it is stored",
+        "body": [
+          "Data is hosted on those providers' servers, which may be located in other countries. By using the site you understand that your information may be processed outside where you live."
+        ]
+      },
+      "retention": {
+        "title": "How long we keep it",
+        "body": [
+          "For as long as your account is active. If you ask us to close it, we delete your account and your personal data.",
+          "We may keep certain technical records needed for security for a limited time, and projects already published may remain in the directory without personal data, unless you ask us to remove them."
+        ]
+      },
+      "rights": {
+        "title": "Your rights",
+        "body": [
+          "You can ask us to access your data, correct it, update it, unlink your Discord account or delete everything. Write to us and we'll respond within a reasonable time.",
+          "To verify the request we'll ask you to write from the email address linked to your account."
+        ]
+      },
+      "minors": {
+        "title": "Minors",
+        "body": [
+          "The site is not directed at children under 13. If we find an account belonging to someone under that age, we delete it."
+        ]
+      },
+      "security": {
+        "title": "Security",
+        "body": [
+          "We take reasonable measures to protect the information, but no system is infallible. If we detect an incident affecting your data, we'll communicate it through the community channels."
+        ]
+      },
+      "changes": {
+        "title": "Changes to this policy",
+        "body": [
+          "If we change how we handle data, we update this page and its date. Significant changes are announced on the site."
+        ]
+      }
+    },
+    "contact": {
+      "title": "Contact",
+      "body": "To exercise your rights or ask anything about privacy, write to us at"
+    }
   }
 }

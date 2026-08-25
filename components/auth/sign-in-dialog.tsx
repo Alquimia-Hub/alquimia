@@ -11,6 +11,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Link } from "@/i18n/navigation";
 import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 
@@ -121,8 +122,36 @@ export function SignInDialog({
             </div>
           )}
         </div>
+
+        <p className="m-0 text-balance text-center text-[12px] text-ink-4 leading-relaxed">
+          {t.rich("legalHint", {
+            privacy: (chunks) => (
+              <LegalLink href="/privacy">{chunks}</LegalLink>
+            ),
+            terms: (chunks) => <LegalLink href="/terms">{chunks}</LegalLink>,
+          })}
+        </p>
       </DialogContent>
     </Dialog>
+  );
+}
+
+function LegalLink({
+  href,
+  children,
+}: {
+  href: "/privacy" | "/terms";
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      className="text-ink-3 underline underline-offset-2 transition-colors duration-200 hover:text-gold"
+      href={href}
+      rel="noopener"
+      target="_blank"
+    >
+      {children}
+    </Link>
   );
 }
 

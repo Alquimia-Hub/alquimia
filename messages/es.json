@@ -5,7 +5,11 @@
     "brandTitle": "Alquimia | Marca",
     "brandDescription": "Los elementos visuales de Alquimia. Descarga el logo, copia los colores y consulta la tipografía.",
     "ogAlt": "Alquimia — Comunidad abierta sobre IA, automatización y productividad",
-    "ogTagline": "Comunidad abierta sobre IA, automatización y productividad"
+    "ogTagline": "Comunidad abierta sobre IA, automatización y productividad",
+    "termsTitle": "Alquimia | Términos y condiciones",
+    "termsDescription": "Cómo funciona Alquimia, qué se puede publicar en el Launchpad y qué esperamos de quienes participan.",
+    "privacyTitle": "Alquimia | Política de privacidad",
+    "privacyDescription": "Qué datos guardamos, para qué los usamos y cómo pedir que los borremos."
   },
   "Common": {
     "brand": "Alquimia",
@@ -117,7 +121,9 @@
     "tagline": "Alquimia — comunidad de artes modernas",
     "year": "· MMXXVI ·",
     "craft": "Forjada con tinta y paciencia",
-    "brand": "Marca"
+    "brand": "Marca",
+    "terms": "Términos",
+    "privacy": "Privacidad"
   },
   "Brand": {
     "eyebrow": "Identidad",
@@ -379,7 +385,8 @@
     "account": "Mi cuenta",
     "requiredTitle": "Entrá para continuar",
     "requiredBody": "Necesitás una cuenta para publicar y apoyar proyectos en el Launchpad.",
-    "backToLaunchpad": "Volver al Launchpad"
+    "backToLaunchpad": "Volver al Launchpad",
+    "legalHint": "Al iniciar sesión aceptás los <terms>términos y condiciones</terms> y la <privacy>política de privacidad</privacy>."
   },
   "Admin": {
     "title": "Panel del Launchpad",
@@ -471,5 +478,184 @@
     "unexpected": "Algo salió mal. Probá de nuevo.",
     "logoTooLarge": "El logo supera el máximo de 1 MB.",
     "logoBadFormat": "El logo tiene que ser una imagen WebP, PNG o JPG."
+  },
+  "Terms": {
+    "eyebrow": "Legal",
+    "title": "Términos y condiciones",
+    "updated": "Última actualización: 25 de agosto de 2026",
+    "intro": "Estos términos explican cómo funciona Alquimia y qué esperamos de quienes participan. Al usar el sitio o publicar un proyecto en el Launchpad, aceptás lo que sigue.",
+    "sections": {
+      "about": {
+        "title": "Qué es Alquimia",
+        "body": [
+          "Alquimia es una comunidad abierta y gratuita sobre inteligencia artificial, automatización y productividad. No somos una entidad legal constituida ni una empresa: somos un grupo de personas que sostiene la comunidad.",
+          "Un equipo de administradores maneja la plataforma y la infraestructura del sitio, que incluye la página pública y el Launchpad, un directorio de proyectos hecho por la comunidad."
+        ]
+      },
+      "account": {
+        "title": "Tu cuenta",
+        "body": [
+          "Para publicar un proyecto o apoyar a otros necesitás iniciar sesión con Google o Discord. Tenés que tener al menos 13 años para usar el sitio.",
+          "Sos responsable de la actividad de tu cuenta y de la información que cargás. No suplantes a otras personas ni crees cuentas múltiples."
+        ]
+      },
+      "publishing": {
+        "title": "Publicar en el Launchpad",
+        "body": [
+          "Cualquier persona registrada puede enviar un proyecto. Al hacerlo declarás que tenés derecho a usar y publicar todo lo que subís: nombre, descripción, logo y enlaces.",
+          "Los proyectos pasan por una revisión antes de publicarse. Podemos aprobarlos, pedir correcciones o rechazarlos. Cuando rechazamos algo, intentamos siempre explicar el motivo por mail.",
+          "Podés editar o dar de baja tu proyecto cuando quieras desde tu cuenta."
+        ]
+      },
+      "content": {
+        "title": "Contenido que no aceptamos",
+        "body": [
+          "No se puede publicar contenido ilegal, engañoso o fraudulento, spam, malware, material que viole derechos de terceros, contenido sexual explícito, ni nada que promueva odio, violencia o acoso.",
+          "Tampoco aceptamos proyectos que existan solo para hacer publicidad encubierta o inflar métricas."
+        ]
+      },
+      "votes": {
+        "title": "Apoyos y ranking",
+        "body": [
+          "Cada persona puede apoyar un proyecto una sola vez. Quienes verifican que forman parte de nuestro Discord obtienen el badge de Alquimista y su apoyo cuenta doble.",
+          "Está prohibido manipular el ranking con cuentas falsas, bots, incentivos o coordinación artificial. Si detectamos manipulación podemos anular los apoyos y despublicar el proyecto."
+        ]
+      },
+      "ownership": {
+        "title": "Contenido y propiedad",
+        "body": [
+          "Lo que publicás sigue siendo tuyo. Al publicarlo nos das permiso para mostrarlo en el sitio y difundirlo en los canales de la comunidad, como Discord y redes sociales.",
+          "Las marcas y logos de cada proyecto pertenecen a sus dueños. El nombre y la identidad visual de Alquimia son de la comunidad; en la página de marca están los archivos y las pautas de uso."
+        ]
+      },
+      "moderation": {
+        "title": "Moderación",
+        "body": [
+          "Podemos editar, despublicar o eliminar contenido, y suspender o dar de baja cuentas que incumplan estos términos o afecten a la comunidad. Cuando podemos, avisamos antes; si el caso es urgente, actuamos primero."
+        ]
+      },
+      "thirdParties": {
+        "title": "Enlaces y proyectos de terceros",
+        "body": [
+          "El sitio enlaza a proyectos y páginas que no controlamos. Que un proyecto esté publicado en el Launchpad no significa que lo respaldemos, lo hayamos auditado ni que garanticemos nada sobre él.",
+          "Antes de contratar, comprar o compartir datos con un proyecto listado, evaluálo por tu cuenta."
+        ]
+      },
+      "warranty": {
+        "title": "Sin garantías",
+        "body": [
+          "El sitio se ofrece tal como está y según disponibilidad. No garantizamos que funcione sin interrupciones ni errores, y podemos cambiar, pausar o discontinuar cualquier parte en cualquier momento.",
+          "Es un proyecto comunitario mantenido con esfuerzo voluntario: hacemos lo posible por cuidar tu información y el contenido publicado, pero te recomendamos guardar tu propia copia de lo que te importe."
+        ]
+      },
+      "liability": {
+        "title": "Responsabilidad",
+        "body": [
+          "En la máxima medida permitida por la ley, ni Alquimia ni sus administradores responden por daños derivados del uso del sitio, de la pérdida de contenido o de tu interacción con proyectos publicados por terceros."
+        ]
+      },
+      "changes": {
+        "title": "Cambios en estos términos",
+        "body": [
+          "Podemos actualizar estos términos cuando el sitio cambie. La fecha de arriba indica la última versión, y si el cambio es importante lo avisamos en el sitio. Seguir usando Alquimia después de un cambio significa que lo aceptás."
+        ]
+      }
+    },
+    "contact": {
+      "title": "Contacto",
+      "body": "Cualquier duda sobre estos términos, escribinos a"
+    }
+  },
+  "Privacy": {
+    "eyebrow": "Legal",
+    "title": "Política de privacidad",
+    "updated": "Última actualización: 25 de agosto de 2026",
+    "intro": "Esta política explica qué datos guardamos, para qué los usamos y cómo podés pedirnos que los borremos. Buscamos pedir lo mínimo necesario para que el sitio funcione.",
+    "sections": {
+      "who": {
+        "title": "Quiénes somos",
+        "body": [
+          "Alquimia es una comunidad abierta, sin entidad legal constituida. Los administradores de la comunidad manejan la plataforma, la infraestructura y los datos que se guardan en ella."
+        ]
+      },
+      "data": {
+        "title": "Qué datos guardamos",
+        "body": [
+          "Cuenta: cuando entrás con Google o Discord recibimos y guardamos tu nombre, tu email, tu foto de perfil y el identificador de esa cuenta. No guardamos tu contraseña.",
+          "Contenido: los proyectos que publicás (nombre, descripción, logo, categorías y enlaces), los apoyos que das y los reportes que enviás.",
+          "Discord: si verificás el badge de Alquimista, guardamos tu identificador de Discord y consultamos si seguís siendo miembro del servidor para revalidarlo.",
+          "Datos técnicos: para mantener tu sesión y prevenir abusos guardamos la dirección IP, el navegador y las fechas de tus sesiones activas. También medimos el uso del sitio de forma agregada y anónima."
+        ]
+      },
+      "use": {
+        "title": "Para qué los usamos",
+        "body": [
+          "Para crear y mantener tu cuenta, publicar y moderar los proyectos del Launchpad, calcular los apoyos y el ranking, enviarte avisos por mail sobre tu cuenta y tus proyectos, prevenir spam y abuso, y entender de forma general cómo se usa el sitio para mejorarlo.",
+          "No vendemos ni alquilamos tus datos, no hacemos publicidad con ellos ni los usamos para crear perfiles comerciales."
+        ]
+      },
+      "public": {
+        "title": "Qué es público",
+        "body": [
+          "Los proyectos aprobados son públicos, junto con el nombre y la foto de perfil de quien los publica. Tu dirección de email nunca se muestra públicamente.",
+          "Los apoyos se muestran como un total; no publicamos quién apoyó qué."
+        ]
+      },
+      "cookies": {
+        "title": "Cookies",
+        "body": [
+          "Usamos solo cookies necesarias: una para mantener tu sesión iniciada y otra para recordar el idioma que elegiste. No usamos cookies publicitarias ni de rastreo entre sitios."
+        ]
+      },
+      "sharing": {
+        "title": "Con quién compartimos",
+        "body": [
+          "Compartimos datos únicamente con los proveedores que hacen funcionar el sitio, y solo para eso: Vercel (hosting, medición de uso y almacenamiento de imágenes), Neon (base de datos), Better Auth (sesiones y protección contra abusos), Google y Discord (inicio de sesión) y Resend (envío de mails).",
+          "También podríamos compartir información si nos lo exige una autoridad competente o si es necesario para proteger a la comunidad."
+        ]
+      },
+      "storage": {
+        "title": "Dónde se guardan",
+        "body": [
+          "Los datos se alojan en servidores de esos proveedores, que pueden estar en otros países. Al usar el sitio entendés que tu información puede procesarse fuera del lugar donde vivís."
+        ]
+      },
+      "retention": {
+        "title": "Cuánto tiempo los guardamos",
+        "body": [
+          "Mientras tengas cuenta activa. Si pedís la baja, eliminamos tu cuenta y tus datos personales.",
+          "Podemos conservar por un tiempo limitado ciertos registros técnicos necesarios por seguridad, y los proyectos que ya estaban publicados pueden mantenerse en el directorio sin datos personales, salvo que nos pidas eliminarlos."
+        ]
+      },
+      "rights": {
+        "title": "Tus derechos",
+        "body": [
+          "Podés pedirnos acceder a tus datos, corregirlos, actualizarlos, desvincular tu cuenta de Discord o eliminar todo. Escribinos y respondemos en un plazo razonable.",
+          "Para verificar la solicitud vamos a pedirte que escribas desde la dirección de mail asociada a tu cuenta."
+        ]
+      },
+      "minors": {
+        "title": "Menores",
+        "body": [
+          "El sitio no está dirigido a menores de 13 años. Si detectamos una cuenta de alguien menor de esa edad, la eliminamos."
+        ]
+      },
+      "security": {
+        "title": "Seguridad",
+        "body": [
+          "Tomamos medidas razonables para proteger la información, pero ningún sistema es infalible. Si detectamos un incidente que afecte tus datos, lo comunicamos por los canales de la comunidad."
+        ]
+      },
+      "changes": {
+        "title": "Cambios en esta política",
+        "body": [
+          "Si cambiamos cómo tratamos los datos, actualizamos esta página y su fecha. Los cambios importantes se avisan en el sitio."
+        ]
+      }
+    },
+    "contact": {
+      "title": "Contacto",
+      "body": "Para ejercer tus derechos o hacer cualquier consulta sobre privacidad, escribinos a"
+    }
   }
 }
