@@ -1,7 +1,6 @@
 export function BackgroundEffects() {
   return (
     <>
-      {/* Background Image */}
       <div
         className="pointer-events-none fixed inset-0 z-0 bg-center bg-cover bg-no-repeat opacity-[0.22] contrast-[1.05] saturate-[0.85]"
         style={{
@@ -9,13 +8,10 @@ export function BackgroundEffects() {
         }}
       />
 
-      {/* Vignette */}
       <div className="pointer-events-none fixed inset-0 z-[1] bg-vignette" />
 
-      {/* Noise */}
       <div className="pointer-events-none fixed inset-0 z-[2] bg-noise" />
 
-      {/* Frame Corners */}
       <div
         className="pointer-events-none fixed inset-5 z-[3] animate-entrance animate-fade-in"
         style={{ "--delay": "0ms" } as React.CSSProperties}

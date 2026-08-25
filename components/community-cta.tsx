@@ -77,7 +77,6 @@ export function CommunityCta() {
       style={{ "--delay": "750ms" } as React.CSSProperties}
     >
       <div className="flex items-center justify-center gap-5 max-md:w-full max-md:max-w-[340px] max-md:flex-col max-md:gap-3.5">
-        {/* Primary — Discord */}
         <div className="relative max-md:w-full" ref={discord.wrapperRef}>
           <Button
             asChild
@@ -98,7 +97,6 @@ export function CommunityCta() {
           </Button>
         </div>
 
-        {/* Secondary — WhatsApp */}
         <div className="relative max-md:w-full" ref={whatsapp.wrapperRef}>
           <Button
             asChild

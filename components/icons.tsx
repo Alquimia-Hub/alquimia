@@ -97,35 +97,33 @@ export function PlayGlyph({ className }: { className?: string }) {
   );
 }
 
-/** Alchemical sigils used to give each repository card its own mark. */
 const SIGIL_PATHS = [
-  // Sol — gold
   <>
     <circle cx="20" cy="20" key="c" r="11" />
     <circle cx="20" cy="20" fill="currentColor" key="d" r="3" />
   </>,
-  // Mercurius
+
   <>
     <circle cx="20" cy="19" key="c" r="8" />
     <path d="M20 27 v8 M15 31 h10" key="p" />
     <path d="M14 8 a9 9 0 0 0 12 0" key="a" />
   </>,
-  // Sal
+
   <>
     <circle cx="20" cy="20" key="c" r="12" />
     <path d="M8 20 h24" key="p" />
   </>,
-  // Ignis
+
   <>
     <path d="M20 6 L33 29 L7 29 Z" key="t" />
     <path d="M20 16 L26 26 L14 26 Z" key="i" />
   </>,
-  // Aqua
+
   <>
     <path d="M20 34 L7 11 L33 11 Z" key="t" />
     <path d="M20 26 L14 15 L26 15 Z" key="i" />
   </>,
-  // Aer
+
   <>
     <path d="M20 6 L33 29 L7 29 Z" key="t" />
     <path d="M12 22 h16" key="l" />

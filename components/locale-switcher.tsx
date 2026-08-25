@@ -1,49 +1,58 @@
 "use client";
 
+import { Check, ChevronDown } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Link, usePathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
+import { cn } from "@/lib/utils";
 
-/**
- * `ES · EN` toggle. Rendered as real anchors so it works before hydration and
- * stays crawlable — next-intl emits the prefixed href on purpose so the
- * middleware can refresh the locale cookie before landing on the final URL.
- */
-export function LocaleSwitcher({ className = "" }: { className?: string }) {
+export function LocaleSwitcher() {
   const t = useTranslations("LocaleSwitcher");
+  const tNav = useTranslations("Nav");
   const active = useLocale();
   const pathname = usePathname();
 
   return (
-    <ul
-      aria-label={t("label")}
-      className={`flex items-center gap-1.5 font-[family-name:var(--font-im-fell)] text-[10px] tracking-[0.3em] ${className}`}
-    >
-      {routing.locales.map((locale, index) => {
-        const isActive = locale === active;
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        aria-label={tNav("language")}
+        className="nav-link flex items-center gap-1 px-2 py-2 text-ink-3 outline-none transition-colors duration-200 hover:text-gold"
+        data-testid="locale-switcher"
+      >
+        {t(active)}
+        <ChevronDown aria-hidden="true" className="size-3" />
+      </DropdownMenuTrigger>
 
-        return (
-          <li className="flex items-center gap-1.5" key={locale}>
-            {index > 0 && (
-              <span aria-hidden="true" className="text-ink-4">
-                ·
-              </span>
-            )}
+      <DropdownMenuContent
+        align="end"
+        className="min-w-[9rem] border-rule bg-bg-2"
+      >
+        {routing.locales.map((locale) => (
+          <DropdownMenuItem asChild key={locale}>
             <Link
-              aria-current={isActive ? "true" : undefined}
-              className={`nav-link px-1 py-2 transition-colors duration-200 hover:text-gold ${
-                isActive ? "text-gold" : "text-ink-3"
-              }`}
+              aria-current={locale === active ? "true" : undefined}
+              className={cn(
+                "flex items-center justify-between gap-2",
+                locale === active && "text-gold"
+              )}
               href={pathname}
               hrefLang={locale}
               locale={locale}
-              title={t(`${locale}Name`)}
             >
-              {t(locale)}
+              {t(`${locale}Name`)}
+              {locale === active && (
+                <Check aria-hidden="true" className="size-3.5" />
+              )}
             </Link>
-          </li>
-        );
-      })}
-    </ul>
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

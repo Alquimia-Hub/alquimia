@@ -1,11 +1,5 @@
 "use client";
 
-/**
- * Adapted from magicui / 21st.dev `hero-video-dialog`: a thumbnail card with a
- * play affordance that opens the video in an in-app modal. Rebuilt on Radix
- * Dialog (focus trap, escape, scroll lock) and restyled for the Alquimia look.
- */
-
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import type { ReactNode } from "react";
@@ -41,7 +35,6 @@ export function HeroVideoDialog({
           className="talk-card group flex h-full w-full cursor-pointer flex-col border border-rule-2 bg-bg-2/80 p-0 text-left backdrop-blur-[3px]"
           type="button"
         >
-          {/* Thumbnail */}
           <span className="relative block w-full overflow-hidden border-rule-2 border-b">
             <span className="relative block aspect-video w-full">
               <Image
@@ -53,10 +46,8 @@ export function HeroVideoDialog({
               />
             </span>
 
-            {/* Warm wash so the thumbnail sits inside the palette */}
             <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-bg via-bg/25 to-transparent" />
 
-            {/* Play affordance */}
             <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
               <span className="flex h-[74px] w-[74px] scale-90 items-center justify-center rounded-full border border-gold/40 bg-bg/45 backdrop-blur-md transition-transform duration-300 ease-out group-hover:scale-100">
                 <span className="play-core flex h-[52px] w-[52px] items-center justify-center rounded-full bg-gold">

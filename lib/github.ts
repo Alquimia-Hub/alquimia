@@ -1,7 +1,6 @@
 import { GITHUB_ORG } from "./constants";
 
 export interface Repo {
-  /** GitHub's own description — may be missing or too terse to show as-is. */
   description: string | null;
   homepage: string | null;
   language: string | null;
@@ -11,7 +10,6 @@ export interface Repo {
   url: string;
 }
 
-/** A repo whose card copy has already been resolved for the active locale. */
 export interface DisplayRepo extends Omit<Repo, "description"> {
   description: string;
 }
@@ -29,12 +27,6 @@ interface GithubApiRepo {
   topics?: string[];
 }
 
-/**
- * Repos we write our own copy for, because their GitHub description is empty
- * or too terse to make a friendly card. The localized description and topics
- * live in `messages/*.json` under `Repos.descriptions` / `Repos.topics`; this
- * list only fixes the order shown in the carousel.
- */
 const CURATED_NAMES = [
   "alquimia",
   "alquimia-cli",
@@ -87,10 +79,6 @@ function toRepo(apiRepo: GithubApiRepo): Repo {
   };
 }
 
-/**
- * Public repos of the org, refreshed hourly. Falls back to the curated list so
- * the section never renders empty if the GitHub API is rate limited or down.
- */
 export async function fetchOrgRepos(): Promise<readonly Repo[]> {
   const token = process.env.GITHUB_TOKEN;
 

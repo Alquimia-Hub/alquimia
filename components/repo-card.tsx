@@ -37,7 +37,6 @@ export function RepoCard({
       rel="noopener noreferrer"
       target="_blank"
     >
-      {/* Sigil + stars */}
       <div className="flex items-start justify-between">
         <RepoSigil
           className="h-9 w-9 text-gold opacity-70 transition-opacity duration-300 group-hover:opacity-100"
@@ -53,17 +52,14 @@ export function RepoCard({
         </div>
       </div>
 
-      {/* Name */}
       <h3 className="mt-6 mb-2.5 font-[family-name:var(--font-cormorant)] font-normal text-[1.65rem] text-ink leading-[1.1] tracking-[-0.01em] transition-colors duration-300 group-hover:text-gold">
         {repo.name}
       </h3>
 
-      {/* Description */}
       <p className="m-0 font-[family-name:var(--font-eb-garamond)] text-[15px] text-ink-3 italic leading-[1.5]">
         {repo.description}
       </p>
 
-      {/* Meta */}
       {meta.length > 0 && (
         <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-2 font-[family-name:var(--font-im-fell)] text-[9px] text-ink-4 uppercase tracking-[0.24em]">
           {meta.map((entry, metaIndex) => (
@@ -77,7 +73,6 @@ export function RepoCard({
         </div>
       )}
 
-      {/* Footer */}
       <div className="mt-auto flex items-center justify-between border-rule-2 border-t pt-5 max-md:pt-4">
         <span className="flex items-center gap-2.5 font-[family-name:var(--font-im-fell)] text-[10px] text-ink-3 uppercase tracking-[0.3em] transition-colors duration-300 group-hover:text-gold">
           <GithubIcon className="h-3.5 w-3.5" />

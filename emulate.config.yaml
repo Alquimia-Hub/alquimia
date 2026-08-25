@@ -1,0 +1,25 @@
+# Emuladores locales para desarrollo (https://github.com/vercel-labs/emulate).
+# Arrancar con: pnpm dev:services
+#
+# Las credenciales de este archivo son las del emulador que corre en localhost:
+# no son secretos reales y no sirven contra Google ni Resend. Las reales viven
+# en .env.local (gitignoreado) y en las variables de entorno de Vercel.
+google:
+  users:
+    - email: brian@alquimia.dev
+      name: Brian Sasbon
+    - email: admin@alquimia.dev
+      name: Admin Alquimia
+    - email: maria@alquimia.dev
+      name: Maria Lopez
+  oauth_clients:
+    - client_id: alquimia-local.apps.googleusercontent.com
+      client_secret: GOCSPX-alquimia-local-secret
+      redirect_uris:
+        - http://localhost:3000/api/auth/callback/google-dev
+        - http://localhost:3000/api/auth/callback/google
+        - http://localhost:3001/api/auth/callback/google-dev
+
+resend:
+  api_keys:
+    - token: re_alquimia_local

@@ -14,3 +14,14 @@ next.user-config.*
 node_modules
 .next/
 .DS_Store
+# Launchpad local dev
+.env
+.env.prod
+.dev-uploads/
+.emulate-secrets.json
+dev/.discord-stub-tokens.json
+.vercel
+.env*
+
+# El ejemplo si se versiona (no tiene valores)
+!.env.example

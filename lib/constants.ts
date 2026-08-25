@@ -1,3 +1,5 @@
+export const SITE_URL = "https://alquimia.community";
+
 export const GITHUB_ORG = "Alquimia-Hub";
 
 export const SOCIAL_LINKS = {
@@ -10,7 +12,6 @@ export const COMMUNITY_LINKS = {
   whatsapp: "https://chat.whatsapp.com/BhC5waw0nm1FIRSb9Kvs7a",
 } as const;
 
-/** Order of the pillars in the hero, matched to icons and message keys. */
 export const PILLAR_IDS = [
   "inteligencia",
   "automatizacion",

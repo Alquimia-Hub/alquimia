@@ -17,8 +17,6 @@ interface ImageProps {
   params: Promise<{ locale: Locale }>;
 }
 
-// Metadata routes sit outside the `[locale]` layout, so they need their own
-// copy of the locale params.
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }

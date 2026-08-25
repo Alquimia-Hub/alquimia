@@ -18,11 +18,6 @@ function splitTopics(value: string): string[] {
   return value.split(",").map((topic) => topic.trim());
 }
 
-/**
- * Overlays our own localized copy on top of the GitHub payload. For curated
- * repos our copy wins, since their GitHub description is empty or too terse to
- * make a friendly card; everything else falls back to what the API returns.
- */
 function localizeRepo(repo: Repo, t: ReposTranslator): DisplayRepo {
   if (!isCuratedRepo(repo.name)) {
     return { ...repo, description: repo.description ?? t("emptyLabel") };

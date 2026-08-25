@@ -44,6 +44,20 @@
       }
     },
     {
+      "includes": ["lib/db/index.ts", "lib/db/schema/index.ts"],
+      "linter": {
+        "rules": {
+          "performance": {
+            "noNamespaceImport": "off",
+            "noBarrelFile": "off"
+          },
+          "style": {
+            "noExportedImports": "off"
+          }
+        }
+      }
+    },
+    {
       "includes": [
         "app/\\[locale\\]/twitter-image.tsx",
         "app/\\[locale\\]/opengraph-image.tsx"
