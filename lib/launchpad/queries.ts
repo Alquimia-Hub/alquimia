@@ -12,7 +12,14 @@ import {
 } from "drizzle-orm";
 import { db } from "@/lib/db";
 import type { ProjectStatus } from "@/lib/db/schema";
-import { project, projectCategory, report, user, vote } from "@/lib/db/schema";
+import {
+  project,
+  projectCategory,
+  report,
+  user,
+  vote,
+  voteEvent,
+} from "@/lib/db/schema";
 import {
   ADMIN_PROJECTS_PER_PAGE,
   ADMIN_VOTES_PER_PAGE,
@@ -349,24 +356,24 @@ export async function listVotesForAdmin(page: number) {
   const [items, [totals]] = await Promise.all([
     db
       .select({
-        createdAt: vote.createdAt,
-        projectId: project.id,
+        action: voteEvent.action,
+        createdAt: voteEvent.createdAt,
+        id: voteEvent.id,
         projectName: project.name,
         projectSlug: project.slug,
         voterEmail: user.email,
         voterHideAvatar: user.hideAvatar,
-        voterId: user.id,
         voterImage: user.image,
-        voterIsAlquimista: user.isAlquimista,
         voterName: user.name,
+        weight: voteEvent.weight,
       })
-      .from(vote)
-      .innerJoin(project, eq(vote.projectId, project.id))
-      .innerJoin(user, eq(vote.userId, user.id))
-      .orderBy(desc(vote.createdAt))
+      .from(voteEvent)
+      .innerJoin(project, eq(voteEvent.projectId, project.id))
+      .innerJoin(user, eq(voteEvent.userId, user.id))
+      .orderBy(desc(voteEvent.createdAt))
       .limit(ADMIN_VOTES_PER_PAGE)
       .offset(offset),
-    db.select({ total: count() }).from(vote),
+    db.select({ total: count() }).from(voteEvent),
   ]);
 
   const total = totals?.total ?? 0;
@@ -382,29 +389,34 @@ export type AdminVote = Awaited<
   ReturnType<typeof listVotesForAdmin>
 >["items"][number];
 
+const eventsSince = (since: Date, action: "added" | "removed") =>
+  sql<number>`count(*) filter (where ${and(gte(voteEvent.createdAt, since), eq(voteEvent.action, action))})`.mapWith(
+    Number
+  );
+
 export async function countVotesByPeriod() {
   const now = Date.now();
   const dayAgo = new Date(now - DAY_MS);
   const weekAgo = new Date(now - WEEK_MS);
 
-  const [row] = await db
-    .select({
-      total: count(),
-      lastDay:
-        sql<number>`count(*) filter (where ${gte(vote.createdAt, dayAgo)})`.mapWith(
-          Number
-        ),
-      lastWeek:
-        sql<number>`count(*) filter (where ${gte(vote.createdAt, weekAgo)})`.mapWith(
-          Number
-        ),
-    })
-    .from(vote);
+  const [[active], [events]] = await Promise.all([
+    db.select({ total: count() }).from(vote),
+    db
+      .select({
+        dayAdded: eventsSince(dayAgo, "added"),
+        dayRemoved: eventsSince(dayAgo, "removed"),
+        weekAdded: eventsSince(weekAgo, "added"),
+        weekRemoved: eventsSince(weekAgo, "removed"),
+      })
+      .from(voteEvent),
+  ]);
 
   return {
-    total: row?.total ?? 0,
-    lastDay: row?.lastDay ?? 0,
-    lastWeek: row?.lastWeek ?? 0,
+    active: active?.total ?? 0,
+    dayAdded: events?.dayAdded ?? 0,
+    dayRemoved: events?.dayRemoved ?? 0,
+    weekAdded: events?.weekAdded ?? 0,
+    weekRemoved: events?.weekRemoved ?? 0,
   };
 }
 

@@ -106,7 +106,7 @@ export default async function AdminLaunchpadPage({
               </TabsTrigger>
               <TabsTrigger asChild data-testid="tab-votes" value="votes">
                 <a href="?votes=1">
-                  {t("tabVotes")} ({voteCounts.total})
+                  {t("tabVotes")} ({voteCounts.active})
                 </a>
               </TabsTrigger>
             </TabsList>
@@ -114,12 +114,14 @@ export default async function AdminLaunchpadPage({
             {activeTab === "votes" && (
               <TabsContent className="mt-6" value="votes">
                 <VotesTable
-                  lastDay={voteCounts.lastDay}
-                  lastWeek={voteCounts.lastWeek}
+                  active={voteCounts.active}
+                  dayAdded={voteCounts.dayAdded}
+                  dayRemoved={voteCounts.dayRemoved}
                   page={filters.page}
                   pageCount={votes.pageCount}
-                  total={voteCounts.total}
                   votes={votes.items}
+                  weekAdded={voteCounts.weekAdded}
+                  weekRemoved={voteCounts.weekRemoved}
                 />
               </TabsContent>
             )}

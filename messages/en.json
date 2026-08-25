@@ -507,16 +507,19 @@
     "deleteProject": "Delete project",
     "deleted": "Project deleted",
     "tabVotes": "Support",
-    "votesTotal": "Total support",
     "votesLastDay": "Last 24 hours",
     "votesLastWeek": "Last 7 days",
-    "votesEmpty": "No support yet",
+    "votesEmpty": "No activity yet",
     "columnWhen": "Date and time",
     "columnVoter": "User",
     "columnAlquimista": "Alchemist",
     "columnWeight": "Worth",
     "isAlquimista": "Yes",
-    "notAlquimista": "No"
+    "notAlquimista": "No",
+    "votesActive": "Active support",
+    "columnAction": "Action",
+    "actionAdded": "Supported",
+    "actionRemoved": "Withdrew support"
   },
   "Error": {
     "title": "Something went wrong",

@@ -23,6 +23,8 @@ export const projectStatus = pgEnum("project_status", [
   "rejected",
 ]);
 
+export const voteAction = pgEnum("vote_action", ["added", "removed"]);
+
 export const reportStatus = pgEnum("report_status", [
   "open",
   "dismissed",
@@ -124,6 +126,28 @@ export const vote = pgTable(
   ]
 );
 
+export const voteEvent = pgTable(
+  "vote_event",
+  {
+    id: text("id").primaryKey(),
+    projectId: text("project_id")
+      .notNull()
+      .references(() => project.id, { onDelete: "cascade" }),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    action: voteAction("action").notNull(),
+    weight: integer("weight").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+  },
+  (table) => [
+    index("vote_event_created_at_idx").on(table.createdAt.desc()),
+    index("vote_event_project_id_idx").on(table.projectId),
+  ]
+);
+
 export const report = pgTable(
   "report",
   {
@@ -193,6 +217,14 @@ export const voteRelations = relations(vote, ({ one }) => ({
   user: one(user, { fields: [vote.userId], references: [user.id] }),
 }));
 
+export const voteEventRelations = relations(voteEvent, ({ one }) => ({
+  project: one(project, {
+    fields: [voteEvent.projectId],
+    references: [project.id],
+  }),
+  user: one(user, { fields: [voteEvent.userId], references: [user.id] }),
+}));
+
 export const reportRelations = relations(report, ({ one }) => ({
   project: one(project, {
     fields: [report.projectId],
@@ -205,3 +237,4 @@ export type Project = typeof project.$inferSelect;
 export type ProjectStatus = Project["status"];
 export type Category = typeof category.$inferSelect;
 export type Report = typeof report.$inferSelect;
+export type VoteEvent = typeof voteEvent.$inferSelect;

@@ -507,16 +507,19 @@
     "deleteProject": "Borrar proyecto",
     "deleted": "Proyecto borrado",
     "tabVotes": "Apoyos",
-    "votesTotal": "Apoyos totales",
     "votesLastDay": "Últimas 24 horas",
     "votesLastWeek": "Últimos 7 días",
-    "votesEmpty": "Todavía no hay apoyos",
+    "votesEmpty": "Todavía no hay movimientos",
     "columnWhen": "Fecha y hora",
     "columnVoter": "Usuario",
     "columnAlquimista": "Alquimista",
     "columnWeight": "Vale",
     "isAlquimista": "Sí",
-    "notAlquimista": "No"
+    "notAlquimista": "No",
+    "votesActive": "Apoyos activos",
+    "columnAction": "Acción",
+    "actionAdded": "Apoyó",
+    "actionRemoved": "Quitó el apoyo"
   },
   "Error": {
     "title": "Algo salió mal",

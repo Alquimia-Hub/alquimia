@@ -35,7 +35,10 @@ export const RATE_LIMITS = {
   createProject: { limit: 3, windowMs: HOUR_MS },
   updateProject: { limit: 20, windowMs: HOUR_MS },
   deleteProject: { limit: 10, windowMs: DAY_MS },
-  vote: { limit: 30, windowMs: MINUTE_MS },
+  vote: [
+    { limit: 20, windowMs: MINUTE_MS },
+    { limit: 150, windowMs: HOUR_MS },
+  ],
   report: { limit: 5, windowMs: DAY_MS },
   uploadLogo: { limit: 20, windowMs: HOUR_MS },
   badgeRefresh: { limit: 5, windowMs: HOUR_MS },

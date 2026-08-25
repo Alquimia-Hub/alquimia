@@ -11,19 +11,19 @@ import {
 } from "@/components/ui/table";
 import { UserAvatar } from "@/components/user-avatar";
 import { Link } from "@/i18n/navigation";
-import {
-  VOTE_WEIGHT_ALQUIMISTA,
-  VOTE_WEIGHT_DEFAULT,
-} from "@/lib/launchpad/constants";
+import { VOTE_WEIGHT_ALQUIMISTA } from "@/lib/launchpad/constants";
 import type { AdminVote } from "@/lib/launchpad/queries";
+import { cn } from "@/lib/utils";
 
 interface VotesTableProps {
-  lastDay: number;
-  lastWeek: number;
+  active: number;
+  dayAdded: number;
+  dayRemoved: number;
   page: number;
   pageCount: number;
-  total: number;
   votes: AdminVote[];
+  weekAdded: number;
+  weekRemoved: number;
 }
 
 const pageHref = (page: number) =>
@@ -31,19 +31,21 @@ const pageHref = (page: number) =>
 
 export function VotesTable({
   votes,
-  total,
-  lastDay,
-  lastWeek,
+  active,
+  dayAdded,
+  dayRemoved,
+  weekAdded,
+  weekRemoved,
   page,
   pageCount,
 }: VotesTableProps) {
   const t = useTranslations("Admin");
   const format = useFormatter();
 
-  const stats = [
-    { label: t("votesTotal"), value: total },
-    { label: t("votesLastDay"), value: lastDay },
-    { label: t("votesLastWeek"), value: lastWeek },
+  const stats: { label: string; removed?: number; value: number }[] = [
+    { label: t("votesActive"), value: active },
+    { label: t("votesLastDay"), removed: dayRemoved, value: dayAdded },
+    { label: t("votesLastWeek"), removed: weekRemoved, value: weekAdded },
   ];
 
   return (
@@ -57,8 +59,13 @@ export function VotesTable({
             <dt className="m-0 font-[family-name:var(--font-jetbrains)] text-[10px] text-ink-3 uppercase tracking-[0.14em]">
               {stat.label}
             </dt>
-            <dd className="m-0 font-[family-name:var(--font-cormorant)] font-light text-3xl text-ink tabular-nums leading-none">
-              {stat.value}
+            <dd className="m-0 flex items-baseline gap-3 font-[family-name:var(--font-cormorant)] font-light text-3xl text-ink tabular-nums leading-none">
+              {stat.removed === undefined ? stat.value : `+${stat.value}`}
+              {stat.removed !== undefined && stat.removed > 0 && (
+                <span className="font-[family-name:var(--font-jetbrains)] text-ink-3 text-sm">
+                  −{stat.removed}
+                </span>
+              )}
             </dd>
           </div>
         ))}
@@ -81,6 +88,9 @@ export function VotesTable({
                 <TableHead className="text-ink-3">
                   {t("columnProject")}
                 </TableHead>
+                <TableHead className="text-ink-3">
+                  {t("columnAction")}
+                </TableHead>
                 <TableHead className="text-right text-ink-3">
                   {t("columnWeight")}
                 </TableHead>
@@ -91,8 +101,8 @@ export function VotesTable({
               {votes.map((vote) => (
                 <TableRow
                   className="border-rule-2 hover:bg-surface-hover"
-                  data-testid={`vote-row-${vote.projectId}-${vote.voterId}`}
-                  key={`${vote.projectId}-${vote.voterId}`}
+                  data-testid={`vote-row-${vote.id}`}
+                  key={vote.id}
                 >
                   <TableCell className="whitespace-nowrap font-[family-name:var(--font-jetbrains)] text-ink-2 text-xs tabular-nums">
                     {format.dateTime(vote.createdAt, {
@@ -119,7 +129,7 @@ export function VotesTable({
                   </TableCell>
 
                   <TableCell>
-                    {vote.voterIsAlquimista ? (
+                    {vote.weight >= VOTE_WEIGHT_ALQUIMISTA ? (
                       <span className="inline-flex items-center gap-1 border border-gold/50 bg-gold/10 px-1.5 py-0.5 font-[family-name:var(--font-jetbrains)] text-[9px] text-gold-2 uppercase tracking-[0.1em]">
                         <Sparkles
                           aria-hidden="true"
@@ -143,11 +153,20 @@ export function VotesTable({
                     </Link>
                   </TableCell>
 
-                  <TableCell className="text-right font-[family-name:var(--font-jetbrains)] text-ink-2 tabular-nums">
-                    ×
-                    {vote.voterIsAlquimista
-                      ? VOTE_WEIGHT_ALQUIMISTA
-                      : VOTE_WEIGHT_DEFAULT}
+                  <TableCell className="text-ink-2 text-sm">
+                    {vote.action === "added"
+                      ? t("actionAdded")
+                      : t("actionRemoved")}
+                  </TableCell>
+
+                  <TableCell
+                    className={cn(
+                      "text-right font-[family-name:var(--font-jetbrains)] tabular-nums",
+                      vote.action === "added" ? "text-gold-2" : "text-ink-3"
+                    )}
+                  >
+                    {vote.action === "added" ? "+" : "−"}
+                    {vote.weight}
                   </TableCell>
                 </TableRow>
               ))}
