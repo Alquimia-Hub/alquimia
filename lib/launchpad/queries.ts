@@ -1,14 +1,35 @@
 import "server-only";
-import { and, count, desc, eq, ilike, inArray, or, sql } from "drizzle-orm";
+import {
+  and,
+  count,
+  desc,
+  eq,
+  gte,
+  ilike,
+  inArray,
+  or,
+  sql,
+} from "drizzle-orm";
 import { db } from "@/lib/db";
 import type { ProjectStatus } from "@/lib/db/schema";
-import { project, projectCategory, report, user, vote } from "@/lib/db/schema";
+import {
+  project,
+  projectCategory,
+  report,
+  user,
+  vote,
+  voteEvent,
+} from "@/lib/db/schema";
 import {
   ADMIN_PROJECTS_PER_PAGE,
+  ADMIN_VOTES_PER_PAGE,
   LANDING_TOP_PROJECTS,
   PROJECTS_PER_PAGE,
 } from "./constants";
 import type { ProjectFilters } from "./validation";
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+const WEEK_MS = 7 * DAY_MS;
 
 const publicColumns = {
   id: project.id,
@@ -144,6 +165,7 @@ export async function getProjectBySlug(slug: string) {
         id: user.id,
         name: user.name,
         image: user.image,
+        hideAvatar: user.hideAvatar,
         isAlquimista: user.isAlquimista,
       },
     })
@@ -327,6 +349,72 @@ export async function listOpenReports() {
 }
 
 export type AdminReport = Awaited<ReturnType<typeof listOpenReports>>[number];
+
+export async function listVotesForAdmin(page: number) {
+  const offset = (page - 1) * ADMIN_VOTES_PER_PAGE;
+
+  const [items, [totals]] = await Promise.all([
+    db
+      .select({
+        action: voteEvent.action,
+        createdAt: voteEvent.createdAt,
+        id: voteEvent.id,
+        projectName: project.name,
+        projectSlug: project.slug,
+        voterEmail: user.email,
+        voterHideAvatar: user.hideAvatar,
+        voterImage: user.image,
+        voterName: user.name,
+        weight: voteEvent.weight,
+      })
+      .from(voteEvent)
+      .innerJoin(project, eq(voteEvent.projectId, project.id))
+      .innerJoin(user, eq(voteEvent.userId, user.id))
+      .orderBy(desc(voteEvent.createdAt))
+      .limit(ADMIN_VOTES_PER_PAGE)
+      .offset(offset),
+    db.select({ total: count() }).from(voteEvent),
+  ]);
+
+  const total = totals?.total ?? 0;
+
+  return {
+    items,
+    total,
+    pageCount: Math.max(1, Math.ceil(total / ADMIN_VOTES_PER_PAGE)),
+  };
+}
+
+export type AdminVote = Awaited<
+  ReturnType<typeof listVotesForAdmin>
+>["items"][number];
+
+const eventsSince = (since: Date, action: "added" | "removed") =>
+  sql<number>`count(*) filter (where ${and(gte(voteEvent.createdAt, since), eq(voteEvent.action, action))})`.mapWith(
+    Number
+  );
+
+export async function countVotesByPeriod() {
+  const now = Date.now();
+  const dayAgo = new Date(now - DAY_MS);
+  const weekAgo = new Date(now - WEEK_MS);
+
+  const [[active], [events]] = await Promise.all([
+    db.select({ total: count() }).from(vote),
+    db
+      .select({
+        dayAdded: eventsSince(dayAgo, "added"),
+        weekAdded: eventsSince(weekAgo, "added"),
+      })
+      .from(voteEvent),
+  ]);
+
+  return {
+    active: active?.total ?? 0,
+    dayAdded: events?.dayAdded ?? 0,
+    weekAdded: events?.weekAdded ?? 0,
+  };
+}
 
 export async function countPendingProjects() {
   const [row] = await db

@@ -32,7 +32,7 @@ export function ReportsList({ reports }: { reports: AdminReport[] }) {
 
   if (reports.length === 0) {
     return (
-      <p className="border border-rule-2 border-dashed px-6 py-12 text-center text-ink-4">
+      <p className="border border-rule-2 border-dashed px-6 py-12 text-center text-ink-3">
         {t("reportsEmpty")}
       </p>
     );

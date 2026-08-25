@@ -147,6 +147,11 @@ export const adminFiltersSchema = z.object({
     .optional()
     .catch(undefined)
     .transform((value) => value === "1"),
+  votes: z
+    .union([z.literal("1"), z.literal("0")])
+    .optional()
+    .catch(undefined)
+    .transform((value) => value === "1"),
 });
 
 export type AdminFilters = z.infer<typeof adminFiltersSchema>;

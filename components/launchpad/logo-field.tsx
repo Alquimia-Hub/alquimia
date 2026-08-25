@@ -99,7 +99,7 @@ export function LogoField({ value, onChange, error }: LogoFieldProps) {
           {value ? t("logoChange") : t("logoSelect")}
         </Button>
 
-        <p className="m-0 text-ink-4 text-xs">{t("logoHint")}</p>
+        <p className="m-0 text-ink-3 text-xs">{t("logoHint")}</p>
         <FieldError message={error} />
       </div>
     </div>

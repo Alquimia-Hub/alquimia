@@ -130,6 +130,7 @@ export default async function LocaleLayout({
   return (
     <html
       className={`${cormorant.variable} ${ebGaramond.variable} ${imFell.variable} ${jetbrains.variable}`}
+      data-scroll-behavior="smooth"
       lang={locale}
     >
       <body className="bg-bg font-sans antialiased">

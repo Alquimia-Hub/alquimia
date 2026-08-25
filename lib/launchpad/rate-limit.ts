@@ -11,7 +11,7 @@ export async function consumeRateLimit(
 ): Promise<boolean> {
   const now = Date.now();
   const windowStart = Math.floor(now / windowMs) * windowMs;
-  const key = `${scope}:${subject}:${windowStart}`;
+  const key = `${scope}:${windowMs}:${subject}:${windowStart}`;
 
   const [row] = await db
     .insert(rateLimit)

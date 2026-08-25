@@ -3,7 +3,6 @@
 import { LayoutGrid, LogOut, Shield, Sparkles, User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -13,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
+import { UserAvatar } from "@/components/user-avatar";
 import { Link, useRouter } from "@/i18n/navigation";
 import { authClient } from "@/lib/auth-client";
 import { SignInDialog } from "./sign-in-dialog";
@@ -23,6 +23,7 @@ const SIGN_IN_LABEL =
 export function UserMenu() {
   const t = useTranslations("Auth");
   const tAccount = useTranslations("Account");
+  const tAlquimista = useTranslations("Alquimista");
   const router = useRouter();
   const [signInOpen, setSignInOpen] = useState(false);
   const { data: session, isPending } = authClient.useSession();
@@ -70,16 +71,16 @@ export function UserMenu() {
           data-testid="header-user-menu"
           type="button"
         >
-          <Avatar className="size-7 border border-rule">
-            <AvatarImage alt="" src={user.image ?? undefined} />
-            <AvatarFallback className="bg-bg-3 text-[10px] text-ink-2">
-              {user.name.slice(0, 2).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
+          <UserAvatar
+            className="size-7 border-rule"
+            hideAvatar={user.hideAvatar}
+            image={user.image}
+            name={user.name}
+          />
           {user.isAlquimista && (
             <Sparkles
-              aria-label="Alquimista"
-              className="absolute -top-1 -right-1 size-3 fill-gold/40 text-gold"
+              aria-hidden="true"
+              className="absolute -top-1 -right-1 size-3 fill-gold/40 text-gold drop-shadow-[0_0_6px_var(--gold)]"
             />
           )}
         </button>
@@ -96,6 +97,13 @@ export function UserMenu() {
           <Link href="/launchpad/my-projects">
             <LayoutGrid className="size-4" />
             {tAccount("myProjects")}
+          </Link>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem asChild>
+          <Link href="/alquimista">
+            <Sparkles className="size-4" />
+            {tAlquimista("name")}
           </Link>
         </DropdownMenuItem>
 

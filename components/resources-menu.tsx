@@ -28,6 +28,9 @@ export function ResourcesMenu({ className }: { className?: string }) {
           <Link href="/#charlas">{t("talks")}</Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
+          <Link href="/alquimista">{t("alquimista")}</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
           <Link href="/brand">{t("brand")}</Link>
         </DropdownMenuItem>
       </DropdownMenuContent>

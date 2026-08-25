@@ -238,7 +238,7 @@ export function ProjectsTable({
           <TableBody>
             {visible.length === 0 ? (
               <TableRow>
-                <TableCell className="py-10 text-center text-ink-4" colSpan={7}>
+                <TableCell className="py-10 text-center text-ink-3" colSpan={7}>
                   {t("empty")}
                 </TableCell>
               </TableRow>
@@ -272,7 +272,7 @@ export function ProjectsTable({
                         <p className="m-0 truncate font-medium text-ink">
                           {project.name}
                         </p>
-                        <p className="m-0 max-w-[26ch] truncate text-ink-4 text-xs">
+                        <p className="m-0 max-w-[26ch] truncate text-ink-3 text-xs">
                           {project.tagline}
                         </p>
                       </div>
@@ -302,7 +302,7 @@ export function ProjectsTable({
                     {project.voteScore}
                   </TableCell>
 
-                  <TableCell className="text-ink-4 text-xs">
+                  <TableCell className="text-ink-3 text-xs">
                     {format.dateTime(project.submittedAt ?? project.createdAt, {
                       dateStyle: "short",
                     })}

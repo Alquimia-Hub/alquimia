@@ -85,7 +85,7 @@ export function ProjectSheet({
                   )}
                 </p>
                 {project.submittedAt && (
-                  <p className="mt-1 mb-0 text-ink-4 text-xs">
+                  <p className="mt-1 mb-0 text-ink-3 text-xs">
                     {format.dateTime(project.submittedAt, {
                       dateStyle: "medium",
                       timeStyle: "short",

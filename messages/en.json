@@ -9,7 +9,9 @@
     "termsTitle": "Alquimia | Terms and conditions",
     "termsDescription": "How Alquimia works, what can be published on the Launchpad and what we expect from everyone taking part.",
     "privacyTitle": "Alquimia | Privacy policy",
-    "privacyDescription": "What data we keep, what we use it for and how to ask us to delete it."
+    "privacyDescription": "What data we keep, what we use it for and how to ask us to delete it.",
+    "alquimistaTitle": "Alquimia | Become an Alchemist",
+    "alquimistaDescription": "What the Alchemist badge is, what you get for being part of the community and how to earn it."
   },
   "Common": {
     "brand": "Alquimia",
@@ -24,7 +26,9 @@
     "launchpad": "Launchpad",
     "resources": "Resources",
     "back": "Back",
-    "language": "Language"
+    "language": "Language",
+    "alquimista": "Alchemist",
+    "menu": "Menu"
   },
   "LocaleSwitcher": {
     "label": "Change language",
@@ -237,11 +241,11 @@
     "supported": "Supported",
     "superSupport": "Super support",
     "superSupported": "Super supported",
-    "alquimistaHint": "Your vote counts double as an Alquimista",
     "loginToVote": "Sign in to support",
     "points": "{count, plural, one {# point} other {# points}}",
     "error": "We couldn't register your support",
-    "ownProject": "You can't support your own project"
+    "delta": "+{count}",
+    "doubleHint": "Your support counts double because you're an Alchemist"
   },
   "LaunchpadDetail": {
     "about": "About the project",
@@ -370,7 +374,75 @@
     "badgeStale": "Your verification expired",
     "badgeStaleBody": "It's been more than 7 days since we last checked with Discord, so your votes are worth one again. Revalidate to get the badge back.",
     "badgeAlreadyClaimed": "That Discord account is already linked to another Alquimia user.",
-    "badgeChecking": "Revalidating your badge…"
+    "badgeChecking": "Revalidating your badge…",
+    "avatarTitle": "Your profile picture",
+    "avatarBody": "Choose what the rest of the community sees next to your name.",
+    "avatarToggle": "Hide my picture",
+    "avatarToggleHint": "We show an avatar generated from your name instead. Your picture won't appear on any project or in the Launchpad.",
+    "avatarPreview": "This is how others see you",
+    "avatarSaved": "Done, your avatar is updated",
+    "avatarError": "We couldn't save the change",
+    "badgePerks": "Weekly community calls, events, networking, hackathons and your support counting double in the Launchpad.",
+    "badgeLearnMore": "What being an Alchemist includes"
+  },
+  "Alquimista": {
+    "name": "Alchemist",
+    "title": "The mark of the people who build the community",
+    "intro": "Alchemist is the badge that says you're really part of Alquimia: you're in the Discord, you show up, you bring something of your own. It's verified once, it's free, and it can't be bought.",
+    "whatTitle": "What it is",
+    "whatBody": "It isn't a rank or a prize: it's a verification. You link your Discord account, we confirm you're in the Alquimia server, and that's it. From then on your name carries the mark in the Launchpad and your word weighs more when the community decides which project deserves attention.",
+    "doubleVote": "In the Launchpad your support counts double: one vote, two points.",
+    "benefitsTitle": "What happens inside",
+    "benefits": {
+      "calls": {
+        "title": "Weekly community calls",
+        "body": "Every week we get together to show what we're working on, sort out questions live and learn from what everyone else is building."
+      },
+      "news": {
+        "title": "Everything first",
+        "body": "News, new tools, what's actually worth reading and every Alquimia event reaches you before anywhere else."
+      },
+      "networking": {
+        "title": "People doing what you do",
+        "body": "Devs, founders, designers and the AI-and-automation curious, all in one place and up for a conversation."
+      },
+      "jobs": {
+        "title": "Work and opportunities",
+        "body": "Job openings, freelance projects and teams looking for hands get posted inside. Plenty get filled without ever leaving Discord."
+      },
+      "hackathons": {
+        "title": "Hackathons and challenges",
+        "body": "We compete, build in teams and ship what comes out of it. A good excuse to finally start that project."
+      },
+      "debate": {
+        "title": "Real debate",
+        "body": "Channels to argue ideas, ask for honest feedback on your project and put a team together with whoever's in."
+      }
+    },
+    "stepsTitle": "How to get it",
+    "steps": {
+      "join": {
+        "title": "Join the Discord",
+        "body": "It's open and free. One minute and you're in."
+      },
+      "link": {
+        "title": "Link your Discord from My account",
+        "body": "One click and we confirm your account is in the server. We ask for nothing else."
+      },
+      "vote": {
+        "title": "Done: the mark is yours",
+        "body": "It shows up next to your name in the Launchpad and your support starts counting double."
+      }
+    },
+    "freeNote": "The verification is rechecked every 7 days. If you're still in the Discord, it renews on its own.",
+    "closingTitle": "Alquimia is built together",
+    "closingBody": "The mark isn't the point: it's the signal that you're here. Join in, show what you make and help the good projects get seen.",
+    "ctaJoin": "Join the Discord",
+    "ctaVerify": "Verify my account",
+    "ctaLaunchpad": "Go to the Launchpad",
+    "tooltipTitle": "Verified Alchemist",
+    "tooltipBody": "Confirmed member of the Alquimia Discord. Their Launchpad support counts double.",
+    "tooltipLink": "Tap to see everything it includes"
   },
   "Auth": {
     "signIn": "Sign in",
@@ -434,7 +506,22 @@
     "resultCount": "{count, plural, =0 {No projects} one {# project} other {# projects}}",
     "pendingBadge": "{count, plural, one {# project waiting for review} other {# projects waiting for review}}",
     "deleteProject": "Delete project",
-    "deleted": "Project deleted"
+    "deleted": "Project deleted",
+    "tabVotes": "Support",
+    "votesLastDay": "Last 24 hours",
+    "votesLastWeek": "Last 7 days",
+    "votesEmpty": "No activity yet",
+    "columnWhen": "Date and time",
+    "columnVoter": "User",
+    "columnAlquimista": "Alchemist",
+    "columnWeight": "Worth",
+    "isAlquimista": "Yes",
+    "notAlquimista": "No",
+    "votesActive": "Active support",
+    "columnAction": "Action",
+    "actionAdded": "Supported",
+    "actionRemoved": "Withdrew support",
+    "sections": "Panel sections"
   },
   "Error": {
     "title": "Something went wrong",
@@ -461,7 +548,8 @@
     "verify": "Verify my account",
     "join": "Join the Discord",
     "skip": "Not now",
-    "dontShow": "Don't show again"
+    "dontShow": "Don't show again",
+    "learnMore": "What's an Alchemist"
   },
   "LaunchpadErrors": {
     "unauthorized": "Your session expired. Sign in again to continue.",
@@ -472,7 +560,6 @@
     "projectLimitReached": "You've reached the limit of {max} projects. Delete one to publish another.",
     "tooFast": "You're going too fast. Try again in a bit.",
     "notPublished": "This project isn't published yet.",
-    "cannotVoteOwnProject": "You can't support your own project.",
     "alreadyReported": "You already reported this project and we're still looking into it.",
     "cannotDeleteApproved": "Published projects are taken down by the team. Get in touch or report it.",
     "slugTaken": "We couldn't generate an address for that name. Try a different one.",

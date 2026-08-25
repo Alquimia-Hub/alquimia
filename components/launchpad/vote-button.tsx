@@ -2,10 +2,15 @@
 
 import { Sparkles, Triangle } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useOptimistic, useState, useTransition } from "react";
+import { useOptimistic, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { SignInDialog } from "@/components/auth/sign-in-dialog";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { toggleVote } from "@/lib/launchpad/actions";
 import {
   VOTE_WEIGHT_ALQUIMISTA,
@@ -23,11 +28,14 @@ const VOTE_LABELS = {
   alquimista: { idle: "superSupport", voted: "superSupported" },
 } as const;
 
+const SPARK_COUNT = 8;
+const SPARK_RADIUS_PX = 34;
+const BURST_MS = 1000;
+
 interface VoteButtonProps {
   hasVoted: boolean;
   isAlquimista: boolean;
   isAuthenticated: boolean;
-  isOwner?: boolean;
   projectId: string;
   score: number;
   size?: "sm" | "lg";
@@ -39,7 +47,6 @@ export function VoteButton({
   hasVoted,
   isAuthenticated,
   isAlquimista,
-  isOwner = false,
   size = "sm",
 }: VoteButtonProps) {
   const t = useTranslations("LaunchpadVote");
@@ -47,6 +54,8 @@ export function VoteButton({
   const [, startTransition] = useTransition();
   const [signInOpen, setSignInOpen] = useState(false);
   const [superVoteOpen, setSuperVoteOpen] = useState(false);
+  const [burstKey, setBurstKey] = useState(0);
+  const burstTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const weight = isAlquimista ? VOTE_WEIGHT_ALQUIMISTA : VOTE_WEIGHT_DEFAULT;
 
@@ -58,17 +67,27 @@ export function VoteButton({
     })
   );
 
+  const celebrate = () => {
+    setBurstKey((key) => key + 1);
+
+    if (burstTimeout.current) {
+      clearTimeout(burstTimeout.current);
+    }
+
+    burstTimeout.current = setTimeout(() => setBurstKey(0), BURST_MS);
+  };
+
   const handleClick = () => {
     if (!isAuthenticated) {
       setSignInOpen(true);
       return;
     }
 
-    if (isOwner) {
-      return;
-    }
-
     const isNewVote = !optimistic.hasVoted;
+
+    if (isNewVote) {
+      celebrate();
+    }
 
     startTransition(async () => {
       setOptimistic(null);
@@ -96,40 +115,97 @@ export function VoteButton({
     ]
   );
 
-  const ariaLabel = (() => {
-    if (isOwner) {
-      return t("ownProject");
-    }
+  const bursting = burstKey > 0;
 
-    return isAuthenticated ? label : t("loginToVote");
-  })();
+  const button = (
+    <Button
+      aria-label={isAuthenticated ? label : t("loginToVote")}
+      aria-pressed={optimistic.hasVoted}
+      className={cn(
+        "vote-button h-auto flex-col gap-0.5 border font-[family-name:var(--font-jetbrains)] tabular-nums",
+        size === "sm" ? "px-3 py-2 text-xs" : "px-5 py-3 text-sm",
+        optimistic.hasVoted &&
+          isAlquimista &&
+          "border-elixir/60 bg-elixir/15 text-elixir-2 hover:border-elixir hover:bg-elixir/25 hover:text-elixir-2",
+        optimistic.hasVoted &&
+          !isAlquimista &&
+          "border-gold/70 bg-gold/15 text-gold-2 hover:border-gold hover:bg-gold/25 hover:text-gold-2",
+        !optimistic.hasVoted &&
+          "border-rule bg-transparent text-ink-2 hover:border-gold/60 hover:bg-gold/10 hover:text-gold-2"
+      )}
+      data-burst={bursting}
+      data-super={isAlquimista}
+      data-testid={`vote-${projectId}`}
+      onClick={handleClick}
+      variant="ghost"
+    >
+      <span className="vote-icon relative flex items-center justify-center">
+        <VoteIcon hasVoted={optimistic.hasVoted} isAlquimista={isAlquimista} />
+      </span>
+      <span className={size === "sm" ? "text-sm" : "text-base"}>
+        {optimistic.score}
+      </span>
+
+      {bursting && <span className="vote-sheen" key={`sheen-${burstKey}`} />}
+
+      {bursting && <Burst isAlquimista={isAlquimista} key={burstKey} />}
+
+      {bursting && (
+        <span
+          className="vote-delta font-[family-name:var(--font-jetbrains)] text-xs"
+          key={`delta-${burstKey}`}
+        >
+          {t("delta", { count: weight })}
+        </span>
+      )}
+    </Button>
+  );
 
   return (
     <>
-      <Button
-        aria-label={ariaLabel}
-        aria-pressed={optimistic.hasVoted}
-        className={cn(
-          "group h-auto flex-col gap-0.5 border font-[family-name:var(--font-jetbrains)] tabular-nums transition-colors",
-          size === "sm" ? "px-3 py-2 text-xs" : "px-5 py-3 text-sm",
-          optimistic.hasVoted
-            ? "border-gold bg-gold/15 text-gold-2 hover:bg-gold/20"
-            : "border-rule bg-transparent text-ink-2 hover:border-gold/60 hover:text-gold-2"
-        )}
-        data-testid={`vote-${projectId}`}
-        disabled={isOwner}
-        onClick={handleClick}
-        title={isOwner ? t("ownProject") : undefined}
-        variant="ghost"
-      >
-        <VoteIcon hasVoted={optimistic.hasVoted} isAlquimista={isAlquimista} />
-        <span className={size === "sm" ? "text-sm" : "text-base"}>
-          {optimistic.score}
-        </span>
-      </Button>
+      {isAlquimista ? (
+        <Tooltip>
+          <TooltipTrigger asChild>{button}</TooltipTrigger>
+          <TooltipContent className="border-elixir/40" side="left">
+            {t("doubleHint")}
+          </TooltipContent>
+        </Tooltip>
+      ) : (
+        button
+      )}
 
       <SignInDialog onOpenChange={setSignInOpen} open={signInOpen} />
       <SuperVotePrompt onOpenChange={setSuperVoteOpen} open={superVoteOpen} />
+    </>
+  );
+}
+
+function Burst({ isAlquimista }: { isAlquimista: boolean }) {
+  return (
+    <>
+      <span className="vote-ring" />
+      {Array.from({ length: SPARK_COUNT }, (_, index) => {
+        const angle = (index / SPARK_COUNT) * 2 * Math.PI;
+        const spread = index % 2 === 0 ? 1 : 0.65;
+
+        return (
+          <span
+            className="vote-spark"
+            key={angle}
+            style={
+              {
+                "--spark-x": `${Math.cos(angle) * SPARK_RADIUS_PX * spread}px`,
+                "--spark-y": `${Math.sin(angle) * SPARK_RADIUS_PX * spread}px`,
+                "--spark-delay": `${index * 22}ms`,
+                "--spark-color":
+                  isAlquimista && index % 2 === 0
+                    ? "var(--gold-2)"
+                    : "var(--vote-glow)",
+              } as React.CSSProperties
+            }
+          />
+        );
+      })}
     </>
   );
 }
@@ -141,11 +217,14 @@ function VoteIcon({
   isAlquimista: boolean;
   hasVoted: boolean;
 }) {
-  const className = cn("size-4", hasVoted && "fill-gold/40");
+  const className = cn(
+    "size-4 transition-colors",
+    hasVoted && (isAlquimista ? "fill-elixir/50" : "fill-gold/50")
+  );
 
   return isAlquimista ? (
-    <Sparkles className={className} />
+    <Sparkles aria-hidden="true" className={className} />
   ) : (
-    <Triangle className={className} />
+    <Triangle aria-hidden="true" className={className} />
   );
 }

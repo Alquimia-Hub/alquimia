@@ -39,7 +39,7 @@ export async function LaunchpadSection() {
               >
                 <span
                   aria-hidden="true"
-                  className="w-6 shrink-0 text-center font-[family-name:var(--font-cormorant)] text-2xl text-ink-4 tabular-nums"
+                  className="w-6 shrink-0 text-center font-[family-name:var(--font-cormorant)] text-2xl text-ink-3 tabular-nums"
                 >
                   {index + 1}
                 </span>

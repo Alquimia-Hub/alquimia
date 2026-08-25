@@ -5,7 +5,14 @@ import { nanoid } from "nanoid";
 import { revalidatePath } from "next/cache";
 import type { EmailLocale } from "@/emails/copy";
 import { db } from "@/lib/db";
-import { project, projectCategory, report, user, vote } from "@/lib/db/schema";
+import {
+  project,
+  projectCategory,
+  report,
+  user,
+  vote,
+  voteEvent,
+} from "@/lib/db/schema";
 import {
   sendAdminNewSubmissionEmail,
   sendProjectApprovedEmail,
@@ -80,8 +87,15 @@ async function withinRateLimit(
   scope: keyof typeof RATE_LIMITS,
   subject: string
 ) {
-  const { limit: max, windowMs } = RATE_LIMITS[scope];
-  const allowed = await consumeRateLimit(scope, subject, max, windowMs);
+  const rule = RATE_LIMITS[scope];
+  const windows = Array.isArray(rule) ? rule : [rule];
+  let allowed = true;
+
+  for (const { limit: max, windowMs } of windows) {
+    if (!(await consumeRateLimit(scope, subject, max, windowMs))) {
+      allowed = false;
+    }
+  }
 
   await pruneRateLimits();
 
@@ -105,6 +119,18 @@ const ALQUIMISTA_TTL_DAYS = Math.round(
 const WEIGHT_CASE = sql.raw(
   `case when u.is_alquimista and u.alquimista_checked_at > now() - interval '${ALQUIMISTA_TTL_DAYS} days' then ${VOTE_WEIGHT_ALQUIMISTA} else ${VOTE_WEIGHT_DEFAULT} end`
 );
+
+async function recordVoteEvent(
+  projectId: string,
+  userId: string,
+  action: "added" | "removed"
+) {
+  await db.execute(sql`
+    insert into ${voteEvent} (id, project_id, user_id, action, weight)
+    select ${nanoid()}, ${projectId}, ${userId}, ${action}, ${WEIGHT_CASE}
+    from ${user} u where u.id = ${userId}
+  `);
+}
 
 async function recalculateProjectScore(projectId: string) {
   await db.execute(sql`
@@ -395,21 +421,13 @@ export async function toggleVote(
     }
 
     const [target] = await db
-      .select({
-        slug: project.slug,
-        status: project.status,
-        ownerId: project.ownerId,
-      })
+      .select({ slug: project.slug, status: project.status })
       .from(project)
       .where(eq(project.id, projectId))
       .limit(1);
 
     if (!target || target.status !== "approved") {
       return fail("notPublished");
-    }
-
-    if (target.ownerId === currentUser.id) {
-      return fail("cannotVoteOwnProject");
     }
 
     const deleted = await db
@@ -427,6 +445,12 @@ export async function toggleVote(
         .values({ projectId, userId: currentUser.id })
         .onConflictDoNothing();
     }
+
+    await recordVoteEvent(
+      projectId,
+      currentUser.id,
+      voted ? "added" : "removed"
+    );
 
     await recalculateProjectScore(projectId);
     invalidate(target.slug);
