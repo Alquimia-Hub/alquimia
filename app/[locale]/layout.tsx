@@ -12,6 +12,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { getPathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { localeAlternates } from "@/lib/alternates";
+import { publicUrl } from "@/lib/site-url";
 import "../globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -45,17 +46,7 @@ const OG_LOCALES = {
   en: "en_US",
 } as const;
 
-const resolveSiteUrl = () => {
-  if (process.env.NEXT_PUBLIC_SITE_URL) {
-    return new URL(process.env.NEXT_PUBLIC_SITE_URL);
-  }
-  if (process.env.VERCEL_PROJECT_PRODUCTION_URL) {
-    return new URL(`https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`);
-  }
-  return new URL("https://alquimia.vercel.app");
-};
-
-const siteUrl = resolveSiteUrl();
+const siteUrl = new URL(publicUrl());
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));

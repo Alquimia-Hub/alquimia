@@ -44,7 +44,6 @@ export function LogoCard({ variant }: Props) {
     <ContextMenu>
       <ContextMenuTrigger asChild>
         <article className="group flex flex-col gap-5 rounded-sm border border-rule bg-bg-2 p-6 transition-colors hover:border-gold/40">
-          {/* Preview */}
           <div
             className={[
               "flex items-center justify-center rounded-sm border border-rule/60 bg-bg-3 px-8",
@@ -61,7 +60,6 @@ export function LogoCard({ variant }: Props) {
             />
           </div>
 
-          {/* Label */}
           <div className="flex flex-col gap-1">
             <h3 className="font-[family-name:var(--font-im-fell)] text-[11px] text-ink uppercase tracking-[0.3em]">
               {name}
@@ -71,7 +69,6 @@ export function LogoCard({ variant }: Props) {
             </p>
           </div>
 
-          {/* Actions */}
           <div className="flex flex-wrap items-center gap-2">
             <button
               className="inline-flex items-center gap-1.5 rounded-sm border border-rule px-3 py-1.5 font-[family-name:var(--font-im-fell)] text-[10px] text-ink uppercase tracking-[0.3em] transition-colors hover:border-gold hover:text-gold"

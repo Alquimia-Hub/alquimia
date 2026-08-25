@@ -1,6 +1,5 @@
 export type ContrastGrade = "AAA" | "AA" | "AA-Large" | "FAIL";
 
-/** Token names double as message keys under `Brand.colorNotes`. */
 export const COLOR_TOKEN_NAMES = [
   "bg",
   "bg-2",

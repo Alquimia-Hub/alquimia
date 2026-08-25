@@ -1,8 +1,3 @@
-/**
- * Talks we've given, newest first. Only the stable identifiers live here — the
- * title, event, date, speakers and description are localized in
- * `messages/*.json` under `Talks.items.<id>`.
- */
 export const TALKS = [
   { id: "agentes-ia-opbnb", youtubeId: "zt5cvUjv-DM" },
 ] as const;

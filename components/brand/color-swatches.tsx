@@ -70,7 +70,7 @@ function Swatch({ token }: { token: ColorToken }) {
       setCopied(true);
       setTimeout(() => setCopied(false), 1400);
     } catch {
-      // noop — clipboard unavailable
+      setCopied(false);
     }
   }
 
