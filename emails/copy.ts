@@ -15,7 +15,7 @@ export const EMAIL_COPY = {
       heading: "Bienvenido a Alquimia",
       body: "Ya podes publicar tu proyecto en el Launchpad y apoyar los del resto de la comunidad.",
       alquimista:
-        "Verifica tu cuenta de Discord para conseguir el badge de Alquimista: tus votos pasan a valer el doble.",
+        "Verifica tu cuenta de Discord para conseguir el badge de Alquimista: tus votos pasan a valer el triple.",
       cta: "Ir al Launchpad",
       discordCta: "Unirme al Discord",
     },
@@ -55,7 +55,7 @@ export const EMAIL_COPY = {
       heading: "Welcome to Alquimia",
       body: "You can now publish your project on the Launchpad and support everyone else's.",
       alquimista:
-        "Verify your Discord account to earn the Alquimista badge: your votes count double.",
+        "Verify your Discord account to earn the Alquimista badge: your votes count triple.",
       cta: "Go to the Launchpad",
       discordCta: "Join the Discord",
     },

@@ -245,7 +245,7 @@
     "points": "{count, plural, one {# point} other {# points}}",
     "error": "We couldn't register your support",
     "delta": "+{count}",
-    "doubleHint": "Your support counts double because you're an Alchemist"
+    "alquimistaHint": "Your support counts x3 because you're an Alchemist"
   },
   "LaunchpadDetail": {
     "about": "About the project",
@@ -358,9 +358,9 @@
     "subtitle": "Your profile and your community verification.",
     "badgeTitle": "Alquimista badge",
     "badgeVerified": "You're a verified Alquimista",
-    "badgeVerifiedBody": "Your votes count double on the Launchpad.",
+    "badgeVerifiedBody": "Your votes count x3 on the Launchpad.",
     "badgeMissing": "You're not an Alquimista yet",
-    "badgeMissingBody": "Link your Discord account to verify you're part of the community. Your votes will count double.",
+    "badgeMissingBody": "Link your Discord account to verify you're part of the community. Your votes will count x3.",
     "badgeNotMember": "Your Discord account isn't in the Alquimia server.",
     "badgeUnavailable": "We couldn't reach Discord. Try again in a bit.",
     "linkDiscord": "Link Discord",
@@ -382,7 +382,7 @@
     "avatarPreview": "This is how others see you",
     "avatarSaved": "Done, your avatar is updated",
     "avatarError": "We couldn't save the change",
-    "badgePerks": "Weekly community calls, events, networking, hackathons and your support counting double in the Launchpad.",
+    "badgePerks": "Weekly community calls, events, networking, hackathons and your support counting x3 in the Launchpad.",
     "badgeLearnMore": "What being an Alchemist includes"
   },
   "Alquimista": {
@@ -391,7 +391,7 @@
     "intro": "Alchemist is the badge that says you're really part of Alquimia: you're in the Discord, you show up, you bring something of your own. It's verified once, it's free, and it can't be bought.",
     "whatTitle": "What it is",
     "whatBody": "It isn't a rank or a prize: it's a verification. You link your Discord account, we confirm you're in the Alquimia server, and that's it. From then on your name carries the mark in the Launchpad and your word weighs more when the community decides which project deserves attention.",
-    "doubleVote": "In the Launchpad your support counts double: one vote, two points.",
+    "weightedVote": "In the Launchpad your support counts x3: one vote, three points.",
     "benefitsTitle": "What happens inside",
     "benefits": {
       "calls": {
@@ -431,7 +431,7 @@
       },
       "vote": {
         "title": "Done: the mark is yours",
-        "body": "It shows up next to your name in the Launchpad and your support starts counting double."
+        "body": "It shows up next to your name in the Launchpad and your support starts counting x3."
       }
     },
     "freeNote": "The verification is rechecked every 7 days. If you're still in the Discord, it renews on its own.",
@@ -441,7 +441,7 @@
     "ctaVerify": "Verify my account",
     "ctaLaunchpad": "Go to the Launchpad",
     "tooltipTitle": "Verified Alchemist",
-    "tooltipBody": "Confirmed member of the Alquimia Discord. Their Launchpad support counts double.",
+    "tooltipBody": "Confirmed member of the Alquimia Discord. Their Launchpad support counts x3.",
     "tooltipLink": "Tap to see everything it includes"
   },
   "Auth": {
@@ -543,8 +543,8 @@
     "cancel": "Keep editing"
   },
   "SuperVotePrompt": {
-    "title": "Your support can count double",
-    "body": "If you're part of our Discord, verify your account and your support counts twice. It's free and takes a minute.",
+    "title": "Your support can count triple",
+    "body": "If you're part of our Discord, verify your account and your support counts three times. It's free and takes a minute.",
     "verify": "Verify my account",
     "join": "Join the Discord",
     "skip": "Not now",
@@ -605,7 +605,7 @@
       "votes": {
         "title": "Support and ranking",
         "body": [
-          "Each person can support a project once. Those who verify they are part of our Discord earn the Alquimista badge and their support counts double.",
+          "Each person can support a project once. Those who verify they are part of our Discord earn the Alquimista badge and their support counts triple.",
           "Manipulating the ranking with fake accounts, bots, incentives or artificial coordination is not allowed. If we detect manipulation we may void the support and unpublish the project."
         ]
       },

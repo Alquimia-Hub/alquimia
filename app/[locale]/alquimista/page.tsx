@@ -103,7 +103,7 @@ export default async function AlquimistaPage({
                 aria-hidden="true"
                 className="mt-1 size-4 shrink-0 fill-gold/40 text-gold"
               />
-              {t("doubleVote")}
+              {t("weightedVote")}
             </p>
           </section>
 
