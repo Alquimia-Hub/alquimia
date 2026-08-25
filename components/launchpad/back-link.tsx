@@ -12,7 +12,7 @@ export function BackLink({ href, label }: BackLinkProps) {
 
   return (
     <Link
-      className="inline-flex w-fit items-center gap-1.5 font-[family-name:var(--font-jetbrains)] text-[11px] text-ink-4 uppercase tracking-[0.14em] transition-colors hover:text-gold"
+      className="inline-flex w-fit items-center gap-1.5 font-[family-name:var(--font-jetbrains)] text-[11px] text-ink-3 uppercase tracking-[0.14em] transition-colors duration-200 hover:text-gold-2"
       data-testid="back-link"
       href={href}
     >

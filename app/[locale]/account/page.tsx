@@ -1,10 +1,10 @@
 import { LayoutGrid, Shield } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { AlquimistaCard } from "@/components/auth/alquimista-card";
+import { AvatarPrivacyCard } from "@/components/auth/avatar-privacy-card";
 import { SignInRequired } from "@/components/auth/sign-in-required";
 import { BackLink } from "@/components/launchpad/back-link";
 import { SiteHeader } from "@/components/site-header";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Toaster } from "@/components/ui/sonner";
 import { resolveLocale } from "@/i18n/locale";
@@ -63,18 +63,12 @@ export default async function AccountPage({
             <p className="mt-3 mb-0 text-ink-3">{t("subtitle")}</p>
           </header>
 
-          <section className="flex items-center gap-4 border border-rule-2 bg-bg-2/60 px-6 py-5">
-            <Avatar className="size-12 border border-rule">
-              <AvatarImage alt="" src={viewer.image ?? undefined} />
-              <AvatarFallback className="bg-bg-3 text-ink-2">
-                {viewer.name.slice(0, 2).toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-            <div className="min-w-0">
-              <p className="m-0 font-medium text-ink">{viewer.name}</p>
-              <p className="m-0 truncate text-ink-3 text-sm">{viewer.email}</p>
-            </div>
-          </section>
+          <AvatarPrivacyCard
+            email={viewer.email}
+            hideAvatar={viewer.hideAvatar}
+            image={viewer.image}
+            name={viewer.name}
+          />
 
           <AlquimistaCard
             checkedAt={viewer.alquimistaCheckedAt}

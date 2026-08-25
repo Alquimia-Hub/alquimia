@@ -144,6 +144,7 @@ export async function getProjectBySlug(slug: string) {
         id: user.id,
         name: user.name,
         image: user.image,
+        hideAvatar: user.hideAvatar,
         isAlquimista: user.isAlquimista,
       },
     })

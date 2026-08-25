@@ -123,7 +123,7 @@ export function SignInDialog({
           )}
         </div>
 
-        <p className="m-0 text-balance text-center text-[12px] text-ink-4 leading-relaxed">
+        <p className="m-0 text-balance text-center text-[12px] text-ink-3 leading-relaxed">
           {t.rich("legalHint", {
             privacy: (chunks) => (
               <LegalLink href="/privacy">{chunks}</LegalLink>

@@ -395,21 +395,13 @@ export async function toggleVote(
     }
 
     const [target] = await db
-      .select({
-        slug: project.slug,
-        status: project.status,
-        ownerId: project.ownerId,
-      })
+      .select({ slug: project.slug, status: project.status })
       .from(project)
       .where(eq(project.id, projectId))
       .limit(1);
 
     if (!target || target.status !== "approved") {
       return fail("notPublished");
-    }
-
-    if (target.ownerId === currentUser.id) {
-      return fail("cannotVoteOwnProject");
     }
 
     const deleted = await db

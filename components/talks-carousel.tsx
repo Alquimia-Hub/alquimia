@@ -39,7 +39,7 @@ function TalkCardBody({ id }: { id: TalkId }) {
 
       <span className="mt-auto flex flex-col gap-1.5 border-rule-2 border-t pt-5 font-[family-name:var(--font-im-fell)] text-[9px] uppercase tracking-[0.24em] max-md:pt-4">
         <span className="text-ink-2">{t(`items.${id}.speakers`)}</span>
-        <span className="text-ink-4">{t(`items.${id}.event`)}</span>
+        <span className="text-ink-3">{t(`items.${id}.event`)}</span>
       </span>
     </span>
   );

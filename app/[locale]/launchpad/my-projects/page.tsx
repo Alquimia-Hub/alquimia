@@ -61,7 +61,7 @@ export default async function MyProjectsPage({
           <p className="m-0 font-[family-name:var(--font-cormorant)] text-2xl text-ink-2">
             {t("emptyTitle")}
           </p>
-          <p className="mt-2 mb-4 text-ink-4 text-sm">{t("emptyBody")}</p>
+          <p className="mt-2 mb-4 text-ink-3 text-sm">{t("emptyBody")}</p>
           <Button asChild size="sm">
             <Link href="/launchpad/new">{tLaunchpad("submitProject")}</Link>
           </Button>

@@ -7,6 +7,7 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 import { useActionError } from "@/components/launchpad/use-action-error";
 import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/navigation";
 import { authClient } from "@/lib/auth-client";
 import { COMMUNITY_LINKS } from "@/lib/constants";
 import { revalidateAlquimistaBadge } from "@/lib/launchpad/actions";
@@ -113,30 +114,56 @@ export function AlquimistaCard({
   return (
     <section
       className={cn(
-        "flex flex-col gap-4 border px-6 py-6",
-        isActive ? "border-gold/40 bg-gold/5" : "border-rule-2 bg-bg-2/60"
+        "flex flex-col gap-5 border px-6 py-6",
+        isActive
+          ? "border-gold/50 bg-gradient-to-br from-gold/10 via-bg-2 to-elixir/5 shadow-[0_0_50px_-30px_var(--gold)]"
+          : "border-rule-2 bg-bg-2/60"
       )}
       data-testid="alquimista-card"
     >
-      <div className="flex items-center gap-2">
-        <Sparkles
-          aria-hidden="true"
-          className={cn(
-            "size-5",
-            isActive ? "fill-gold/40 text-gold" : "text-ink-4"
-          )}
-        />
-        <h2 className="m-0 font-[family-name:var(--font-cormorant)] font-light text-ink text-xl">
-          {t("badgeTitle")}
-        </h2>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <span
+            className={cn(
+              "flex size-9 items-center justify-center border",
+              isActive
+                ? "border-gold/50 bg-gold/15 shadow-[0_0_20px_-8px_var(--gold)]"
+                : "border-rule-2 bg-bg-3"
+            )}
+          >
+            <Sparkles
+              aria-hidden="true"
+              className={cn(
+                "size-5",
+                isActive ? "fill-gold/40 text-gold" : "text-ink-3"
+              )}
+            />
+          </span>
+          <h2 className="m-0 font-[family-name:var(--font-cormorant)] font-light text-ink text-xl">
+            {t("badgeTitle")}
+          </h2>
+        </div>
+
+        <Link
+          className="font-[family-name:var(--font-jetbrains)] text-[10px] text-ink-3 uppercase tracking-[0.14em] transition-colors duration-200 hover:text-gold-2"
+          href="/alquimista"
+        >
+          {t("badgeLearnMore")}
+        </Link>
       </div>
 
       <div>
         <p className="m-0 font-medium text-ink" data-testid="badge-state">
           {badgeHeadline}
         </p>
-        <p className="mt-1 mb-0 text-ink-3 text-sm">{badgeBody}</p>
+        <p className="mt-1 mb-0 text-ink-3 text-sm leading-relaxed">
+          {badgeBody}
+        </p>
       </div>
+
+      <p className="m-0 border-gold/60 border-l-2 bg-gold/5 py-2 pl-4 text-ink-2 text-sm leading-relaxed">
+        {t("badgePerks")}
+      </p>
 
       {linkFailed && (
         <p

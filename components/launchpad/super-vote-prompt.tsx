@@ -44,16 +44,29 @@ export function SuperVotePrompt({
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
       <DialogContent
-        className="border-gold/40 bg-bg-2"
+        className="border-gold/40 bg-gradient-to-br from-gold/10 via-bg-2 to-elixir/10"
         data-testid="super-vote-prompt"
       >
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Sparkles aria-hidden="true" className="size-5 text-gold" />
+          <DialogTitle className="flex items-center gap-2 text-ink">
+            <Sparkles
+              aria-hidden="true"
+              className="size-5 fill-gold/40 text-gold"
+            />
             {t("title")}
           </DialogTitle>
-          <DialogDescription>{t("body")}</DialogDescription>
+          <DialogDescription className="text-ink-2">
+            {t("body")}
+          </DialogDescription>
         </DialogHeader>
+
+        <Link
+          className="w-fit font-[family-name:var(--font-jetbrains)] text-[10px] text-ink-3 uppercase tracking-[0.14em] transition-colors duration-200 hover:text-gold-2"
+          href="/alquimista"
+          onClick={() => onOpenChange(false)}
+        >
+          {t("learnMore")}
+        </Link>
 
         <DialogFooter className="flex-col gap-2 sm:flex-row">
           <Button

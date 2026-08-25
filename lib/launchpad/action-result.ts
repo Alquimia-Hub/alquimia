@@ -7,7 +7,6 @@ export const ACTION_ERRORS = [
   "projectLimitReached",
   "tooFast",
   "notPublished",
-  "cannotVoteOwnProject",
   "alreadyReported",
   "cannotDeleteApproved",
   "slugTaken",

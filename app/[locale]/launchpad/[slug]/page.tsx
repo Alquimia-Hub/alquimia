@@ -3,14 +3,16 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { AlquimistaBadge } from "@/components/auth/alquimista-badge";
+import { BackLink } from "@/components/launchpad/back-link";
 import { CategoryChip } from "@/components/launchpad/category-chip";
 import { DeleteProjectButton } from "@/components/launchpad/delete-project-button";
 import { ReportDialog } from "@/components/launchpad/report-dialog";
 import { ShareOnX } from "@/components/launchpad/share-on-x";
 import { StatusChip } from "@/components/launchpad/status-chip";
 import { VoteButton } from "@/components/launchpad/vote-button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { UserAvatar } from "@/components/user-avatar";
 import { resolveLocale } from "@/i18n/locale";
 import { Link } from "@/i18n/navigation";
 import { localeAlternates } from "@/lib/alternates";
@@ -100,12 +102,7 @@ export default async function ProjectDetailPage({
 
   return (
     <article className="flex flex-col gap-8">
-      <Link
-        className="font-[family-name:var(--font-jetbrains)] text-[11px] text-ink-4 uppercase tracking-[0.14em] hover:text-gold"
-        href="/launchpad"
-      >
-        ← {tDetail("backToList")}
-      </Link>
+      <BackLink href="/launchpad" label={tDetail("backToList")} />
 
       {justSubmitted && (
         <aside
@@ -192,7 +189,6 @@ export default async function ProjectDetailPage({
             hasVoted={voted}
             isAlquimista={viewer?.isAlquimista ?? false}
             isAuthenticated={Boolean(viewer)}
-            isOwner={isOwner}
             projectId={project.id}
             score={project.voteScore}
             size="lg"
@@ -247,18 +243,14 @@ export default async function ProjectDetailPage({
               {tDetail("publishedBy")}
             </h2>
             <div className="flex items-center gap-2">
-              <Avatar className="size-7 border border-rule-2">
-                <AvatarImage alt="" src={project.owner.image ?? undefined} />
-                <AvatarFallback className="bg-bg-3 text-[10px]">
-                  {project.owner.name.slice(0, 2).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
+              <UserAvatar
+                className="size-7"
+                hideAvatar={project.owner.hideAvatar}
+                image={project.owner.image}
+                name={project.owner.name}
+              />
               <span className="text-ink-2 text-sm">{project.owner.name}</span>
-              {project.owner.isAlquimista && (
-                <span className="border border-gold/40 bg-gold/10 px-1.5 py-0.5 font-[family-name:var(--font-jetbrains)] text-[9px] text-gold-2 uppercase tracking-[0.1em]">
-                  Alquimista
-                </span>
-              )}
+              {project.owner.isAlquimista && <AlquimistaBadge size="md" />}
             </div>
           </div>
 

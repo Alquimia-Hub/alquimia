@@ -160,6 +160,12 @@ export const auth = betterAuth({
         defaultValue: "es",
         input: false,
       },
+      hideAvatar: {
+        type: "boolean",
+        required: false,
+        defaultValue: false,
+        input: true,
+      },
       isAlquimista: {
         type: "boolean",
         required: false,

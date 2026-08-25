@@ -52,6 +52,7 @@ export const isAdmin = (user: SessionUser | null | undefined) =>
 export interface Viewer {
   alquimistaCheckedAt: Date | null;
   email: string;
+  hideAvatar: boolean;
   id: string;
   image: string | null;
   isAlquimista: boolean;
@@ -70,6 +71,7 @@ export function toViewer(user: SessionUser | null): Viewer | null {
     name: user.name,
     email: user.email,
     image: user.image ?? null,
+    hideAvatar: user.hideAvatar ?? false,
     role: user.role ?? "user",
     locale: user.locale ?? "es",
     isAlquimista: user.isAlquimista ?? false,

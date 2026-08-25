@@ -29,6 +29,8 @@ export const user = pgTable("user", {
 
   locale: text("locale").default("es").notNull(),
 
+  hideAvatar: boolean("hide_avatar").default(false).notNull(),
+
   isAlquimista: boolean("is_alquimista").default(false).notNull(),
   alquimistaCheckedAt: timestamp("alquimista_checked_at", {
     withTimezone: true,
