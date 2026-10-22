@@ -1,0 +1,9 @@
+# Estado local de HyperFrames (rutas de la máquina, caché, snapshots)
+.hyperframes/
+.thumbnails/
+.waveform-cache/
+
+# Versiones viejas, assets crudos y renders
+.old/
+.media/
+renders/

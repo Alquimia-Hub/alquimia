@@ -1,0 +1,49 @@
+<template>
+  <style>
+    @font-face { font-family: "Cormorant"; src: url("assets/fonts/CormorantGaramond-VF.ttf"); font-weight: 300 700; }
+    #root { position: absolute; inset: 0; overflow: hidden; background: var(--bg); }
+    #que-glow { position: absolute; inset: 0; background: radial-gradient(circle at 28% 45%, rgba(184, 106, 42, 0.24) 0, rgba(184, 106, 42, 0.06) 35%, rgba(10, 8, 6, 0) 65%); }
+    #que-eyebrow { position: absolute; left: 160px; top: 170px; font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 38px; letter-spacing: 0.1em; color: var(--gold2); }
+    .que-line { position: absolute; left: 160px; width: 1600px; font-family: "Cormorant", serif; font-weight: 700; font-size: 104px; line-height: 1; letter-spacing: -0.015em; color: var(--ink); }
+    .que-line .hl { color: var(--gold2); }
+    .que-w { display: inline-block; }
+    #que-flood { position: absolute; inset: 0; background: #d99a3d; }
+  </style>
+  <div id="root" data-composition-id="que" data-width="1920" data-height="1080">
+    <div id="que-glow"></div>
+    <div id="que-eyebrow">QUÉ ES</div>
+    <div id="que-l1" class="que-line" style="top: 290px"><span class="hl">Dos episodios</span> por semana, a la noche</div>
+    <div id="que-l2" class="que-line" style="top: 480px">De <span class="hl">30 minutos</span> cada uno</div>
+    <div id="que-l3" class="que-line" style="top: 670px">Charlan los cohosts y, a veces, <span class="hl">un invitado</span></div>
+    <div id="que-flood"></div>
+  </div>
+  <script>
+    (() => {
+      const split = (sel, cls) => {
+        const el = document.querySelector(sel);
+        const nodes = [...el.childNodes];
+        el.textContent = "";
+        for (const node of nodes) {
+          for (const word of node.textContent.split(" ").filter(Boolean)) {
+            const span = document.createElement("span");
+            span.className = node.nodeType === 1 ? `${cls} hl` : cls;
+            span.textContent = word;
+            el.appendChild(span);
+            el.appendChild(document.createTextNode(" "));
+          }
+        }
+        return [...el.children];
+      };
+      const lines = ["#que-l1", "#que-l2", "#que-l3"].map((sel) => split(sel, "que-w"));
+
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#que-flood", { opacity: 1 }, { opacity: 0, duration: 0.3, ease: "power2.out" }, 0);
+      tl.fromTo("#que-eyebrow", { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power2.out" }, 0.1);
+      // Una línea por pulso fuerte.
+      lines.forEach((words, i) => {
+        tl.fromTo(words, { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, stagger: 0.04, ease: "power2.out" }, 0.15 + i * 0.65);
+      });
+      window.__timelines["que"] = tl;
+    })();
+  </script>
+</template>
