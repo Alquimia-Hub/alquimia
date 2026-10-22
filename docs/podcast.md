@@ -7,6 +7,12 @@ startups. Cada tanto se suma un invitado.
 Se publica en YouTube, Spotify, X y en [alquimia.community/podcast](https://alquimia.community/podcast),
 con subtítulos en español e inglés.
 
+<p align="center">
+  <a href="images/podcast-infografia.webp">
+    <img src="images/podcast-infografia.webp" alt="Infografía de Noches de Alquimia: formato del episodio, cómo se hace, arquitectura y stack propuesto" width="640">
+  </a>
+</p>
+
 ## Formato
 
 Episodios de 30 minutos, grabados.
