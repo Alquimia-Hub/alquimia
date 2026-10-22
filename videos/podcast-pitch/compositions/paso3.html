@@ -1,0 +1,87 @@
+<template>
+  <style>
+    @font-face { font-family: "Cormorant"; src: url("assets/fonts/CormorantGaramond-VF.ttf"); font-weight: 300 700; }
+    #root { position: absolute; inset: 0; overflow: hidden; background: var(--bg); }
+    #paso3-glow { position: absolute; inset: 0; background: radial-gradient(circle at 40% 62%, rgba(184, 106, 42, 0.22) 0, rgba(184, 106, 42, 0.06) 36%, rgba(10, 8, 6, 0) 64%); }
+    #paso3-cam { position: absolute; inset: 0; }
+    #paso3-step { position: absolute; left: 160px; top: 110px; font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 38px; letter-spacing: 0.1em; color: var(--gold2); }
+    #paso3-title { position: absolute; left: 160px; top: 172px; width: 1640px; font-family: "Cormorant", serif; font-weight: 700; font-size: 96px; line-height: 1; letter-spacing: -0.015em; color: var(--ink); }
+    #paso3-title .hl { color: var(--gold2); }
+    .paso3-w { display: inline-block; }
+    #paso3-win { position: absolute; left: 160px; top: 400px; width: 1100px; height: 560px; border: 3px solid var(--gold); background: #120e09; }
+    #paso3-bar { position: absolute; left: 0; right: 0; top: 0; height: 64px; border-bottom: 2px solid rgba(217, 154, 61, 0.6); padding: 14px 26px; font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 30px; letter-spacing: 0.06em; color: var(--gold2); }
+    #paso3-rec { position: absolute; right: 26px; top: 14px; color: var(--ink); }
+    #paso3-dot { display: inline-block; width: 18px; height: 18px; margin-right: 10px; border-radius: 50%; background: #9d8b6a; vertical-align: 1px; }
+    .paso3-tile { position: absolute; border: 2px solid rgba(217, 154, 61, 0.5); background: #0a0806; overflow: hidden; }
+    #paso3-screen { left: 24px; top: 86px; width: 680px; height: 448px; }
+    #paso3-c1 { left: 724px; top: 86px; width: 352px; height: 214px; }
+    #paso3-c2 { left: 724px; top: 320px; width: 352px; height: 214px; }
+    .paso3-tag { position: absolute; left: 14px; bottom: 10px; font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 28px; letter-spacing: 0.04em; color: var(--ink); }
+    .paso3-ring { position: absolute; inset: -2px; border: 6px solid var(--gold2); opacity: 0; }
+    #paso3-gh { position: absolute; left: 250px; top: 120px; width: 180px; height: 180px; background: var(--ink); -webkit-mask: url(assets/logos/github.svg) center / contain no-repeat; mask: url(assets/logos/github.svg) center / contain no-repeat; }
+    #paso3-side { position: absolute; left: 1320px; top: 420px; width: 460px; }
+    #paso3-fact { font-family: "Cormorant", serif; font-weight: 700; font-size: 64px; line-height: 1.02; color: var(--ink); }
+    #paso3-fact .hl { color: var(--gold2); }
+    .paso3-tool { margin-top: 30px; height: 64px; font-family: "JetBrains Mono", monospace; font-weight: 700; font-size: 32px; line-height: 64px; letter-spacing: 0.04em; color: var(--ink); }
+    .paso3-tool i { display: inline-block; width: 60px; height: 60px; margin-right: 18px; vertical-align: -18px; background: var(--ink); -webkit-mask: var(--logo) center / contain no-repeat; mask: var(--logo) center / contain no-repeat; }
+  </style>
+  <div id="root" data-composition-id="paso3" data-width="1920" data-height="1080">
+    <div id="paso3-glow"></div>
+    <div id="paso3-cam">
+      <div id="paso3-step">PASO 3 · GRABACIÓN</div>
+      <div id="paso3-title">Grabamos en <span class="hl">Alquimia Studio,</span> nuestra sala online</div>
+      <div id="paso3-win">
+        <div id="paso3-bar">ALQUIMIA STUDIO<span id="paso3-rec"><span id="paso3-dot"></span>REC</span></div>
+        <div id="paso3-screen" class="paso3-tile"><div id="paso3-gh"></div><div class="paso3-tag">PANTALLA COMPARTIDA</div></div>
+        <div id="paso3-c1" class="paso3-tile">
+          <svg width="352" height="214" viewBox="0 0 352 243" preserveAspectRatio="xMidYMax meet"><circle cx="176" cy="96" r="46" fill="none" stroke="#c9b689" stroke-width="3" /><path d="M80 243 C90 172 132 158 176 158 C220 158 262 172 272 243" fill="none" stroke="#c9b689" stroke-width="3" /></svg>
+          <div class="paso3-tag">COHOST</div><div id="paso3-r1" class="paso3-ring"></div>
+        </div>
+        <div id="paso3-c2" class="paso3-tile">
+          <svg width="352" height="214" viewBox="0 0 352 243" preserveAspectRatio="xMidYMax meet"><circle cx="176" cy="96" r="46" fill="none" stroke="#c9b689" stroke-width="3" /><path d="M80 243 C90 172 132 158 176 158 C220 158 262 172 272 243" fill="none" stroke="#c9b689" stroke-width="3" /></svg>
+          <div class="paso3-tag">COHOST</div><div id="paso3-r2" class="paso3-ring"></div>
+        </div>
+      </div>
+      <div id="paso3-side">
+        <div id="paso3-fact">Cada uno se graba en su compu, <span class="hl">en 1080p</span></div>
+        <div class="paso3-tool" style="--logo: url(assets/logos/livekit.svg)"><i></i>LIVEKIT</div>
+        <div class="paso3-tool" style="--logo: url(assets/logos/cloudflare.svg)"><i></i>CLOUDFLARE R2</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (() => {
+      const split = (sel) => {
+        const el = document.querySelector(sel);
+        const nodes = [...el.childNodes];
+        el.textContent = "";
+        for (const node of nodes) {
+          for (const word of node.textContent.split(" ").filter(Boolean)) {
+            const span = document.createElement("span");
+            span.className = node.nodeType === 1 ? "paso3-w hl" : "paso3-w";
+            span.textContent = word;
+            el.appendChild(span);
+            el.appendChild(document.createTextNode(" "));
+          }
+        }
+        return [...el.children];
+      };
+      const title = split("#paso3-title");
+
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#paso3-cam", { scale: 1.04 }, { scale: 1, duration: 0.5, ease: "expo.out" }, 0);
+      tl.fromTo("#paso3-step", { opacity: 0 }, { opacity: 1, duration: 0.15, ease: "power2.out" }, 0.05);
+      tl.fromTo(title, { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, stagger: 0.05, ease: "power2.out" }, 0.1);
+      tl.fromTo("#paso3-win", { opacity: 0, y: 60 }, { opacity: 1, y: 0, duration: 0.45, ease: "expo.out" }, 0.3);
+      tl.set("#paso3-dot", { backgroundColor: "#f0b956" }, 1.0);
+      // Quien habla se marca en su cámara, en cada pulso.
+      [[1.0, 1], [1.5, 2], [2.0, 1], [2.5, 2], [3.0, 1]].forEach(([at, who]) => {
+        tl.set(`#paso3-r${who}`, { opacity: 1 }, at);
+        tl.set(`#paso3-r${who === 1 ? 2 : 1}`, { opacity: 0 }, at);
+      });
+      tl.fromTo("#paso3-fact", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.2, ease: "power2.out" }, 1.1);
+      tl.fromTo(".paso3-tool", { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.3, stagger: 0.25, ease: "expo.out" }, 1.75);
+      window.__timelines["paso3"] = tl;
+    })();
+  </script>
+</template>

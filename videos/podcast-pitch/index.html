@@ -1,0 +1,64 @@
+<!doctype html>
+<html
+  lang="es"
+  data-composition-variables='[
+    {"id":"bg","type":"color","label":"Fondo","default":"#0a0806"},
+    {"id":"ink","type":"color","label":"Tinta","default":"#ead9b8"},
+    {"id":"ink3","type":"color","label":"Tinta secundaria","default":"#c9b689"},
+    {"id":"gold","type":"color","label":"Oro","default":"#d99a3d"},
+    {"id":"gold2","type":"color","label":"Oro claro","default":"#f0b956"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      :root {
+        --bg: #0a0806;
+        --ink: #ead9b8;
+        --ink3: #c9b689;
+        --gold: #d99a3d;
+        --gold2: #f0b956;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+      #root { position: relative; width: 100%; height: 100%; background: var(--bg); }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="58" data-width="1920" data-height="1080">
+      <!-- Qué es -->
+      <div id="intro" data-composition-id="intro" data-composition-src="compositions/intro.html" data-start="0" data-duration="4" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="que" data-composition-id="que" data-composition-src="compositions/que.html" data-start="4" data-duration="4" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="temas" data-composition-id="temas" data-composition-src="compositions/temas.html" data-start="8" data-duration="4" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="donde" data-composition-id="donde" data-composition-src="compositions/donde.html" data-start="12" data-duration="4" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="idea" data-composition-id="idea" data-composition-src="compositions/idea.html" data-start="16" data-duration="4" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <!-- Cómo se produce -->
+      <div id="paso1" data-composition-id="paso1" data-composition-src="compositions/paso1.html" data-start="20" data-duration="4" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="paso2" data-composition-id="paso2" data-composition-src="compositions/paso2.html" data-start="24" data-duration="4" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="paso3" data-composition-id="paso3" data-composition-src="compositions/paso3.html" data-start="28" data-duration="4" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="paso4" data-composition-id="paso4" data-composition-src="compositions/paso4.html" data-start="32" data-duration="8" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="paso5" data-composition-id="paso5" data-composition-src="compositions/paso5.html" data-start="40" data-duration="3" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="paso6" data-composition-id="paso6" data-composition-src="compositions/paso6.html" data-start="43" data-duration="4" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <!-- Formato, stack y cierre -->
+      <div id="formato" data-composition-id="formato" data-composition-src="compositions/formato.html" data-start="47" data-duration="4" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="stack" data-composition-id="stack" data-composition-src="compositions/stack.html" data-start="51" data-duration="4" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+      <div id="cierre" data-composition-id="cierre" data-composition-src="compositions/cierre.html" data-start="55" data-duration="3" data-track-index="1" data-track-kind="graphics" data-width="1920" data-height="1080"></div>
+
+      <!-- Música: 120 BPM, compás de 2 s; las escenas cortan en compás -->
+      <audio id="bed-a" class="clip" src="assets/audio/pulso.wav" data-start="0" data-duration="28" data-track-index="10" data-volume="0.8" data-fade-in="0.15"></audio>
+      <audio id="bed-b" class="clip" src="assets/audio/pulso.wav" data-start="28" data-duration="30" data-track-index="11" data-volume="0.8" data-fade-out="2.5"></audio>
+
+      <!-- Efectos bajos, solo en lo que se ve -->
+      <audio id="sfx-zoom" class="clip" src="assets/audio/whoosh-short.mp3" data-start="3.6" data-duration="0.57" data-track-index="12" data-volume="0.12"></audio>
+      <audio id="sfx-flood" class="clip" src="assets/audio/whoosh.mp3" data-start="15.88" data-duration="0.57" data-track-index="12" data-volume="0.1"></audio>
+      <audio id="sfx-aprobar" class="clip" src="assets/audio/click.mp3" data-start="41.56" data-duration="0.37" data-track-index="13" data-volume="0.3"></audio>
+      <audio id="sfx-marca" class="clip" src="assets/audio/impact.mp3" data-start="55.62" data-duration="2.12" data-track-index="13" data-volume="0.12"></audio>
+    </div>
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>
