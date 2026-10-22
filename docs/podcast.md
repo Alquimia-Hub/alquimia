@@ -1,21 +1,25 @@
 # Noches de Alquimia
 
-El podcast en video de Alquimia. Dos noches por semana, los cohosts charlan
-sobre lo que está pasando en IA, automatización, biotech, diseño, seguridad y
-startups. Cada tanto se suma un invitado.
+El podcast en video de Alquimia. Los cohosts charlan sobre lo que está pasando
+en IA, automatización, biotech, diseño, seguridad y startups. Cada tanto se
+suma un invitado.
 
 Se publica en YouTube, Spotify, X y en [alquimia.community/podcast](https://alquimia.community/podcast),
 con subtítulos en español e inglés.
 
-<p align="center">
-  <a href="images/podcast-infografia.webp">
-    <img src="images/podcast-infografia.webp" alt="Infografía de Noches de Alquimia: formato del episodio, cómo se hace, arquitectura y stack propuesto" width="640">
-  </a>
-</p>
+**Un episodio por semana** hasta que el proceso sea estable. Después, dos.
+
+## Principio
+
+El producto es el podcast, no la plataforma. Usamos herramientas que ya existen
+y construimos solo lo que nos ahorra tiempo todas las semanas. Todo lo demás se
+hace a mano hasta que moleste.
 
 ## Formato
 
-Episodios de 30 minutos, grabados.
+Episodios de 30 minutos, grabados. Hay dos formatos:
+
+**Actualidad**
 
 | Bloque | Duración | Qué es |
 |---|---|---|
@@ -27,95 +31,136 @@ Episodios de 30 minutos, grabados.
 | **De la comunidad** | ~3 min | Un proyecto del Launchpad o una sugerencia de Discord |
 | **Cierre** | ~1 min | Predicción de la semana |
 
-Un episodio por semana puede ser de profundidad o con invitado: un solo tema,
-con cold open, intro y cierre. De cada episodio salen 3 Shorts.
+**Profundidad**: un solo tema o un invitado, con cold open, intro y cierre.
+
+Mientras sea uno por semana, el formato por defecto es actualidad, y
+profundidad lo reemplaza cuando hay un tema o un invitado que lo justifique.
+Con dos por semana, una noche es para cada formato.
+
+De cada episodio salen 3 Shorts. Se piensan desde el guion: cada bloque deja al
+menos una pregunta con una respuesta concreta que se entienda fuera de
+contexto.
 
 ## Cómo se hace un episodio
 
-Los cohosts eligen los temas, graban y aprueban. El resto es automático.
+Los cohosts eligen los temas, graban y aprueban. El resto lo hacen scripts.
 
-1. **Curación.** Durante la semana se juntan candidatos de Hacker News, GitHub,
-   arXiv, bioRxiv, newsletters y lo que la comunidad sugiere en Discord. Se
-   agrupan, se deduplican y se rankean según lo que está pasando y los
-   intereses del programa.
-2. **Elección.** Los cohosts eligen los temas de cada bloque en el panel.
-3. **Guion.** Se genera un guion por episodio: datos clave, links, preguntas
-   disparadoras y posturas para el debate.
-4. **Grabación.** En Alquimia Studio, una sala de grabación dentro del sitio.
-   Cada participante se graba en su propia pista, y la pantalla compartida va
-   en una pista aparte.
-5. **Postproducción.** Limpieza de audio, transcripción, edición multicámara,
-   gráficos, subtítulos, Shorts, títulos, capítulos y miniatura.
-6. **Aprobación.** Los cohosts revisan el corte y los Shorts en el panel y
-   aprueban la publicación.
-7. **Publicación.** El episodio sale programado en cada plataforma.
+1. **Curación.** Un cron junta candidatos de Hacker News, GitHub, arXiv y
+   bioRxiv, los deduplica por URL, los rankea y publica el top 10 en un canal
+   de Discord. Las sugerencias de la comunidad llegan por otro canal.
+2. **Elección.** Los cohosts eligen los temas con reacciones en Discord.
+3. **Briefing.** Se genera un briefing por episodio con datos clave y su
+   fuente, links, preguntas disparadoras y posturas para el debate. No es un
+   guion para leer.
+4. **Grabación.** En VDO.Ninja. Cada participante se graba localmente en su
+   propia pista, y la pantalla compartida va en una pista aparte. Durante la
+   charla se marcan los momentos buenos.
+5. **Postproducción.** Sync de pistas, audio, transcripción, plan de cortes,
+   render, subtítulos, Shorts, títulos, capítulos y miniatura.
+6. **Revisión.** El corte y los Shorts se suben a YouTube como no listados.
+   Los cohosts los miran ahí y aprueban o piden cambios en Discord.
+7. **Publicación.** Se pasan a públicos en YouTube, se sube el video a Spotify
+   for Creators y se postea en X.
 
 ## Arquitectura
 
 ```
-                 ┌──────────────── alquimia.community ────────────────┐
- Fuentes ──────▶ │ Curación ─▶ Panel (temas, guion, aprobación)        │
- Bot Discord ──▶ │ Alquimia Studio          /podcast + feed RSS        │
-                 └──────┬──────────────────────────────▲──────────────┘
-                        │ pistas grabadas               │ cola de trabajos
-                        ▼                               │
-                 ┌──────────── Estación de producción ──┴─────────────┐
-                 │ sync ─▶ audio ─▶ transcripción ─▶ plan de cortes ─▶ │
-                 │ render ─▶ Shorts ─▶ YouTube                         │
-                 └────────────────────────────────────────────────────┘
+ Fuentes ──▶ cron (GitHub Actions) ──▶ Discord: top 10 ──▶ cohosts eligen
+                                                              │
+                                                              ▼
+                                          briefing ──▶ grabación (VDO.Ninja)
+                                                              │ pistas
+                                                              ▼
+ ┌──────────────────────── Estación de producción ────────────────────────┐
+ │ sync ─▶ audio ─▶ transcripción ─▶ plan de cortes ─▶ render ─▶ Shorts   │
+ └────────────────────────────────────┬───────────────────────────────────┘
+                                      ▼
+                YouTube (no listado ─▶ público) · Spotify for Creators · X
+                                      │
+                                      ▼
+                          alquimia.community/podcast
 ```
 
-- **El sitio** (Next.js, Postgres) es el centro de control: curación, panel,
-  sala de grabación, página pública y feed RSS.
-- **La estación de producción** es un worker que toma trabajos de una cola en
-  la base y hace todo el procesamiento de audio y video.
+- **No hay panel ni cola de trabajos.** Discord es el espacio editorial y
+  YouTube no listado es la sala de revisión.
+- **La estación de producción** es una compu con scripts del repo. Cada etapa
+  es un comando (`pnpm podcast <episodio> <etapa>`) que lee y escribe archivos
+  en la carpeta del episodio, así se puede rehacer una etapa sin repetir las
+  anteriores. Corre en una Mac con Apple Silicon, pero todo el stack funciona
+  también en Linux y Windows.
 - **El plan de cortes** es un JSON por episodio y es la fuente de verdad de la
-  edición. De ahí se renderiza el video, se muestra el corte en el panel y se
-  exporta a DaVinci Resolve (`.otio`) para retoques a mano.
+  edición. De ahí se renderiza el episodio y se sacan los Shorts. Si algún día
+  hace falta retocar a mano, se exporta a `.otio` para DaVinci Resolve.
+- **Spotify for Creators es el host del podcast.** Recibe el video y genera el
+  RSS para Apple Podcasts y las demás apps. No mantenemos un feed propio.
+- **La página `/podcast`** lee el feed de la playlist de YouTube y muestra los
+  episodios embebidos.
 
 ## Stack
 
 | Etapa | Herramienta |
 |---|---|
-| Curación | Fuentes por API y RSS, deduplicación con pgvector, ranking con Claude |
-| Comunidad | Bot de Discord propio (`/sugerir`, votos) |
-| Guion, títulos, capítulos, selección de Shorts | Claude |
-| Llamada | LiveKit |
-| Grabación | Alquimia Studio: grabación local en cada navegador, subida por partes a Cloudflare R2 durante la llamada |
-| Sincronización de pistas | Reloj compartido + correlación de audio contra una grabación de referencia |
-| Limpieza de audio | DeepFilterNet3 por pista + normalización a −14 LUFS |
-| Transcripción | Parakeet TDT 0.6B v3 + corrección con Claude (puntuación y términos técnicos) |
+| Curación | GitHub Actions (cron), APIs y RSS, deduplicación por URL, ranking con Claude Haiku |
+| Comunidad | Webhook de Discord y un canal de sugerencias |
+| Briefing, títulos, capítulos, selección de Shorts | Claude |
+| Grabación | VDO.Ninja con grabación local por participante |
+| Sincronización de pistas | Correlación de audio contra una pista de referencia |
+| Audio | ffmpeg (`loudnorm` en dos pasadas); DeepFilterNet3 solo si hay ruido |
+| Transcripción | whisper.cpp + corrección con Claude (puntuación y términos técnicos) |
 | Subtítulos en inglés | Traducción con Claude |
 | Edición del episodio | Plan de cortes propio + ffmpeg |
-| Gráficos | Remotion (intro, outro, placas de tema, carteles con nombre) |
-| Shorts | Remotion, 9:16, encuadre con MediaPipe y subtítulos animados |
-| Música | Stable Audio 3 (fondos) y ACE-Step 1.5 (jingle) |
-| Miniaturas | Plantilla propia + FLUX.2 klein |
-| Publicación | YouTube Data API, feed RSS propio para Spotify y apps de podcast |
+| Gráficos y Shorts | HyperFrames (intro, placas, carteles con nombre, subtítulos animados) |
+| Encuadre de Shorts | Recorte 9:16 centrado sobre la pista de cada cámara |
+| Música | Identidad sonora fija: jingle, intro, transición y cierre |
+| Miniaturas | Plantilla fija en HyperFrames |
+| Publicación | YouTube, Spotify for Creators y X, a mano al principio |
 
 ### Decisiones
 
-- **Grabación local en cada navegador**: una mala conexión no afecta la calidad
-  de la grabación, solo la de la llamada.
-- **ffmpeg para el episodio y Remotion solo para gráficos y Shorts**: Remotion
-  es lento con varias fuentes de video largas.
-- **Cambio de cámara por volumen de cada pista**: como cada participante tiene
-  su pista, se sabe quién habla sin adivinar. Se corta con un tiempo mínimo por
-  plano, plano dividido cuando hablan dos y layout de pantalla cuando hay demo.
-- **Los Shorts los propone la IA y los eligen los cohosts**: cada propuesta
+- **VDO.Ninja en lugar de una sala propia.** Es gratis y graba una pista por
+  participante. Si algún día queremos la sala dentro del sitio, se arma con
+  LiveKit.
+- **Grabación local en cada participante.** Una mala conexión afecta la
+  llamada, no la grabación. Hay que confirmarlo en el episodio 0.
+- **Scripts locales en lugar de un worker.** No hay infraestructura que
+  mantener y se itera rápido. Los originales quedan en disco, y los masters en
+  YouTube y Spotify.
+- **ffmpeg para el episodio y HyperFrames solo para gráficos y Shorts.**
+  Renderizar 30 minutos de varias cámaras en HTML es lento e innecesario.
+- **Cambio de cámara por volumen de cada pista.** Como cada participante tiene
+  su pista, se sabe quién habla sin adivinar. Se corta con histéresis y un
+  tiempo mínimo por plano, con plano dividido cuando hablan dos y layout de
+  pantalla cuando hay demo.
+- **Los Shorts los propone la IA y los eligen los cohosts.** Las propuestas
+  salen de la transcripción y de los marcadores de la grabación, y cada una
   trae la frase gancho y por qué funciona.
-- **Limpieza de audio moderada**: DeepFilterNet3 con atenuación limitada, para
-  que las voces suenen naturales.
+- **Un solo proveedor de IA.** Con este volumen, Claude cuesta centavos por
+  mes y sumar otro proveedor complica más de lo que ahorra.
+- **A mano hasta que moleste.** La publicación, el bot de Discord, el panel y
+  MediaPipe se automatizan o se suman cuando el proceso manual sea un problema
+  real.
 
-## Componentes a construir
+## Episodio 0
 
-- [ ] Modelo de datos: fuentes, candidatos, episodios, guiones, trabajos.
-- [ ] Curación: ingesta, deduplicación y ranking.
-- [ ] Bot de Discord: sugerencias y votos.
-- [ ] Panel `/admin/podcast`: temas, guion, revisión del corte, aprobación.
-- [ ] Alquimia Studio: sala, grabación local y subida por partes.
-- [ ] Worker de producción: sync, audio, transcripción, plan de cortes, render.
-- [ ] Templates de Remotion con la identidad de Alquimia.
-- [ ] Shorts.
-- [ ] Publicación en YouTube y feed RSS.
+Antes de construir cualquier otra cosa: grabar un episodio de prueba de
+30 minutos y llevarlo hasta un corte publicable con scripts mínimos.
+
+- [ ] Grabar 30 min con dos participantes en VDO.Ninja, con una demo en pantalla.
+- [ ] Confirmar que las pistas se graban en cada dispositivo, no del stream de la llamada.
+- [ ] Sincronizar las pistas y masterizar el audio con ffmpeg.
+- [ ] Transcribir con whisper.cpp y comparar con `parakeet-mlx` (calidad y tiempo).
+- [ ] Generar el plan de cortes por volumen y renderizar el episodio.
+- [ ] Subtítulos en español e inglés.
+- [ ] Intro, placas y miniatura en HyperFrames.
+- [ ] 3 Shorts.
+- [ ] Revisar como no listado en YouTube.
+
+Si sale un episodio publicable con una sola ronda de revisión, el pipeline está
+listo para usar todas las semanas.
+
+## Después del episodio 0
+
+- [ ] Cron de curación con publicación en Discord.
+- [ ] Generación del briefing.
+- [ ] Identidad sonora.
 - [ ] Página pública `/podcast`.
