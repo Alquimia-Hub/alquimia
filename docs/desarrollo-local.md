@@ -124,6 +124,7 @@ validar, así que una key de prueba bloquearía todos los registros locales.
 |---|---|
 | `pnpm dev` | La app en modo desarrollo |
 | `pnpm dev:services` | Los servicios simulados (Google, Discord, mails) |
+| `pnpm setup:infisical` | Trae las variables del equipo desde Infisical (opcional) |
 | `pnpm check` | Revisa formato, calidad de código y traducciones |
 | `pnpm fix` | Arregla automáticamente lo que se pueda |
 | `pnpm build` | Compila como si fuera producción |
@@ -176,79 +177,76 @@ publica nada.
 
 Dos cosas que se siguen de eso:
 
-- **Los previews también migran.** Si apuntan a la misma base que producción, un
-  PR con una migración la aplica ahí. Para evitarlo, que los previews usen una
-  base aparte.
+- **Los previews también migran,** contra la base de los previews (un branch
+  de Neon aparte), nunca contra la de producción.
 - **Cuidado con los cambios que rompen.** La migración corre antes de que el
   código nuevo esté publicado, así que por unos segundos la versión anterior
   corre contra la base ya migrada. Si vas a borrar o renombrar una columna que
   el código viejo todavía usa, partilo en dos merges: primero el que agrega,
   después el que borra.
 
-La configuración de los servicios reales (base de datos, cuentas, mails,
-imágenes) la mantiene el equipo desde Vercel y no hace falta tocarla para
-desarrollar.
+## Variables de entorno
 
-## Agregar textos
+Las variables de los entornos desplegados viven en
+[Infisical](https://app.infisical.com), en el proyecto Alquimia. Es la única
+fuente de verdad: Vercel recibe una copia que Infisical escribe sola.
 
-Ningún texto que ve el usuario va escrito dentro de un componente. Todos viven en
-`messages/es.json` y `messages/en.json`, y siempre tienen que estar en los dos
-idiomas. `pnpm check` avisa si falta alguno o si quedó una clave mal escrita.
-
-## Si algo no arranca
-
-**«Cannot connect to the Docker daemon»** — Docker Desktop no está abierto.
-
-**La app arranca pero da error de base de datos** — falta `pnpm db:reset`.
-
-**«port is already allocated» al hacer `db:up`** — ya tenés otro Postgres en el
-puerto 55432. Apagalo o cambiá el puerto en `DATABASE_URL`.
-
-**Los botones de emulador no aparecen** — solo existen fuera de producción.
-Asegurate de estar corriendo `pnpm dev` y no `pnpm build && pnpm start`.
-
-**El login se queda cargando** — falta `pnpm dev:services` en la otra terminal.
-
-## Cómo se despliega
-
-**Preview:** al abrir un Pull Request, Vercel genera una automática. No corre
-migraciones.
-
-**Producción:** al mergear a `main` corre `.github/workflows/deploy-production.yml`,
-que hace todo en orden y se detiene ante el primer error:
-
-1. `pnpm check` — formato, lint y traducciones.
-2. Trae las variables de producción desde Vercel.
-3. Verifica que no falte ninguna (`scripts/check-production-env.mjs`).
-4. Aplica las migraciones pendientes.
-5. Compila y publica.
-
-Si algo falla antes del paso 5, no se publica nada. Las migraciones corren
-antes que el deploy, así que el código nuevo nunca se encuentra con una base
-sin migrar.
-
-El deploy automático de Vercel para `main` está apagado en `vercel.json`: lo
-maneja el workflow para poder migrar primero.
-
-### Configuración necesaria
-
-Las variables viven en Vercel, que es la única fuente de verdad. El workflow
-las lee de ahí, no las guarda en el repo.
-
-En GitHub (Settings → Secrets → Actions) hacen falta tres:
-
-| Secreto | De dónde sale |
+| Infisical | Llega a |
 |---|---|
-| `VERCEL_TOKEN` | Vercel → Account Settings → Tokens |
-| `VERCEL_ORG_ID` | `.vercel/project.json` después de `vercel link` |
-| `VERCEL_PROJECT_ID` | `.vercel/project.json` después de `vercel link` |
+| Production | Vercel Production |
+| Development | Vercel Preview y el `.env.local` de quien use `pnpm setup:infisical` |
 
-El job usa el entorno `production` de GitHub: si querés que un deploy requiera
-aprobación manual, se configura ahí (Settings → Environments → production).
+Para desarrollar con los emuladores no hace falta nada de esto.
 
-### Al agregar una migración
+### Cambiar un valor
 
-El workflow la aplica antes de publicar, así que durante unos segundos la
-versión anterior de la app corre contra la base ya migrada. Para cambios que
-rompen (borrar o renombrar una columna que el código viejo todavía usa),
-partilo en dos merges: primero el que agrega, después el que borra.
+1. Cambialo en Infisical, en el entorno que corresponda.
+2. En segundos aparece en Vercel.
+3. **Redeployá.** Vercel fija las variables en cada deploy, así que el que está
+   publicado sigue con el valor anterior hasta el próximo: en Vercel,
+   Deployments → el último → ⋯ → Redeploy, o mergeá cualquier cambio. Los
+   previews lo toman en el próximo push.
+
+### Agregar una variable
+
+1. Cargala **primero** en Infisical, en Production y en Development si la usan
+   los dos.
+2. En el PR, sumala a `lib/env.ts` y a `.env.example`. Si hace falta para
+   desarrollar con emuladores, también a `scripts/setup-local.mjs`.
+
+Si el código que la exige llega a `main` antes que la variable a Infisical, el
+build falla: `lib/env.ts` valida las variables al arrancar.
+
+### Borrar una variable
+
+1. Sacala del código.
+2. Borrala en Infisical.
+3. **Borrala también en Vercel,** a mano. La sincronización nunca borra nada en
+   Vercel, para no llevarse las variables que maneja Vercel solo (las de Vercel
+   Blob).
+
+### Qué no hacer
+
+- **No edites en Vercel una variable que viene de Infisical:** la próxima
+  sincronización la pisa.
+- No pases valores por chat ni los subas al repo. Si alguien necesita acceso,
+  se le da en Infisical (Access Control → Users), y cada cambio queda en el
+  registro de auditoría.
+
+### Usar las variables del equipo en local
+
+Si tenés acceso al proyecto en Infisical, podés desarrollar con los servicios
+reales de los previews en lugar de los emuladores:
+
+```bash
+pnpm setup:infisical
+```
+
+El wizard instala el CLI de Infisical si falta, te pide iniciar sesión y escribe
+las variables de Development en tu `.env.local` (antes guarda una copia del que
+tenías). Cuando cambie algo en Development, volvé a correrlo.
+
+Ojo: con esas variables usás la base de datos de los previews, que es
+compartida. `pnpm db:migrate` o `pnpm db:reset` la modifican para todos. Si no
+la necesitás, usá tu Postgres local (`pnpm db:up`) cambiando `DATABASE_URL` por
+`postgresql://alquimia:alquimia@localhost:55432/alquimia_dev`.

@@ -76,6 +76,12 @@ Para desarrollar no hacen falta credenciales reales: hay emuladores locales de
 todos los servicios externos. El paso a paso completo está en
 **[docs/desarrollo-local.md](docs/desarrollo-local.md)**.
 
+Las variables de los entornos desplegados viven en Infisical, que las
+sincroniza solo con Vercel. Si sos del equipo y tenés acceso,
+`pnpm setup:infisical` las trae a tu `.env.local`. Cómo agregar o cambiar una
+variable está en
+[docs/desarrollo-local.md](docs/desarrollo-local.md#variables-de-entorno).
+
 ## Estructura
 
 ```
@@ -101,6 +107,7 @@ Los textos que ve el usuario nunca van escritos dentro de un componente: viven e
 ## Documentación
 
 - **[Trabajar en local](docs/desarrollo-local.md)** — cómo levantar el proyecto en tu máquina, sin necesidad de credenciales.
+- **[Variables de entorno](docs/desarrollo-local.md#variables-de-entorno)** — dónde viven, cómo llegan a Vercel y qué hacer para agregar, cambiar o borrar una.
 
 ---
 
