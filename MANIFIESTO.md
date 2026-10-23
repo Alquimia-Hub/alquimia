@@ -111,3 +111,4 @@ de git queda como registro de cada firma.
 | Nombre | GitHub | Rol | Fecha |
 | --- | --- | --- | --- |
 | Brian Sasbon | [@bsasbon-np](https://github.com/bsasbon-np) | Fundador | 2026-10-22 |
+| Nicolas Lopez | [@Nicolopez603](https://github.com/Nicolopez603) | Cofundador | 2026-10-23 |
