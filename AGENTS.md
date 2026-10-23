@@ -37,8 +37,6 @@ explicarlos en el chat.
 - Para desarrollar no hacen falta credenciales reales: `pnpm dev:services`
   levanta los emuladores.
 - El código va en inglés. Docs, specs, commits y PRs, en español.
-- `videos/<proyecto>/` son proyectos de HyperFrames, cada uno con su propio
-  `AGENTS.md`.
 - El plan del podcast está en `docs/podcast.md`.
 
 ## Agentes

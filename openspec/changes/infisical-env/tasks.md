@@ -28,7 +28,7 @@
 - [x] 5.1 Borrar `scripts/vercel-env-push.sh` y el script `vercel:env` de `package.json`; verificar con `grep -rn "vercel-env-push\|vercel:env"` que no quedan referencias
 - [x] 5.2 Reescribir la sección de deploy de `docs/desarrollo-local.md`: sacar la duplicación y el workflow inexistente, explicar Infisical como fuente de verdad, cómo agregar, cambiar y borrar una variable, que el cambio se aplica en el próximo deploy, y el riesgo de migrar la base compartida desde local
 - [x] 5.3 Sumar a `docs/desarrollo-local.md` y `README.md` el camino opcional `pnpm setup:infisical` y verificar que los comandos documentados existen en `package.json`
-- [ ] 5.4 Correr `pnpm check` y `pnpm exec tsc --noEmit` y verificar que pasan
+- [x] 5.4 Correr `pnpm check` y `pnpm exec tsc --noEmit` y verificar que pasan
 
 ## Workflow follow-up
 

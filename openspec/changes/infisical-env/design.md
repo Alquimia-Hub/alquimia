@@ -63,6 +63,10 @@ syncs con estas opciones:
   borra una variable en Infisical, hay que borrarla también a mano en Vercel.
 - **Key Schema:** no se usa. Los nombres en Vercel son los mismos que en
   Infisical y el código no cambia.
+- **Mark Secrets as Sensitive:** activado. Las variables que la sync crea en
+  Vercel no se pueden leer después ni desde el dashboard ni por la API; las que
+  ya existían conservan su tipo. Vercel no admite Sensitive en Development, y
+  ese entorno no se sincroniza.
 
 ### App Connection con un token de Vercel de cuenta completa
 
