@@ -13,7 +13,7 @@ corresponde a Preview de Vercel y Production a Production. Las variables que
 inyecta una integración de Vercel (Vercel Blob) quedan fuera.
 
 #### Scenario: Cambiar un valor de producción
-- **WHEN** alguien del equipo cambia `RESEND_API_KEY` en el entorno Production de Infisical
+- **WHEN** un admin cambia `RESEND_API_KEY` en el entorno Production de Infisical
 - **THEN** el valor nuevo aparece en el entorno Production de Vercel sin que nadie corra ningún comando
 
 #### Scenario: Variable nueva para previews
@@ -49,10 +49,10 @@ credenciales reales, usando los emuladores.
 - **WHEN** alguien sin acceso a Infisical corre `pnpm setup:local` y sigue `docs/desarrollo-local.md`
 - **THEN** la app levanta completa en `localhost:3000` con los servicios simulados
 
-### Requirement: Setup opcional con Infisical para el equipo
-Un miembro del equipo con acceso al proyecto SHALL poder bajar el entorno
-Development de Infisical a su `.env.local` con un solo comando guiado, sin
-pedirle valores a nadie por chat.
+### Requirement: Setup opcional con Infisical para admins
+Un admin con acceso al proyecto SHALL poder bajar el entorno Development de
+Infisical (el de pruebas, nunca Production) a su `.env.local` con un solo
+comando guiado, sin pedirle valores a nadie por chat.
 
 #### Scenario: Primer setup con Infisical
 - **WHEN** alguien con acceso corre `pnpm setup:infisical`

@@ -124,7 +124,7 @@ validar, así que una key de prueba bloquearía todos los registros locales.
 |---|---|
 | `pnpm dev` | La app en modo desarrollo |
 | `pnpm dev:services` | Los servicios simulados (Google, Discord, mails) |
-| `pnpm setup:infisical` | Trae las variables del equipo desde Infisical (opcional) |
+| `pnpm setup:infisical` | Solo admins: trae las variables de pruebas desde Infisical |
 | `pnpm check` | Revisa formato, calidad de código y traducciones |
 | `pnpm fix` | Arregla automáticamente lo que se pueda |
 | `pnpm build` | Compila como si fuera producción |
@@ -196,7 +196,8 @@ fuente de verdad: Vercel recibe una copia que Infisical escribe sola.
 | Production | Vercel Production |
 | Development | Vercel Preview y el `.env.local` de quien use `pnpm setup:infisical` |
 
-Para desarrollar con los emuladores no hace falta nada de esto.
+Acceden solo los admins. Para desarrollar con los emuladores no hace falta
+nada de esto.
 
 ### Cambiar un valor
 
@@ -233,10 +234,11 @@ build falla: `lib/env.ts` valida las variables al arrancar.
   se le da en Infisical (Access Control → Users), y cada cambio queda en el
   registro de auditoría.
 
-### Usar las variables del equipo en local
+### Usar las variables de pruebas en local (admins)
 
-Si tenés acceso al proyecto en Infisical, podés desarrollar con los servicios
-reales de los previews en lugar de los emuladores:
+Los admins tienen acceso al proyecto en Infisical y pueden desarrollar con los
+servicios reales del entorno de pruebas (Development) en lugar de los
+emuladores. Production nunca se baja a una máquina:
 
 ```bash
 pnpm setup:infisical

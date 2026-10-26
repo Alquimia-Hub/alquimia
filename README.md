@@ -77,8 +77,8 @@ todos los servicios externos. El paso a paso completo está en
 **[docs/desarrollo-local.md](docs/desarrollo-local.md)**.
 
 Las variables de los entornos desplegados viven en Infisical, que las
-sincroniza solo con Vercel. Si sos del equipo y tenés acceso,
-`pnpm setup:infisical` las trae a tu `.env.local`. Cómo agregar o cambiar una
+sincroniza solo con Vercel. Si sos admin, `pnpm setup:infisical` trae las
+del entorno de pruebas (nunca las de producción) a tu `.env.local`. Cómo agregar o cambiar una
 variable está en
 [docs/desarrollo-local.md](docs/desarrollo-local.md#variables-de-entorno).
 
