@@ -141,6 +141,10 @@ fallas junto a los resultados.
 - **WHEN** la API de arXiv responde con error
 - **THEN** la corrida se completa con las otras fuentes y la página avisa que arXiv falló
 
+#### Scenario: Un feed caído dentro de una fuente
+- **WHEN** uno de los feeds RSS de la fuente de newsletters no responde y los demás sí
+- **THEN** la fuente aporta los candidatos de los feeds que respondieron y la página avisa qué feed falló
+
 #### Scenario: Todas las fuentes fallan
 - **WHEN** todas las fuentes fallan
 - **THEN** la corrida queda marcada como fallida, no mueve la ventana de la próxima corrida y la página muestra el error
