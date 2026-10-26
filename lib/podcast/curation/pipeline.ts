@@ -89,13 +89,18 @@ export async function curate({
   window,
 }: CurateInput): Promise<CurationResult> {
   const sources = config.sources.filter((source) => source.enabled);
+  const errors: SourceError[] = [];
   const results = await Promise.allSettled(
     sources.map((source) =>
-      fetchSource(source, window, AbortSignal.timeout(config.sourceTimeoutMs))
+      fetchSource(
+        source,
+        window,
+        AbortSignal.timeout(config.sourceTimeoutMs),
+        (message) => errors.push({ source: source.id, message })
+      )
     )
   );
 
-  const errors: SourceError[] = [];
   const seen = new Set(previousTopUrls);
   const bySource = results.map((result, index) => {
     if (result.status === "rejected") {
@@ -118,7 +123,8 @@ export async function curate({
     errors,
     candidates: bySource.flat(),
     status:
-      sources.length > 0 && errors.length === sources.length
+      sources.length > 0 &&
+      results.every((result) => result.status === "rejected")
         ? "failed"
         : "completed",
   };

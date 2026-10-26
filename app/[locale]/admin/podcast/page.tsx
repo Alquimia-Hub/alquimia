@@ -99,7 +99,7 @@ export default async function AdminPodcastPage({
                     </p>
                     <ul className="mt-2 mb-0 pl-4">
                       {run.sourceErrors.map((error) => (
-                        <li key={error.source}>
+                        <li key={`${error.source}:${error.message}`}>
                           <span className="font-[family-name:var(--font-jetbrains)] uppercase">
                             {error.source}
                           </span>

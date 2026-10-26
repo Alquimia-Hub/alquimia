@@ -25,7 +25,7 @@ export async function curateCandidates(): Promise<ActionResult<CurateResult>> {
 
     return ok({
       status: result.status,
-      failedSources: result.errors.length,
+      failedSources: new Set(result.errors.map((error) => error.source)).size,
       topCount: result.candidates.filter(
         (candidate) => candidate.topPosition !== null
       ).length,

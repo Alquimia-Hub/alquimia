@@ -56,19 +56,36 @@ function parseFeed(data: Feed, feedUrl: string): SourceItem[] {
 export async function fetchRss(
   config: Extract<SourceConfig, { kind: "rss" }>,
   window: CurationWindow,
-  signal: AbortSignal
+  signal: AbortSignal,
+  reportError: (message: string) => void
 ): Promise<SourceItem[]> {
   const feeds = await Promise.allSettled(
-    config.feeds.map(async (feedUrl) =>
-      parseFeed(await fetchXml<Feed>(feedUrl, signal), feedUrl)
-    )
+    config.feeds.map(async (feedUrl) => {
+      try {
+        return parseFeed(await fetchXml<Feed>(feedUrl, signal), feedUrl);
+      } catch (error) {
+        throw new Error(
+          `${feedUrl}: ${error instanceof Error ? error.message : String(error)}`
+        );
+      }
+    })
   );
 
   const failed = feeds.flatMap((feed) =>
-    feed.status === "rejected" ? [String(feed.reason)] : []
+    feed.status === "rejected"
+      ? [
+          feed.reason instanceof Error
+            ? feed.reason.message
+            : String(feed.reason),
+        ]
+      : []
   );
   if (failed.length === feeds.length) {
     throw new Error(failed.join("; "));
+  }
+  // A dead feed shouldn't go unnoticed while the others still work.
+  for (const message of failed) {
+    reportError(message);
   }
 
   return feeds

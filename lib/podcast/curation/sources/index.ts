@@ -9,7 +9,8 @@ import { fetchRss } from "./rss";
 export function fetchSource(
   config: SourceConfig,
   window: CurationWindow,
-  signal: AbortSignal
+  signal: AbortSignal,
+  reportError: (message: string) => void
 ): Promise<SourceItem[]> {
   switch (config.kind) {
     case "hn":
@@ -21,7 +22,7 @@ export function fetchSource(
     case "biorxiv":
       return fetchBiorxiv(config, window, signal);
     case "rss":
-      return fetchRss(config, window, signal);
+      return fetchRss(config, window, signal, reportError);
     default:
       throw new Error(`Unknown source kind: ${(config as SourceConfig).kind}`);
   }
