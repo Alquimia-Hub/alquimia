@@ -45,10 +45,11 @@ contexto.
 
 Los cohosts eligen los temas, graban y aprueban. El resto lo hacen scripts.
 
-1. **Curación.** Un cron junta candidatos de Hacker News, GitHub, arXiv y
-   bioRxiv, los deduplica por URL, los rankea y publica el top 10 en un canal
-   de Discord. Las sugerencias de la comunidad llegan por otro canal.
-2. **Elección.** Los cohosts eligen los temas con reacciones en Discord.
+1. **Curación.** Un admin aprieta **Curar** en `/admin/podcast`. La corrida
+   junta candidatos de Hacker News, GitHub, arXiv, bioRxiv y newsletters, los
+   deduplica por URL y arma un top 10. Las sugerencias de la comunidad llegan
+   por un canal de Discord. Ver [Curación](#curación).
+2. **Elección.** Los cohosts eligen los temas del top.
 3. **Briefing.** Se genera un briefing por episodio con datos clave y su
    fuente, links, preguntas disparadoras y posturas para el debate. No es un
    guion para leer.
@@ -65,7 +66,7 @@ Los cohosts eligen los temas, graban y aprueban. El resto lo hacen scripts.
 ## Arquitectura
 
 ```
- Fuentes ──▶ cron (GitHub Actions) ──▶ Discord: top 10 ──▶ cohosts eligen
+ Fuentes ──▶ Curar (/admin/podcast) ──▶ top 10 ──▶ cohosts eligen
                                                               │
                                                               ▼
                                           briefing ──▶ grabación (VDO.Ninja)
@@ -81,8 +82,9 @@ Los cohosts eligen los temas, graban y aprueban. El resto lo hacen scripts.
                           alquimia.community/podcast
 ```
 
-- **No hay panel ni cola de trabajos.** Discord es el espacio editorial y
-  YouTube no listado es la sala de revisión.
+- **No hay cola de trabajos.** El único panel es `/admin/podcast`, para la
+  curación. Discord es el espacio editorial y YouTube no listado es la sala
+  de revisión.
 - **La estación de producción** es una compu con scripts del repo. Cada etapa
   es un comando (`pnpm podcast <episodio> <etapa>`) que lee y escribe archivos
   en la carpeta del episodio, así se puede rehacer una etapa sin repetir las
@@ -100,7 +102,7 @@ Los cohosts eligen los temas, graban y aprueban. El resto lo hacen scripts.
 
 | Etapa | Herramienta |
 |---|---|
-| Curación | GitHub Actions (cron), APIs y RSS, deduplicación por URL, ranking con Claude Haiku |
+| Curación | Server action en `/admin/podcast`, APIs y RSS, deduplicación por URL, ranking por la señal de cada fuente |
 | Comunidad | Webhook de Discord y un canal de sugerencias |
 | Briefing, títulos, capítulos, selección de Shorts | Claude |
 | Grabación | VDO.Ninja con grabación local por participante |
@@ -140,6 +142,31 @@ Los cohosts eligen los temas, graban y aprueban. El resto lo hacen scripts.
   MediaPipe se automatizan o se suman cuando el proceso manual sea un problema
   real.
 
+## Curación
+
+Primera etapa del pipeline. Va antes o en paralelo al episodio 0, porque de
+ahí salen sus temas. No usa IA, no corre con cron y no publica en Discord:
+todo eso se suma cuando el proceso manual moleste.
+
+- **Fuentes:** Hacker News (por puntos), las stars de la cuenta
+  [`alquimia-hq`](https://github.com/alquimia-hq) (para sumar un repo, se le
+  da star desde esa cuenta), arXiv (cs.AI, cs.LG, cs.CL, cs.CR, cs.HC),
+  bioRxiv (bioinformatics, synthetic biology, genomics) y newsletters por RSS.
+- **Ventana:** desde la corrida anterior hasta ahora. En la primera corrida,
+  7 días.
+- **Top:** cada fuente se ordena por su señal (puntos, estrellas) o, si no
+  tiene, por fecha. El top se arma tomando de a uno por fuente, en orden de
+  prioridad y con un tope por fuente. Las URLs que ya estuvieron en un top no
+  se repiten.
+- **Parámetros:** todo se configura en `lib/podcast/curation/config.ts`:
+  fuentes y prioridad, topes, tamaño del top, ventana, puntos mínimos,
+  categorías y feeds.
+- **Desde la terminal:** `pnpm podcast:curation --dry-run` imprime el top sin
+  escribir en la base. `--days N` fuerza la ventana.
+
+Cada corrida queda en la base con todos sus candidatos. Si una fuente falla,
+la corrida sigue con las demás y el panel lo avisa.
+
 ## Episodio 0
 
 Antes de construir cualquier otra cosa: grabar un episodio de prueba de
@@ -160,7 +187,7 @@ listo para usar todas las semanas.
 
 ## Después del episodio 0
 
-- [ ] Cron de curación con publicación en Discord.
+- [ ] Ranking con IA y publicación del top en Discord.
 - [ ] Generación del briefing.
 - [ ] Identidad sonora.
 - [ ] Página pública `/podcast`.

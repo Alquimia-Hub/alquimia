@@ -1,4 +1,4 @@
-import { LayoutGrid, Shield } from "lucide-react";
+import { LayoutGrid, Mic, Shield } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { AlquimistaCard } from "@/components/auth/alquimista-card";
 import { AvatarPrivacyCard } from "@/components/auth/avatar-privacy-card";
@@ -99,6 +99,15 @@ export default async function AccountPage({
                       {pendingCount}
                     </span>
                   )}
+                </Link>
+              </Button>
+            )}
+
+            {viewer.role === "admin" && (
+              <Button asChild size="sm" variant="outline">
+                <Link href="/admin/podcast">
+                  <Mic className="size-4" />
+                  {t("podcastPanel")}
                 </Link>
               </Button>
             )}

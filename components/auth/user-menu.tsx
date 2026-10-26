@@ -1,6 +1,6 @@
 "use client";
 
-import { LayoutGrid, LogOut, Shield, Sparkles, User } from "lucide-react";
+import { LayoutGrid, LogOut, Mic, Shield, Sparkles, User } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -112,6 +112,15 @@ export function UserMenu() {
             <Link data-testid="menu-admin" href="/admin/launchpad">
               <Shield className="size-4" />
               {tAccount("adminPanel")}
+            </Link>
+          </DropdownMenuItem>
+        )}
+
+        {user.role === "admin" && (
+          <DropdownMenuItem asChild>
+            <Link data-testid="menu-podcast" href="/admin/podcast">
+              <Mic className="size-4" />
+              {tAccount("podcastPanel")}
             </Link>
           </DropdownMenuItem>
         )}

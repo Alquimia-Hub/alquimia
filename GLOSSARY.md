@@ -73,10 +73,13 @@ Un mismo estado se nombra distinto según quién lo mire.
 | **Formato** | *Actualidad*, con bloques fijos, o *profundidad*, con un solo tema o un invitado. |
 | **Bloque** | Cada sección de un episodio de actualidad: cold open, intro, Lo que importa, En pantalla, ¿Hype o real?, De la comunidad y cierre. |
 | **Short** | Clip vertical que sale del episodio. Hay 3 por episodio. |
-| **Curación** | Juntar, deduplicar y rankear candidatos de las fuentes. |
-| **Candidato** | Noticia, repo o paper que puede volverse tema. Se publica en el top 10 de Discord. |
+| **Curación** | Juntar, deduplicar y rankear candidatos de las fuentes. Se dispara a mano desde `/admin/podcast`. |
+| **Corrida** | Una ejecución de la curación, con su ventana y sus candidatos. En el código: `podcastCurationRun`. |
+| **Fuente** | De dónde salen los candidatos: Hacker News, stars de GitHub, arXiv, bioRxiv o newsletters. Se configuran en `lib/podcast/curation/config.ts`. |
+| **Candidato** | Noticia, repo o paper que puede volverse tema. En el código: `podcastCandidate`. |
+| **Top** | Los candidatos elegidos de una corrida, con un tope por fuente. Por defecto, 10. |
 | **Sugerencia** | Candidato que propone la comunidad en su canal de Discord. |
-| **Elección** | Los cohosts eligen los temas con reacciones en Discord. |
+| **Elección** | Los cohosts eligen los temas del top. |
 | **Briefing** | Datos, fuentes, preguntas y posturas para cada tema. No es un guion. |
 | **Pista** | La grabación de un solo participante o de la pantalla compartida. |
 | **Pista de referencia** | La mezcla de la llamada. Se usa para sincronizar las demás pistas. |
