@@ -3,6 +3,7 @@
   "scripts": {
     "dev": "next dev",
     "setup:local": "node scripts/setup-local.mjs",
+    "setup:infisical": "bash scripts/setup-infisical.sh",
     "build": "drizzle-kit migrate && next build",
     "start": "next start",
     "lint": "ultracite check",
@@ -18,7 +19,6 @@
     "dev:discord": "node --env-file=.env.local dev/discord-stub.mjs",
     "dev:services": "concurrently -n emulate,discord -c cyan,magenta \"pnpm emulate\" \"pnpm dev:discord\"",
     "check:messages": "node scripts/check-messages.mjs",
-    "vercel:env": "bash scripts/vercel-env-push.sh",
     "db:up": "docker start alquimia-pg 2>/dev/null || docker run -d --name alquimia-pg -e POSTGRES_USER=alquimia -e POSTGRES_PASSWORD=alquimia -e POSTGRES_DB=alquimia_dev -p 55432:5432 postgres:16-alpine",
     "db:down": "docker stop alquimia-pg",
     "db:reset": "pnpm db:migrate && pnpm db:seed",

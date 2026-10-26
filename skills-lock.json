@@ -60,7 +60,14 @@
     "grill-me": {
       "source": "mattpocock/skills",
       "sourceType": "github",
-      "computedHash": "784f0dbb7403b0f00324bce9a112f715342777a0daee7bbb7385f9c6f0a170ea"
+      "skillPath": "skills/productivity/grill-me/SKILL.md",
+      "computedHash": "9cdbb4b8f7a3aeaef82e6230c9e823500d4a8a1214c726cf342cf9829d34fc7d"
+    },
+    "grilling": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/productivity/grilling/SKILL.md",
+      "computedHash": "ef1641a2047b71b60f1942cd35efb47d3afc9d584dff5a0b01f8c7db923aaa08"
     },
     "hyperframes": {
       "source": "heygen-com/hyperframes",
@@ -116,6 +123,12 @@
       "sourceType": "github",
       "computedHash": "c294f2570dcc5b8865d17f0dc5ef339a700c868f1b20fa9994297f64ace2d4de"
     },
+    "pr": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/pr/SKILL.md",
+      "computedHash": "22a15d4d469344b38e03eb0e95772478393975836289393b1bad3c0febcdc679"
+    },
     "quieter": {
       "source": "pbakaus/impeccable",
       "sourceType": "github",
@@ -140,6 +153,12 @@
       "source": "haydenbleasel/ultracite",
       "sourceType": "github",
       "computedHash": "74f0784eb45e1246471f31331f36b76eb45525f16604dfd8fbdf4c34f731ee67"
+    },
+    "wizard": {
+      "source": "mattpocock/skills",
+      "sourceType": "github",
+      "skillPath": "skills/engineering/wizard/SKILL.md",
+      "computedHash": "49298bed80e7f722b071ad5d64798c75eb705bbbe0635b9bbffd08cd6fb81647"
     }
   }
 }
