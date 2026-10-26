@@ -71,9 +71,9 @@ como dependencia, así el CLI con `--dry-run` usa el pipeline sin persistir.
 |---|---|---|---|
 | `hn` | `minPoints: 50` | puntos | 4 |
 | `github` | `user: "alquimia-hq"` | estrellas del repo | 4 |
+| `newsletters` | `feeds: [latent.space, importai, oneusefulthing, interconnects]` | — (fecha) | 3 |
 | `arxiv` | `categories: [cs.AI, cs.LG, cs.CL, cs.CR, cs.HC]` | — (fecha) | 2 |
 | `biorxiv` | `categories: [bioinformatics, synthetic biology, genomics]` | — (fecha) | 2 |
-| `newsletters` | `feeds: [latent.space, importai, oneusefulthing, interconnects]` | — (fecha) | 3 |
 
 Se valida con zod al cargar el módulo, así un error de config rompe
 `tsc` o el arranque, no una corrida a medias.
@@ -137,7 +137,7 @@ Cada fuente corre con `AbortSignal.timeout(sourceTimeoutMs)` dentro de un
 podcast_curation_run
   id text pk, status enum(running|completed|failed),
   window_start, window_end timestamptz,
-  triggered_by text → user.id (null si vino del CLI),
+  triggered_by_id text → user.id (null si vino del CLI),
   source_errors jsonb  -- [{ source, message }]
   created_at, finished_at
 
