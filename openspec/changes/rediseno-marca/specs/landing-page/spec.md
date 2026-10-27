@@ -26,7 +26,7 @@ número tomado de `COMMUNITY_MEMBERS` en `lib/constants.ts`.
 
 #### Scenario: Cantidad de miembros
 - **WHEN** se cambia `COMMUNITY_MEMBERS`
-- **THEN** el hero y la imagen OG muestran el número nuevo
+- **THEN** el hero muestra el número nuevo
 
 ### Requirement: La escena se adapta al formato de pantalla
 En pantallas verticales la portada SHALL mostrar la versión vertical de la
@@ -176,13 +176,13 @@ reemplace.
 - **THEN** ninguna imagen de la portada repite a otra
 
 ### Requirement: Imagen para redes con la marca
-La imagen OG (y la de X) SHALL mostrar la escena del taller oscurecida, la
-marca, el título y la oración del hero en IM Fell English y Literata, y "Unite
-a {n} alquimistas", en el idioma de la ruta.
+La imagen OG (y la de X) SHALL mostrar, sobre la escena del taller oscurecida,
+solo el logo y "Alquimia" en grande (IM Fell English) y el título del hero
+debajo, en el idioma de la ruta, legibles como miniatura.
 
 #### Scenario: Compartir el link
 - **WHEN** se pide `/opengraph-image/og` o `/en/opengraph-image/og`
-- **THEN** devuelve un PNG de 1200 × 630 con el título y la oración en ese idioma
+- **THEN** devuelve un PNG de 1200 × 630 con el logo, "Alquimia" y el título en ese idioma
 
 ### Requirement: Portada en los dos idiomas
 Todo texto visible de la portada SHALL existir en español y en inglés, y SHALL
