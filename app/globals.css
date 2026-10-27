@@ -4,22 +4,23 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --bg: #0a0806;
-  --bg-2: #120e09;
-  --bg-3: #1e170f;
-  --ink: #ead9b8;
-  --ink-2: #c9b689;
-  --ink-3: #b3a281;
-  --ink-4: #8a7c5f;
-  --gold: #d99a3d;
-  --gold-2: #f0b956;
-  --copper: #b86a2a;
-  --elixir: #c9a7ff;
-  --elixir-2: #e3d1ff;
-  --surface-hover: #221a11;
-  --surface-active: #2c2216;
-  --rule: rgba(217, 154, 61, 0.25);
-  --rule-2: rgba(217, 154, 61, 0.12);
+  /* The four stages of the Great Work: nigredo, albedo, citrinitas, rubedo.
+     See GLOSSARY.md and /brand. */
+  --bg: #14110d; /* nigredo */
+  --bg-2: #1e1912;
+  --bg-3: #29221a;
+  --ink: #ede6d6; /* albedo */
+  --ink-2: #cfc5b0;
+  --ink-3: #b9ae98;
+  --gold: #e0ae45; /* citrinitas */
+  --rubedo: #7e2618;
+  --albedo: #ede6d6;
+  --albedo-2: #ddd2bc;
+  --on-light: #1e1912;
+  --surface-hover: #2b241b;
+  --surface-active: #352c21;
+  --line: #3a3128;
+  --line-strong: #6e624f;
 
   --background: var(--bg);
   --foreground: var(--ink);
@@ -28,27 +29,27 @@
   --popover: var(--bg-2);
   --popover-foreground: var(--ink);
   --primary: var(--gold);
-  --primary-foreground: #1a1410;
+  --primary-foreground: var(--bg);
   --secondary: var(--bg-3);
   --secondary-foreground: var(--ink);
   --muted: var(--bg-2);
   --muted-foreground: var(--ink-3);
   --accent: var(--surface-hover);
   --accent-foreground: var(--ink);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: var(--rule-2);
-  --input: var(--rule);
+  --destructive: #f29680;
+  --destructive-foreground: #f29680;
+  --border: var(--line);
+  --input: var(--line-strong);
   --ring: var(--gold);
   --radius: 0rem;
 }
 
 @theme inline {
-  --font-sans: var(--font-eb-garamond), "EB Garamond", serif;
-  --font-serif: var(--font-eb-garamond), "EB Garamond", serif;
-  --font-display: var(--font-cormorant), "Cormorant Garamond", serif;
-  --font-ornament: var(--font-im-fell), "IM Fell English SC", serif;
-  --font-mono: var(--font-jetbrains), "JetBrains Mono", monospace;
+  --font-sans: var(--font-literata), "Literata", Georgia, serif;
+  --font-display: var(--font-literata), "Literata", Georgia, serif;
+  --font-heading:
+    var(--font-im-fell-display), "IM Fell English", Georgia, serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -74,20 +75,31 @@
   --color-ink: var(--ink);
   --color-ink-2: var(--ink-2);
   --color-ink-3: var(--ink-3);
-  --color-ink-4: var(--ink-4);
   --color-gold: var(--gold);
-  --color-gold-2: var(--gold-2);
-  --color-copper: var(--copper);
-  --color-elixir: var(--elixir);
-  --color-elixir-2: var(--elixir-2);
+  --color-rubedo: var(--rubedo);
+  --color-albedo: var(--albedo);
+  --color-albedo-2: var(--albedo-2);
+  --color-on-light: var(--on-light);
   --color-surface-hover: var(--surface-hover);
   --color-surface-active: var(--surface-active);
-  --color-rule: var(--rule);
-  --color-rule-2: var(--rule-2);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* Five-step type scale. Nothing meant to be read goes below note (14 px). */
+  --text-note: 0.875rem;
+  --text-note--line-height: 1.5;
+  --text-body: clamp(1.125rem, 1.05rem + 0.3vw, 1.3125rem);
+  --text-body--line-height: 1.6;
+  --text-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+  --text-lead--line-height: 1.45;
+  --text-title: clamp(2rem, 1.4rem + 2.2vw, 3.25rem);
+  --text-title--line-height: 1.05;
+  --text-title--letter-spacing: -0.02em;
+  --text-display: clamp(2.75rem, 1.6rem + 5vw, 6rem);
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.025em;
 }
 
 @layer base {
@@ -95,7 +107,30 @@
     @apply border-border outline-ring/50;
   }
   body {
+    font-optical-sizing: auto;
     @apply bg-background text-foreground;
+  }
+  em,
+  i,
+  cite {
+    font-family:
+      var(--font-literata-italic), var(--font-literata), Georgia, serif;
+  }
+  ::selection {
+    color: var(--bg);
+    background: var(--gold);
+  }
+  :focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+  }
+  a {
+    text-underline-offset: 0.18em;
+  }
+  html {
+    accent-color: var(--gold);
+    caret-color: var(--gold);
+    scrollbar-color: var(--line-strong) var(--bg);
   }
 }
 
@@ -103,7 +138,7 @@
 :root {
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --gutter: clamp(1rem, 4vw, 3rem);
 }
 
 html {
@@ -111,15 +146,6 @@ html {
 }
 
 /* Entrance animations */
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 @keyframes fade-up {
   from {
     opacity: 0;
@@ -131,53 +157,6 @@ html {
   }
 }
 
-@keyframes fade-down {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes scale-x-in {
-  from {
-    opacity: 0;
-    transform: scaleX(0);
-  }
-  to {
-    opacity: 1;
-    transform: scaleX(1);
-  }
-}
-
-@keyframes bg-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 0.22;
-  }
-}
-
-@keyframes cta-pulse {
-  0%,
-  100% {
-    box-shadow:
-      0 0 0 1px var(--bg),
-      0 0 0 2px var(--gold),
-      0 8px 40px color-mix(in oklch, var(--gold) 25%, transparent);
-  }
-  50% {
-    box-shadow:
-      0 0 0 1px var(--bg),
-      0 0 0 2px var(--gold),
-      0 8px 60px color-mix(in oklch, var(--gold) 40%, transparent);
-  }
-}
-
 .animate-entrance {
   opacity: 0;
   animation-timing-function: var(--ease-out-expo);
@@ -185,284 +164,395 @@ html {
   animation-fill-mode: forwards;
 }
 
-.animate-fade-in {
-  animation-name: fade-in;
-  animation-duration: 700ms;
-}
-
-.animate-bg-fade-in {
-  animation-name: bg-fade-in;
-  animation-duration: 700ms;
-}
-
 .animate-fade-up {
   animation-name: fade-up;
   animation-duration: 600ms;
 }
 
-.animate-fade-down {
-  animation-name: fade-down;
-  animation-duration: 600ms;
+/* Hero: the scene settles in, the copy rises in three beats. */
+@keyframes hero-settle {
+  from {
+    transform: scale(1.08);
+  }
+  to {
+    transform: scale(1);
+  }
 }
 
-.animate-scale-x {
-  animation-name: scale-x-in;
-  animation-duration: 700ms;
+@keyframes hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
 }
 
-/* Nav hover underline */
-.nav-link {
-  position: relative;
+/* The title rises without fading: it is the largest text on the first
+   screen, and text that starts invisible is not counted as painted. */
+@keyframes hero-title-rise {
+  from {
+    transform: translateY(24px);
+  }
 }
 
-.nav-link::after {
-  position: absolute;
-  right: 50%;
-  bottom: 0;
-  left: 50%;
-  height: 1px;
-  content: "";
+.hero-settle {
+  animation: hero-settle 2400ms var(--ease-out-expo) backwards;
+}
+
+.hero-rise {
+  animation: hero-rise 1000ms var(--ease-out-expo) backwards;
+  animation-delay: var(--rise-delay, 420ms);
+}
+
+.hero-title-rise {
+  animation: hero-title-rise 1200ms var(--ease-out-expo) backwards;
+}
+
+.hero-camera {
+  transform-origin: 50% 42%;
+}
+
+/* The camera needs scroll length to travel; it only gets it once the script runs. */
+.hero[data-camera="on"] {
+  height: 260svh;
+}
+
+@media (max-aspect-ratio: 4 / 5) {
+  .hero[data-camera="on"] {
+    height: 240svh;
+  }
+}
+
+/* The doorway: the corridor plate seen through the arch of the hall. The
+   mask is the arch opening traced on taller.png (1536 × 1024) and sized and
+   placed like the picture (cover, 50% 42%), so it sits exactly on it. */
+.hero-door,
+.hero-bloom,
+.hero-veil {
+  display: none;
+}
+
+.hero[data-camera="on"] .hero-door,
+.hero[data-camera="on"] .hero-bloom,
+.hero[data-camera="on"] .hero-veil {
+  display: block;
+}
+
+/* The last step of the light: the screen settles on flat albedo. */
+.hero-veil {
+  opacity: 0;
+}
+
+.hero-door {
+  opacity: 0;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1536 1024'%3E%3Cfilter id='b'%3E%3CfeGaussianBlur stdDeviation='3'/%3E%3C/filter%3E%3Cpath filter='url(%23b)' d='M588 707V338a176 176 0 0 1 352 0v369z'/%3E%3C/svg%3E");
+  mask-repeat: no-repeat;
+  mask-position: 50% 42%;
+  mask-size: cover;
+  transform-origin: 50% 42%;
+}
+
+/* Same origin as the doorway, so the counter-scale keeps the corridor
+   centred on the arch while the arch opens. */
+.hero-door-view {
+  transform-origin: 50% 42%;
+}
+
+/* The light of the furnace grows into the albedo field of the next section. */
+.hero-bloom {
+  background: radial-gradient(
+    circle closest-side at 50% 60%,
+    #fff7e2 0%,
+    #f6e2ae 30%,
+    #eccf8a 62%,
+    var(--albedo) 100%
+  );
+  opacity: 0;
+  mask-image: radial-gradient(
+    circle closest-side at 50% 60%,
+    #000 0%,
+    rgb(0 0 0 / 0.9) 18%,
+    rgb(0 0 0 / 0.55) 45%,
+    rgb(0 0 0 / 0.2) 72%,
+    transparent 100%
+  );
+  transform: scale(0.04);
+  transform-origin: 50% 60%;
+}
+
+@media (max-aspect-ratio: 4 / 5) {
+  /* The arch of taller-vertical.png (1024 × 1536). */
+  .hero-door {
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1024 1536'%3E%3Cfilter id='b'%3E%3CfeGaussianBlur stdDeviation='3'/%3E%3C/filter%3E%3Cpath filter='url(%23b)' d='M339 1121V478a171 171 0 0 1 342 0v643z'/%3E%3C/svg%3E");
+    transform-origin: 50% 46%;
+  }
+
+  .hero-door-view {
+    transform-origin: 50% 46%;
+  }
+}
+
+/* Neutral darkening behind the copy and under the header. With the door light
+   below, the only gradients on the site, and both live inside the scene. */
+.hero-scrim {
+  background:
+    radial-gradient(
+      ellipse 46% 40% at 50% 52%,
+      rgb(10 8 6 / 0.78),
+      rgb(10 8 6 / 0.35) 60%,
+      rgb(10 8 6 / 0) 100%
+    ),
+    linear-gradient(rgb(10 8 6 / 0.6), rgb(10 8 6 / 0) 22%);
+}
+
+@media (max-aspect-ratio: 4 / 5) {
+  .hero-scrim {
+    background:
+      radial-gradient(
+        ellipse 92% 44% at 50% 52%,
+        rgb(10 8 6 / 0.85),
+        rgb(10 8 6 / 0.45) 65%,
+        rgb(10 8 6 / 0) 100%
+      ),
+      linear-gradient(rgb(10 8 6 / 0.6), rgb(10 8 6 / 0) 18%);
+  }
+}
+
+/* One frame for every section: equal outer margins, 80rem of content. */
+.section-frame {
+  width: 100%;
+  max-width: calc(80rem + 2 * var(--gutter));
+  padding-block: clamp(4.5rem, 8vw, 7.5rem);
+  padding-inline: var(--gutter);
+  margin-inline: auto;
+}
+
+/* Illuminated capital for the manifesto: the letter sits in the empty
+   centre of the engraved frame (capitular plate, 22.6–77.3% across and
+   24.3–75.4% down). */
+.capitular {
+  float: left;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 7.5rem;
+  height: 7.5rem;
+  padding-top: 0.35rem;
+  margin: 0.15rem 1.1rem 0.25rem 0;
+  font-family: var(--font-heading);
+  font-size: 4rem;
+  line-height: 1;
+  color: var(--gold);
+  background:
+    image-set(
+      url("/images/hero/capitular.avif") type("image/avif"),
+      url("/images/hero/capitular.webp") type("image/webp")
+    )
+    center / cover no-repeat;
+}
+
+/* Primary action: flat citrinitas, square, no shadow. */
+.btn-primary {
+  display: inline-flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.5rem;
+  padding: 0 1.75rem;
+  font-size: var(--text-body);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--bg);
+  text-decoration: none;
   background: var(--gold);
   transition:
-    left 0.25s var(--ease-out-quart),
-    right 0.25s var(--ease-out-quart);
+    background-color 160ms ease,
+    transform 120ms var(--ease-out-expo);
 }
 
-.nav-link:hover::after {
-  right: 0;
-  left: 0;
-}
-
-/* Scroll reveal */
-.scroll-reveal {
-  opacity: 0;
-  transform: translateY(16px);
+/* The second way in: same size as the primary, on albedo. */
+.btn-secondary {
+  display: inline-flex;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.5rem;
+  padding: 0 1.75rem;
+  font-size: var(--text-body);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--on-light);
+  text-decoration: none;
+  background: var(--albedo);
   transition:
-    opacity 0.6s var(--ease-out-expo),
-    transform 0.6s var(--ease-out-expo);
+    background-color 160ms ease,
+    transform 120ms var(--ease-out-expo);
 }
 
-.scroll-reveal.is-visible {
-  opacity: 1;
-  transform: translateY(0);
+.btn-primary:active,
+.btn-secondary:active {
+  transform: translateY(1px) scale(0.985);
+}
+
+/* Quiet text link: the secondary way in. */
+.link-quiet {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: color-mix(in oklab, currentColor 45%, transparent);
+  text-underline-offset: 0.22em;
+  transition:
+    color 160ms ease,
+    text-decoration-color 160ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn-primary:hover {
+    background: color-mix(in oklab, var(--gold) 82%, white);
+  }
+
+  .btn-secondary:hover {
+    background: color-mix(in oklab, var(--albedo) 70%, white);
+  }
+
+  .link-quiet:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+/* Nav links */
+.nav-link {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: transparent;
+  text-underline-offset: 0.3em;
+  transition:
+    color 160ms ease,
+    text-decoration-color 160ms ease;
+}
+
+.nav-link:hover {
+  text-decoration-color: currentColor;
+}
+
+/* Polyptych: each panel carries the colour of its stage of the Great Work. */
+.stage-panel {
+  --panel-bg: var(--bg);
+  --panel-ink: var(--ink);
+  --panel-action-bg: var(--gold);
+  --panel-action-ink: var(--bg);
+
+  color: var(--panel-ink);
+  background: var(--panel-bg);
+}
+
+.stage-panel[data-stage="albedo"] {
+  --panel-bg: var(--albedo-2);
+  --panel-ink: var(--on-light);
+  --panel-action-bg: var(--on-light);
+  --panel-action-ink: var(--albedo);
+}
+
+.stage-panel[data-stage="citrinitas"] {
+  --panel-bg: var(--gold);
+  --panel-ink: var(--on-light);
+  --panel-action-bg: var(--on-light);
+  --panel-action-ink: var(--albedo);
+}
+
+.stage-panel[data-stage="rubedo"] {
+  --panel-bg: var(--rubedo);
+  --panel-ink: var(--albedo);
+  --panel-action-bg: var(--albedo);
+  --panel-action-ink: var(--on-light);
+}
+
+.stage-panel .stage-action {
+  color: var(--panel-action-ink);
+  background: var(--panel-action-bg);
+  transition:
+    background-color 160ms ease,
+    transform 120ms var(--ease-out-expo);
+}
+
+.stage-panel .stage-action:active {
+  transform: translateY(1px) scale(0.985);
+}
+
+.stage-plate img {
+  transition: transform 700ms var(--ease-out-expo);
+}
+
+/* The two channels slide out of "Entrar al grupo". */
+@keyframes join-open {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+details[open] > .join-options {
+  animation: join-open 200ms var(--ease-out-expo);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .stage-panel .stage-action:hover {
+    background: color-mix(in oklab, var(--panel-action-bg) 84%, white);
+  }
+
+  .stage-panel:hover .stage-plate img {
+    transform: scale(1.04);
+  }
+}
+
+/* Section entrances: visible by default, hidden only once the script has
+   seen the section below the fold. Parts rise in a 75 ms stagger. */
+[data-reveal] [data-reveal-item] {
+  transition:
+    opacity 800ms var(--ease-out-expo),
+    transform 800ms var(--ease-out-expo);
+  transition-delay: calc(var(--i, 0) * 75ms);
+}
+
+[data-reveal="pending"] [data-reveal-item] {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+@media print {
+  [data-reveal] [data-reveal-item] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .animate-entrance,
-  .scroll-reveal {
+  .hero-settle,
+  .hero-rise,
+  .hero-title-rise {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+
+  [data-reveal] [data-reveal-item] {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;
-    animation: none !important;
-  }
-
-  .scroll-reveal.is-visible {
-    opacity: 1;
-    transform: none;
-  }
-
-  .btn-discord,
-  .btn-whatsapp {
-    animation: none !important;
-  }
-
-  .repo-card,
-  .talk-card,
-  .carousel-arrow,
-  .play-core {
-    transition: none !important;
-  }
-
-  .repo-card:hover,
-  .talk-card:hover,
-  .group:hover .play-core {
-    transform: none !important;
   }
 
   html {
     scroll-behavior: auto;
   }
-}
 
-/* Background effects */
-.bg-vignette {
-  background:
-    radial-gradient(
-      ellipse at center,
-      transparent 0%,
-      transparent 30%,
-      var(--bg) 95%
-    ),
-    linear-gradient(
-      180deg,
-      var(--bg) 0%,
-      transparent 15%,
-      transparent 75%,
-      var(--bg) 100%
-    );
-}
-
-.bg-noise {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1  0 0 0 0 0.08  0 0 0 0 0.05  0 0 0 0.15 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-  mix-blend-mode: overlay;
-  opacity: 0.35;
-}
-
-/* Button styles */
-.btn-discord {
-  box-shadow:
-    0 0 0 1px var(--bg),
-    0 0 0 2px var(--gold),
-    0 8px 40px color-mix(in oklch, var(--gold) 25%, transparent);
-  transition:
-    background-color 0.25s var(--ease-out-quart),
-    border-color 0.25s var(--ease-out-quart),
-    box-shadow 0.3s var(--ease-out-quart),
-    transform 0.25s var(--ease-out-quart);
-}
-
-.btn-discord:hover {
-  background-color: var(--gold-2);
-  border-color: var(--gold-2);
-  box-shadow:
-    0 0 0 1px var(--bg),
-    0 0 0 2px var(--gold-2),
-    0 8px 60px color-mix(in oklch, var(--gold-2) 45%, transparent);
-  transform: translateY(-1px);
-}
-
-.btn-discord.cta-idle {
-  animation: cta-pulse 4s var(--ease-in-out) infinite;
-  animation-delay: 2.5s;
-}
-
-/* Secondary (ghost) CTA */
-.btn-whatsapp {
-  box-shadow:
-    0 0 0 1px var(--bg),
-    0 0 0 2px var(--rule-2);
-  transition:
-    background-color 0.25s var(--ease-out-quart),
-    border-color 0.25s var(--ease-out-quart),
-    color 0.25s var(--ease-out-quart),
-    box-shadow 0.3s var(--ease-out-quart),
-    transform 0.25s var(--ease-out-quart);
-}
-
-.btn-whatsapp:hover {
-  color: var(--ink);
-  background-color: color-mix(in oklch, var(--gold) 12%, transparent);
-  border-color: var(--gold);
-  box-shadow:
-    0 0 0 1px var(--bg),
-    0 0 0 2px var(--rule),
-    0 8px 40px color-mix(in oklch, var(--gold) 15%, transparent);
-  transform: translateY(-1px);
-}
-
-/* Cards — repositories & talks */
-.repo-card,
-.talk-card {
-  transition:
-    border-color 0.35s var(--ease-out-quart),
-    background-color 0.35s var(--ease-out-quart),
-    box-shadow 0.4s var(--ease-out-quart),
-    transform 0.35s var(--ease-out-quart);
-}
-
-.repo-card:hover,
-.talk-card:hover,
-.repo-card:focus-visible,
-.talk-card:focus-visible {
-  background-color: color-mix(in oklch, var(--gold) 5%, var(--bg-2));
-  border-color: color-mix(in oklch, var(--gold) 45%, transparent);
-  box-shadow: 0 16px 54px color-mix(in oklch, var(--gold) 12%, transparent);
-  transform: translateY(-3px);
-}
-
-.repo-card:focus-visible,
-.talk-card:focus-visible,
-.carousel-arrow:focus-visible,
-.social-link:focus-visible {
-  outline: 1px solid var(--gold);
-  outline-offset: 3px;
-}
-
-/* Play affordance inside a talk thumbnail */
-.play-core {
-  box-shadow: 0 0 34px color-mix(in oklch, var(--gold) 35%, transparent);
-  transition:
-    transform 0.3s var(--ease-out-quart),
-    background-color 0.3s var(--ease-out-quart),
-    box-shadow 0.3s var(--ease-out-quart);
-}
-
-.group:hover .play-core {
-  background-color: var(--gold-2);
-  box-shadow: 0 0 52px color-mix(in oklch, var(--gold-2) 50%, transparent);
-  transform: scale(1.1);
-}
-
-/* Carousel arrows */
-.carousel-arrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  font-size: 15px;
-  color: var(--ink-3);
-  cursor: pointer;
-  border: 1px solid var(--rule-2);
-  transition:
-    border-color 0.25s var(--ease-out-quart),
-    background-color 0.25s var(--ease-out-quart),
-    color 0.25s var(--ease-out-quart),
-    opacity 0.25s var(--ease-out-quart);
-}
-
-.carousel-arrow:hover:not(:disabled) {
-  color: var(--gold);
-  background-color: color-mix(in oklch, var(--gold) 8%, transparent);
-  border-color: var(--gold);
-}
-
-.carousel-arrow:disabled {
-  cursor: not-allowed;
-  opacity: 0.3;
-}
-
-/* Social icon links */
-.social-link {
-  transition:
-    color 0.25s var(--ease-out-quart),
-    transform 0.25s var(--ease-out-quart);
-}
-
-.social-link:hover {
-  transform: translateY(-1px);
-}
-
-/* CTA celebration particles */
-@keyframes particle-rise {
-  0% {
-    opacity: 1;
-    transform: translate(0, 0) rotate(45deg) scale(1);
+  .stage-plate img {
+    transition: none;
   }
-  100% {
-    opacity: 0;
-    transform: translate(var(--tx), var(--ty)) rotate(45deg) scale(0);
-  }
-}
 
-.cta-particle {
-  position: absolute;
-  z-index: 10;
-  pointer-events: none;
-  background: var(--gold);
-  box-shadow: 0 0 6px color-mix(in oklch, var(--gold) 60%, transparent);
-  animation: particle-rise 0.9s var(--ease-out-quart) forwards;
+  details[open] > .join-options {
+    animation: none;
+  }
 }
 
 /* Vote interaction */
@@ -525,32 +615,6 @@ html {
   }
 }
 
-@keyframes vote-sheen {
-  0% {
-    opacity: 0;
-    transform: translateX(-140%) skewX(-18deg);
-  }
-  35% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(140%) skewX(-18deg);
-  }
-}
-
-@keyframes vote-aura {
-  0%,
-  100% {
-    box-shadow: 0 0 14px -4px
-      color-mix(in oklch, var(--vote-glow) 55%, transparent);
-  }
-  50% {
-    box-shadow: 0 0 22px -2px
-      color-mix(in oklch, var(--vote-glow) 80%, transparent);
-  }
-}
-
 .vote-button {
   --vote-glow: var(--gold);
   position: relative;
@@ -558,12 +622,7 @@ html {
     background-color 0.25s var(--ease-out-quart),
     border-color 0.25s var(--ease-out-quart),
     color 0.25s var(--ease-out-quart),
-    box-shadow 0.35s var(--ease-out-quart),
     transform 0.2s var(--ease-out-quart);
-}
-
-.vote-button[data-super="true"] {
-  --vote-glow: var(--elixir);
 }
 
 .vote-button:hover:not(:disabled) {
@@ -574,35 +633,8 @@ html {
   transform: translateY(0) scale(0.97);
 }
 
-.vote-button[data-voted="true"] {
-  animation: vote-aura 3.6s var(--ease-in-out) infinite;
-}
-
 .vote-button[data-burst="true"] .vote-icon {
   animation: vote-pop 0.55s var(--ease-out-expo);
-}
-
-.vote-sheen {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.vote-sheen::before {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 55%;
-  content: "";
-  background: linear-gradient(
-    90deg,
-    transparent,
-    color-mix(in oklch, var(--vote-glow) 45%, transparent),
-    transparent
-  );
-  animation: vote-sheen 0.7s var(--ease-out-quart) forwards;
 }
 
 .vote-ring {
@@ -626,8 +658,6 @@ html {
   height: 4px;
   pointer-events: none;
   background: var(--spark-color, var(--vote-glow));
-  box-shadow: 0 0 8px
-    color-mix(in oklch, var(--spark-color, var(--vote-glow)) 75%, transparent);
   animation: vote-spark 0.85s var(--ease-out-quart) forwards;
   animation-delay: var(--spark-delay, 0ms);
 }
@@ -643,9 +673,7 @@ html {
 
 @media (prefers-reduced-motion: reduce) {
   .vote-button,
-  .vote-button[data-voted="true"],
   .vote-button[data-burst="true"] .vote-icon,
-  .vote-sheen::before,
   .vote-ring,
   .vote-spark,
   .vote-delta {
@@ -654,8 +682,7 @@ html {
   }
 
   .vote-ring,
-  .vote-spark,
-  .vote-sheen {
+  .vote-spark {
     display: none;
   }
 }

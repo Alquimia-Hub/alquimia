@@ -105,18 +105,13 @@ export default async function ProjectDetailPage({
       <BackLink href="/launchpad" label={tDetail("backToList")} />
 
       {justSubmitted && (
-        <aside
-          className="border border-gold/40 bg-gold/5 px-6 py-6"
-          data-testid="submitted-panel"
-        >
-          <h2 className="mt-0 mb-2 font-[family-name:var(--font-cormorant)] font-light text-2xl text-ink">
+        <aside className="bg-bg-2 px-6 py-6" data-testid="submitted-panel">
+          <h2 className="mt-0 mb-2 font-display font-medium text-ink text-lead tracking-[-0.02em]">
             {tSuccess("title")}
           </h2>
           <p className="m-0 text-ink-2">{tSuccess("body")}</p>
 
-          <hr className="my-5 border-0 border-rule-2 border-t" />
-
-          <h3 className="mt-0 mb-1 font-medium text-gold-2 text-sm">
+          <h3 className="mt-6 mb-1 font-medium text-gold text-sm">
             {tSuccess("shareTitle")}
           </h3>
           <p className="mt-0 mb-4 text-ink-3 text-sm">
@@ -128,10 +123,10 @@ export default async function ProjectDetailPage({
 
       {isOwner && !justSubmitted && project.status === "pending" && (
         <aside
-          className="flex flex-wrap items-center justify-between gap-4 border border-amber-500/30 bg-amber-500/5 px-5 py-4"
+          className="flex flex-wrap items-center justify-between gap-4 bg-bg-2 px-5 py-4"
           data-testid="pending-banner"
         >
-          <p className="m-0 font-medium text-amber-100">
+          <p className="m-0 font-medium text-gold">
             {tDetail("pendingBanner")}
           </p>
           <ShareOnX
@@ -143,14 +138,11 @@ export default async function ProjectDetailPage({
       )}
 
       {isOwner && project.status === "rejected" && project.rejectionReason && (
-        <aside
-          className="border border-red-500/30 bg-red-500/5 px-5 py-4"
-          data-testid="rejected-banner"
-        >
-          <p className="m-0 font-medium text-red-100">
+        <aside className="bg-rubedo px-5 py-4" data-testid="rejected-banner">
+          <p className="m-0 font-medium text-albedo">
             {tDetail("rejectedBanner")}
           </p>
-          <p className="mt-2 mb-0 text-ink-2 text-sm">
+          <p className="mt-2 mb-0 text-albedo text-sm">
             {project.rejectionReason}
           </p>
         </aside>
@@ -159,7 +151,7 @@ export default async function ProjectDetailPage({
       <header className="flex flex-wrap items-start gap-6">
         <Image
           alt=""
-          className="size-24 shrink-0 border border-rule object-cover"
+          className="size-24 shrink-0 object-cover"
           height={96}
           src={project.logoUrl}
           width={96}
@@ -167,7 +159,7 @@ export default async function ProjectDetailPage({
 
         <div className="flex min-w-0 flex-1 flex-col gap-3">
           <div className="flex flex-wrap items-center gap-3">
-            <h1 className="m-0 font-[family-name:var(--font-cormorant)] font-light text-4xl text-ink leading-none">
+            <h1 className="m-0 font-display font-medium text-ink text-title tracking-[-0.02em]">
               {project.name}
             </h1>
             {project.status !== "approved" && (
@@ -198,7 +190,7 @@ export default async function ProjectDetailPage({
 
       <div className="grid grid-cols-[1fr_240px] gap-10 max-lg:grid-cols-1">
         <section>
-          <h2 className="mt-0 mb-3 font-[family-name:var(--font-im-fell)] text-[11px] text-ink-3 uppercase tracking-[0.28em]">
+          <h2 className="mt-0 mb-3 font-medium text-ink-3 text-note">
             {tDetail("about")}
           </h2>
           <p className="m-0 whitespace-pre-wrap text-ink-2 leading-relaxed">
@@ -208,7 +200,7 @@ export default async function ProjectDetailPage({
 
         <aside className="flex flex-col gap-6">
           <div>
-            <h2 className="mt-0 mb-3 font-[family-name:var(--font-im-fell)] text-[11px] text-ink-3 uppercase tracking-[0.28em]">
+            <h2 className="mt-0 mb-3 font-medium text-ink-3 text-note">
               {tDetail("links")}
             </h2>
             <ul className="m-0 flex list-none flex-col gap-2 p-0">
@@ -239,7 +231,7 @@ export default async function ProjectDetailPage({
           </div>
 
           <div>
-            <h2 className="mt-0 mb-3 font-[family-name:var(--font-im-fell)] text-[11px] text-ink-3 uppercase tracking-[0.28em]">
+            <h2 className="mt-0 mb-3 font-medium text-ink-3 text-note">
               {tDetail("publishedBy")}
             </h2>
             <div className="flex items-center gap-2">

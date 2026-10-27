@@ -1,12 +1,12 @@
 import { setRequestLocale } from "next-intl/server";
-import { BackgroundEffects } from "@/components/background-effects";
+import { ClosingSection } from "@/components/closing-section";
 import { HeroSection } from "@/components/hero-section";
 import { LandingFooter } from "@/components/landing-footer";
 import { LaunchpadSection } from "@/components/launchpad-section";
-import { QuoteSection } from "@/components/quote-section";
-import { ReposSection } from "@/components/repos-section";
+import { ManifestoSection } from "@/components/manifesto-section";
+import { PillarsSection } from "@/components/pillars-section";
 import { SiteHeader } from "@/components/site-header";
-import { TalksSection } from "@/components/talks-section";
+import { WelcomeSection } from "@/components/welcome-section";
 import type { Locale } from "@/i18n/routing";
 
 export default async function Home({
@@ -19,17 +19,16 @@ export default async function Home({
 
   return (
     <>
-      <BackgroundEffects />
-
-      <div className="relative z-[4] flex min-h-screen flex-col">
-        <SiteHeader />
+      <SiteHeader overlay />
+      <main>
         <HeroSection />
+        <WelcomeSection />
+        <PillarsSection />
         <LaunchpadSection />
-        <ReposSection />
-        <TalksSection />
-        <QuoteSection />
-        <LandingFooter />
-      </div>
+        <ManifestoSection />
+        <ClosingSection />
+      </main>
+      <LandingFooter />
     </>
   );
 }

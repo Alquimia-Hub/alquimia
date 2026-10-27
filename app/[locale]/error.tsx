@@ -27,7 +27,7 @@ export default function LocaleError({
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-6 bg-bg px-6 text-center">
       <div>
-        <h1 className="m-0 font-[family-name:var(--font-cormorant)] font-light text-4xl text-ink leading-none">
+        <h1 className="m-0 font-display font-medium text-ink text-title tracking-[-0.02em]">
           {t("title")}
         </h1>
         <p className="mx-auto mt-4 mb-0 max-w-[46ch] text-ink-3">{t("body")}</p>
@@ -48,7 +48,7 @@ export default function LocaleError({
       </div>
 
       {error.digest && (
-        <p className="m-0 font-[family-name:var(--font-jetbrains)] text-[10px] text-ink-4 uppercase tracking-[0.14em]">
+        <p className="m-0 text-ink-3 text-note">
           {t("digest")}: {error.digest}
         </p>
       )}

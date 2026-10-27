@@ -7,6 +7,7 @@ export const CONTACT_EMAIL = "contact@alquimia.community";
 export const SOCIAL_LINKS = {
   github: `https://github.com/${GITHUB_ORG}`,
   x: "https://x.com/alquimia_hub",
+  youtube: "https://www.youtube.com/@alquimia_hub",
 } as const;
 
 export const COMMUNITY_LINKS = {
@@ -21,3 +22,14 @@ export const PILLAR_IDS = [
 ] as const;
 
 export type PillarId = (typeof PILLAR_IDS)[number];
+
+// The manifesto only exists in Spanish; both locales link to it.
+export const MANIFESTO_URL = `https://github.com/${GITHUB_ORG}/alquimia/blob/main/MANIFIESTO.md`;
+
+// The four places of the site, in the header, the mobile menu and the footer.
+export const SITE_SECTIONS = [
+  { href: "/launchpad", key: "launchpad" },
+  { href: "/#charlas", key: "talks" },
+  { href: "/#laboratorio", key: "lab" },
+  { href: "/#manifiesto", key: "manifesto" },
+] as const;

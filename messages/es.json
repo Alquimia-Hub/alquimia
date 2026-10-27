@@ -15,20 +15,19 @@
   },
   "Common": {
     "brand": "Alquimia",
-    "year": "Anno MMXXVI"
+    "close": "Cerrar"
   },
   "Nav": {
-    "repos": "Código",
     "talks": "Charlas",
     "brand": "Marca",
-    "githubLabel": "Alquimia en GitHub",
-    "xLabel": "Alquimia en X",
     "launchpad": "Launchpad",
-    "resources": "Recursos",
     "back": "Volver",
     "language": "Idioma",
     "alquimista": "Alquimista",
-    "menu": "Menú"
+    "menu": "Menú",
+    "lab": "Laboratorio",
+    "manifesto": "Manifiesto",
+    "main": "Navegación principal"
   },
   "LocaleSwitcher": {
     "label": "Cambiar idioma",
@@ -38,47 +37,34 @@
     "enName": "Inglés"
   },
   "Hero": {
-    "eyebrow": "Comunidad Abierta",
-    "title": "Alquim",
-    "titleAccent": "ia",
-    "titleSrSuffix": " — Comunidad abierta sobre IA y productividad",
-    "subtitle": "Una comunidad abierta y gratuita donde compartimos conocimiento sobre inteligencia artificial, automatización y productividad."
+    "title": "Entrá al taller de la IA",
+    "subtitle": "Alquimia es una comunidad abierta y gratuita para debatir sobre IA y automatización.",
+    "imageAlt": "Un gran taller renacentista con un arco en el centro. A la izquierda, gente que escribe, estudia y mide con un astrolabio; a la derecha, gente que arma máquinas y levanta un frasco rojo. Dos estatuas de bronce verde estiran la mano hacia la entrada.",
+    "proofProjects": "{count, plural, one {# proyecto en el Launchpad} other {# proyectos en el Launchpad}}",
+    "proofRepos": "{count, plural, one {# repo abierto} other {# repos abiertos}}"
   },
   "Cta": {
-    "button": "Unirse al Discord",
-    "whatsappButton": "Unirse al WhatsApp",
-    "note": "entrada abierta"
+    "discord": "Entrar al Discord",
+    "whatsapp": "Entrar al WhatsApp"
   },
   "Pillars": {
     "inteligencia": {
       "title": "Inteligencia",
-      "description": "modelos · papers · prompts"
+      "description": "Modelos, papers y prompts, y si vale la pena probarlos."
     },
     "automatizacion": {
       "title": "Automatización",
-      "description": "flujos · agentes · integraciones"
+      "description": "Flujos, agentes e integraciones que alguien ya armó y comparte."
     },
     "productividad": {
       "title": "Productividad",
-      "description": "sistemas · hábitos · métodos"
+      "description": "Métodos para usar la IA en el trabajo de todos los días."
     }
   },
-  "Quote": {
-    "text": "La tragedia de la vida es que nos hacemos viejos demasiado pronto y sabios demasiado tarde.",
-    "author": "Benjamin Franklin"
-  },
   "Repos": {
-    "eyebrow": "Código Abierto",
     "title": "El Laboratorio",
-    "subtitle": "Todo lo que construimos es público. Entrá, copiá, rompé y mejorá — no hace falta permiso.",
+    "subtitle": "Todo lo que construimos es público: copialo, rompelo, mejoralo.",
     "cta": "Ver la organización en GitHub",
-    "cardCta": "Ver repositorio",
-    "starsLabel": "estrellas",
-    "emptyLabel": "Un experimento de la comunidad.",
-    "liveLabel": "Demo",
-    "carouselLabel": "Repositorios de Alquimia",
-    "prevLabel": "Repositorios anteriores",
-    "nextLabel": "Siguientes repositorios",
     "descriptions": {
       "alquimia": "El sitio de la comunidad. La misma página que estás mirando, abierta de punta a punta.",
       "alquimia-cli": "La comunidad en tu terminal: un comando y tenés a mano las redes, los links y las novedades.",
@@ -87,30 +73,13 @@
       "videos": "El video promo de Alquimia, hecho 100% con código usando Remotion y la paleta de la marca.",
       "discussions": "El foro abierto de la comunidad: preguntas, ideas y experimentos en curso."
     },
-    "topics": {
-      "alquimia": "nextjs, sitio",
-      "alquimia-cli": "cli, node",
-      "ai-payments": "agentes, cripto, ai sdk",
-      "slides": "slides, charlas",
-      "videos": "remotion, video",
-      "discussions": "comunidad"
-    }
+    "stars": "{count, plural, one {# estrella} other {# estrellas}}",
+    "updated": "Último cambio {when}"
   },
   "Talks": {
-    "eyebrow": "En Vivo",
-    "title": "Charlas",
-    "subtitle": "Lo que contamos en conferencias y meetups. Mirá los videos sin salir del sitio.",
     "playLabel": "Reproducir",
     "closeLabel": "Cerrar video",
     "thumbnailAlt": "Miniatura de la charla: {title}",
-    "carouselLabel": "Charlas de Alquimia",
-    "prevLabel": "Charlas anteriores",
-    "nextLabel": "Siguientes charlas",
-    "soon": {
-      "title": "Próximamente",
-      "description": "Estamos preparando las siguientes charlas. Sumate a la comunidad para enterarte antes que nadie.",
-      "cta": "Unirse al Discord"
-    },
     "items": {
       "agentes-ia-opbnb": {
         "title": "Agentes de IA sobre opBNB para Fintechs",
@@ -122,15 +91,16 @@
     }
   },
   "Footer": {
-    "tagline": "Alquimia — comunidad de artes modernas",
-    "year": "· MMXXVI ·",
-    "craft": "Forjada con tinta y paciencia",
     "brand": "Marca",
     "terms": "Términos",
-    "privacy": "Privacidad"
+    "privacy": "Privacidad",
+    "discord": "Discord",
+    "whatsapp": "WhatsApp",
+    "x": "X",
+    "github": "GitHub",
+    "youtube": "YouTube"
   },
   "Brand": {
-    "eyebrow": "Identidad",
     "title": "Marca",
     "subtitle": "Los elementos visuales de Alquimia. Descarga el logo, copia los colores y consulta la tipografía.",
     "sections": {
@@ -169,34 +139,22 @@
       "downloadPngLight": "Claro",
       "downloadPngDark": "Oscuro"
     },
-    "colorGroups": {
-      "backgrounds": "Fondos",
-      "ink": "Tinta",
-      "accents": "Acentos"
-    },
     "colorNotes": {
-      "bg": "Fondo principal",
-      "bg-2": "Superficies elevadas",
-      "bg-3": "Tarjetas y bordes",
-      "ink": "Texto principal",
-      "ink-2": "Texto secundario",
-      "ink-3": "Texto de apoyo",
-      "ink-4": "Solo bordes y reglas",
-      "gold": "Acento primario",
-      "gold-2": "Acento luminoso",
-      "copper": "Acento cálido"
-    },
-    "typographyRoles": {
-      "display": "Display",
-      "body": "Texto",
-      "ornament": "Ornamento",
-      "mono": "Mono"
+      "nigredo": "Fondo",
+      "albedo": "Texto y campo claro",
+      "citrinitas": "Acción principal",
+      "rubedo": "Campo del Launchpad"
     },
     "pangram": "El veloz murciélago hindú comía feliz cardillo y kiwi.",
-    "aaLabel": "AA",
     "aaaLabel": "AAA",
-    "decorativeLabel": "decorativo",
-    "googleFontsLabel": "Google Fonts"
+    "googleFontsLabel": "Google Fonts",
+    "typeSteps": {
+      "display": "Display",
+      "title": "Título",
+      "lead": "Bajada",
+      "body": "Texto",
+      "note": "Nota"
+    }
   },
   "Launchpad": {
     "name": "Alquimia Launchpad",
@@ -347,11 +305,11 @@
     "rejected": "Necesita cambios"
   },
   "LaunchpadLanding": {
-    "eyebrow": "Launchpad",
     "title": "Lo que construye la comunidad",
-    "subtitle": "Los proyectos más apoyados del Alquimia Launchpad.",
+    "subtitle": "Proyectos de miembros, ordenados por los apoyos de la comunidad.",
     "cta": "Ver todos los proyectos",
-    "emptyCta": "Publicá el primero"
+    "emptyCta": "Publicá el primero",
+    "publish": "Publicar proyecto"
   },
   "Account": {
     "title": "Mi cuenta",
@@ -595,7 +553,6 @@
     "logoBadFormat": "El logo tiene que ser una imagen WebP, PNG o JPG."
   },
   "Terms": {
-    "eyebrow": "Legal",
     "title": "Términos y condiciones",
     "updated": "Última actualización: 25 de agosto de 2026",
     "intro": "Estos términos explican cómo funciona Alquimia y qué esperamos de quienes participan. Al usar el sitio o publicar un proyecto en el Launchpad, aceptás lo que sigue.",
@@ -682,7 +639,6 @@
     }
   },
   "Privacy": {
-    "eyebrow": "Legal",
     "title": "Política de privacidad",
     "updated": "Última actualización: 25 de agosto de 2026",
     "intro": "Esta política explica qué datos guardamos, para qué los usamos y cómo podés pedirnos que los borremos. Buscamos pedir lo mínimo necesario para que el sitio funcione.",
@@ -772,5 +728,55 @@
       "title": "Contacto",
       "body": "Para ejercer tus derechos o hacer cualquier consulta sobre privacidad, escribinos a"
     }
+  },
+  "Welcome": {
+    "title": "¿Por dónde arrancás?",
+    "text": "Elegí dónde estás y empezá por ahí.",
+    "stages": {
+      "nigredo": {
+        "option": "Recién llego",
+        "text": "Presentate en el grupo y contá qué querés aprender.",
+        "link": "Entrar al grupo",
+        "name": "Nigredo"
+      },
+      "albedo": {
+        "option": "Quiero aprender",
+        "text": "Hablá en nuestro grupo y sumate a las community calls.",
+        "link": "Mirá nuestro podcast",
+        "name": "Albedo"
+      },
+      "citrinitas": {
+        "option": "Estoy armando algo",
+        "text": "Mostralo en el Discord. Los repos de la comunidad son abiertos: copialos y rompelos.",
+        "link": "Ver los repos",
+        "name": "Citrinitas"
+      },
+      "rubedo": {
+        "option": "Ya lancé algo",
+        "text": "Publicalo en el Launchpad y que lo apoye la comunidad.",
+        "link": "Publicar mi proyecto",
+        "name": "Rubedo"
+      }
+    }
+  },
+  "Topics": {
+    "title": "De qué hablamos",
+    "talk": "<title>Agentes de IA sobre opBNB para Fintechs</title>, X Space con BNB Chain, mayo 2026, con Brian Sasbon y Emmanuel Martínez.",
+    "recentTitle": "Lo último que debatimos",
+    "recent": {
+      "cloud": "Multiplayer coding en la nube",
+      "peptides": "Péptidos en biotech",
+      "taste": "Taste en diseño",
+      "automation": "Automatización con IA"
+    }
+  },
+  "Manifesto": {
+    "title": "Cero humo",
+    "quote": "Compartimos lo que probamos y contamos también lo que no funcionó.",
+    "link": "Leer el manifiesto"
+  },
+  "Closing": {
+    "title": "Entrar es gratis",
+    "text": "Hay un lugar en la mesa. No hace falta saber nada antes."
   }
 }

@@ -32,7 +32,7 @@ export function ReportsList({ reports }: { reports: AdminReport[] }) {
 
   if (reports.length === 0) {
     return (
-      <p className="border border-rule-2 border-dashed px-6 py-12 text-center text-ink-3">
+      <p className="bg-bg-2 px-6 py-12 text-center text-ink-3">
         {t("reportsEmpty")}
       </p>
     );
@@ -42,14 +42,14 @@ export function ReportsList({ reports }: { reports: AdminReport[] }) {
     <ul className="m-0 flex list-none flex-col gap-3 p-0">
       {reports.map((report) => (
         <li
-          className="flex flex-wrap items-start justify-between gap-4 border border-rule-2 bg-bg-2/60 p-4"
+          className="flex flex-wrap items-start justify-between gap-4 bg-bg-2 p-4"
           data-testid={`report-${report.id}`}
           key={report.id}
         >
           <div className="min-w-0 flex-1">
             <p className="m-0 font-medium text-ink">{report.projectName}</p>
             <p className="mt-1 mb-2 text-ink-2 text-sm">{report.reason}</p>
-            <p className="m-0 font-[family-name:var(--font-jetbrains)] text-[10px] text-ink-4 uppercase tracking-[0.12em]">
+            <p className="m-0 text-ink-3 text-note">
               {t("reportBy")} {report.reporterName} ·{" "}
               {format.dateTime(report.createdAt, { dateStyle: "short" })}
             </p>

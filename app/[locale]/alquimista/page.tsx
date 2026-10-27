@@ -59,21 +59,11 @@ export default async function AlquimistaPage({
       <main className="flex-1 px-14 pt-10 pb-24 max-md:px-6 max-lg:px-8">
         <div className="mx-auto flex w-full max-w-3xl flex-col gap-16">
           <header className="flex animate-entrance animate-fade-up flex-col items-center gap-4 text-center">
-            <span className="inline-flex items-center gap-2 border border-gold/50 bg-gradient-to-r from-gold/25 via-gold/10 to-elixir/20 px-3 py-1.5 font-[family-name:var(--font-jetbrains)] text-[11px] text-gold-2 uppercase tracking-[0.24em] shadow-[0_0_28px_-10px_var(--gold)]">
-              <Sparkles aria-hidden="true" className="size-4 fill-gold/40" />
-              {t("name")}
-            </span>
-
-            <h1
-              className="m-0 text-[clamp(36px,6vw,68px)] text-ink"
-              style={{ fontFamily: "var(--font-cormorant)" }}
-            >
+            <h1 className="m-0 font-display font-medium text-ink text-title tracking-[-0.02em]">
               {t("title")}
             </h1>
 
-            <p className="m-0 max-w-xl text-[17px] text-ink-2 leading-relaxed">
-              {t("intro")}
-            </p>
+            <p className="m-0 max-w-xl text-body text-ink-2">{t("intro")}</p>
 
             <div className="mt-2 flex flex-wrap justify-center gap-3">
               <Button asChild>
@@ -91,17 +81,15 @@ export default async function AlquimistaPage({
             </div>
           </header>
 
-          <section className="flex flex-col gap-6 border border-gold/25 bg-gradient-to-br from-gold/8 to-transparent px-8 py-8 max-md:px-6">
-            <h2 className="m-0 font-[family-name:var(--font-im-fell)] text-[12px] text-ink-2 uppercase tracking-[0.32em]">
+          <section className="flex flex-col gap-6 bg-bg-2 px-8 py-8 max-md:px-6">
+            <h2 className="m-0 font-display font-medium text-ink text-lead tracking-[-0.02em]">
               {t("whatTitle")}
             </h2>
-            <p className="m-0 text-[16px] text-ink-2 leading-relaxed">
-              {t("whatBody")}
-            </p>
-            <p className="m-0 flex items-start gap-3 border-gold border-l-2 pl-4 text-[16px] text-ink leading-relaxed">
+            <p className="m-0 text-body text-ink-2">{t("whatBody")}</p>
+            <p className="m-0 flex items-start gap-3 text-body text-ink">
               <Sparkles
                 aria-hidden="true"
-                className="mt-1 size-4 shrink-0 fill-gold/40 text-gold"
+                className="mt-1.5 size-4 shrink-0 text-gold"
               />
               {t("weightedVote")}
             </p>
@@ -109,20 +97,19 @@ export default async function AlquimistaPage({
 
           <section className="flex flex-col gap-6">
             <div className="flex items-center gap-4">
-              <h2 className="m-0 font-[family-name:var(--font-im-fell)] text-[12px] text-ink-2 uppercase tracking-[0.32em]">
+              <h2 className="m-0 font-display font-medium text-ink text-lead tracking-[-0.02em]">
                 {t("benefitsTitle")}
               </h2>
-              <span className="h-px flex-1 bg-rule" />
             </div>
 
-            <ul className="m-0 grid list-none grid-cols-2 gap-px border border-rule-2 bg-rule-2 p-0 max-sm:grid-cols-1">
+            <ul className="m-0 grid list-none grid-cols-2 gap-3 p-0 max-sm:grid-cols-1">
               {BENEFITS.map(({ id, Icon }) => (
                 <li
                   className="flex flex-col gap-2 bg-bg-2 px-6 py-6 transition-colors duration-300 hover:bg-surface-hover"
                   key={id}
                 >
                   <Icon aria-hidden="true" className="size-5 text-gold" />
-                  <h3 className="m-0 font-[family-name:var(--font-cormorant)] font-normal text-ink text-xl leading-tight">
+                  <h3 className="m-0 font-display font-medium text-ink text-xl leading-tight tracking-[-0.02em]">
                     {t(`benefits.${id}.title`)}
                   </h3>
                   <p className="m-0 text-ink-3 text-sm leading-relaxed">
@@ -135,16 +122,15 @@ export default async function AlquimistaPage({
 
           <section className="flex flex-col gap-6">
             <div className="flex items-center gap-4">
-              <h2 className="m-0 font-[family-name:var(--font-im-fell)] text-[12px] text-ink-2 uppercase tracking-[0.32em]">
+              <h2 className="m-0 font-display font-medium text-ink text-lead tracking-[-0.02em]">
                 {t("stepsTitle")}
               </h2>
-              <span className="h-px flex-1 bg-rule" />
             </div>
 
             <ol className="m-0 flex list-none flex-col gap-4 p-0">
               {STEPS.map((step, index) => (
                 <li className="flex items-start gap-4" key={step}>
-                  <span className="flex size-8 shrink-0 items-center justify-center border border-gold/40 bg-gold/10 font-[family-name:var(--font-jetbrains)] text-gold-2 text-sm tabular-nums">
+                  <span className="flex size-8 shrink-0 items-center justify-center bg-bg-3 text-gold text-sm tabular-nums">
                     {index + 1}
                   </span>
                   <div>
@@ -162,8 +148,8 @@ export default async function AlquimistaPage({
             <p className="m-0 text-ink-3 text-sm">{t("freeNote")}</p>
           </section>
 
-          <section className="flex flex-col items-center gap-4 border border-rule-2 bg-bg-2/60 px-8 py-10 text-center max-md:px-6">
-            <h2 className="m-0 font-[family-name:var(--font-cormorant)] font-light text-2xl text-ink">
+          <section className="flex flex-col items-center gap-4 bg-bg-2 px-8 py-10 text-center max-md:px-6">
+            <h2 className="m-0 font-display font-medium text-ink text-lead tracking-[-0.02em]">
               {t("closingTitle")}
             </h2>
             <p className="m-0 max-w-lg text-ink-2">{t("closingBody")}</p>

@@ -73,7 +73,7 @@ export function DeleteProjectButton({
       </Button>
 
       <AlertDialog onOpenChange={setOpen} open={open}>
-        <AlertDialogContent className="border-rule bg-bg-2">
+        <AlertDialogContent className="bg-bg-2">
           <AlertDialogHeader>
             <AlertDialogTitle>
               {t("deleteTitle", { project: projectName })}

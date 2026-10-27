@@ -43,10 +43,10 @@ export function LogoCard({ variant }: Props) {
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>
-        <article className="group flex flex-col gap-5 rounded-sm border border-rule bg-bg-2 p-6 transition-colors hover:border-gold/40">
+        <article className="group flex flex-col gap-5 bg-bg-2 p-6">
           <div
             className={[
-              "flex items-center justify-center rounded-sm border border-rule/60 bg-bg-3 px-8",
+              "flex items-center justify-center bg-bg-3 px-8",
               aspectClass,
             ].join(" ")}
           >
@@ -61,17 +61,17 @@ export function LogoCard({ variant }: Props) {
           </div>
 
           <div className="flex flex-col gap-1">
-            <h3 className="font-[family-name:var(--font-im-fell)] text-[11px] text-ink uppercase tracking-[0.3em]">
+            <h3 className="m-0 font-display font-medium text-ink text-xl tracking-[-0.02em]">
               {name}
             </h3>
-            <p className="font-[family-name:var(--font-eb-garamond)] text-[13px] text-ink-3 italic">
+            <p className="m-0 text-ink-3 text-note">
               {t(`logoVariants.${variant}.desc`)}
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
             <button
-              className="inline-flex items-center gap-1.5 rounded-sm border border-rule px-3 py-1.5 font-[family-name:var(--font-im-fell)] text-[10px] text-ink uppercase tracking-[0.3em] transition-colors hover:border-gold hover:text-gold"
+              className="inline-flex items-center gap-1.5 border border-input px-3 py-1.5 text-ink text-note transition-colors hover:border-gold hover:text-gold"
               onClick={() => {
                 downloadSvg(variant);
               }}
@@ -81,7 +81,7 @@ export function LogoCard({ variant }: Props) {
             </button>
 
             <button
-              className="inline-flex items-center gap-1.5 rounded-sm border border-rule px-3 py-1.5 font-[family-name:var(--font-im-fell)] text-[10px] text-ink uppercase tracking-[0.3em] transition-colors hover:border-gold hover:text-gold"
+              className="inline-flex items-center gap-1.5 border border-input px-3 py-1.5 text-ink text-note transition-colors hover:border-gold hover:text-gold"
               onClick={() => {
                 downloadPng(variant, "light", pngSize);
               }}
@@ -90,15 +90,15 @@ export function LogoCard({ variant }: Props) {
               {t("actions.downloadPng")}
             </button>
 
-            <div className="ml-1 flex items-center gap-1 font-[family-name:var(--font-jetbrains)] text-[10px] text-ink-3">
+            <div className="ml-1 flex items-center gap-1 text-ink-3 text-note tabular-nums">
               {PNG_SIZES.map((size) => (
                 <button
                   aria-pressed={pngSize === size}
                   className={[
-                    "rounded-sm border px-1.5 py-1 transition-colors",
+                    "border px-1.5 py-1 transition-colors",
                     pngSize === size
                       ? "border-gold text-gold"
-                      : "border-transparent hover:text-ink-2",
+                      : "border-transparent hover:text-ink",
                   ].join(" ")}
                   key={size}
                   onClick={() => setPngSize(size)}

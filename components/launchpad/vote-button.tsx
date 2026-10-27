@@ -122,16 +122,12 @@ export function VoteButton({
       aria-label={isAuthenticated ? label : t("loginToVote")}
       aria-pressed={optimistic.hasVoted}
       className={cn(
-        "vote-button h-auto flex-col gap-0.5 border font-[family-name:var(--font-jetbrains)] tabular-nums",
-        size === "sm" ? "px-3 py-2 text-xs" : "px-5 py-3 text-sm",
+        "vote-button h-auto flex-col gap-0.5 border tabular-nums",
+        size === "sm" ? "px-3 py-2 text-note" : "px-5 py-3 text-note",
         optimistic.hasVoted &&
-          isAlquimista &&
-          "border-elixir/60 bg-elixir/15 text-elixir-2 hover:border-elixir hover:bg-elixir/25 hover:text-elixir-2",
-        optimistic.hasVoted &&
-          !isAlquimista &&
-          "border-gold/70 bg-gold/15 text-gold-2 hover:border-gold hover:bg-gold/25 hover:text-gold-2",
+          "border-gold bg-gold text-bg hover:border-[color-mix(in_oklab,var(--gold)_82%,white)] hover:bg-[color-mix(in_oklab,var(--gold)_82%,white)] hover:text-bg",
         !optimistic.hasVoted &&
-          "border-rule bg-transparent text-ink-2 hover:border-gold/60 hover:bg-gold/10 hover:text-gold-2"
+          "border-input bg-transparent text-ink-2 hover:border-gold hover:bg-transparent hover:text-gold"
       )}
       data-burst={bursting}
       data-super={isAlquimista}
@@ -142,17 +138,15 @@ export function VoteButton({
       <span className="vote-icon relative flex items-center justify-center">
         <VoteIcon hasVoted={optimistic.hasVoted} isAlquimista={isAlquimista} />
       </span>
-      <span className={size === "sm" ? "text-sm" : "text-base"}>
+      <span className={size === "sm" ? "text-note" : "text-lg"}>
         {optimistic.score}
       </span>
-
-      {bursting && <span className="vote-sheen" key={`sheen-${burstKey}`} />}
 
       {bursting && <Burst isAlquimista={isAlquimista} key={burstKey} />}
 
       {bursting && (
         <span
-          className="vote-delta font-[family-name:var(--font-jetbrains)] text-xs"
+          className="vote-delta text-note tabular-nums"
           key={`delta-${burstKey}`}
         >
           {t("delta", { count: weight })}
@@ -166,9 +160,7 @@ export function VoteButton({
       {isAlquimista ? (
         <Tooltip>
           <TooltipTrigger asChild>{button}</TooltipTrigger>
-          <TooltipContent className="border-elixir/40" side="left">
-            {t("alquimistaHint")}
-          </TooltipContent>
+          <TooltipContent side="left">{t("alquimistaHint")}</TooltipContent>
         </Tooltip>
       ) : (
         button
@@ -199,7 +191,7 @@ function Burst({ isAlquimista }: { isAlquimista: boolean }) {
                 "--spark-delay": `${index * 22}ms`,
                 "--spark-color":
                   isAlquimista && index % 2 === 0
-                    ? "var(--gold-2)"
+                    ? "var(--ink)"
                     : "var(--vote-glow)",
               } as React.CSSProperties
             }
@@ -217,10 +209,7 @@ function VoteIcon({
   isAlquimista: boolean;
   hasVoted: boolean;
 }) {
-  const className = cn(
-    "size-4 transition-colors",
-    hasVoted && (isAlquimista ? "fill-elixir/50" : "fill-gold/50")
-  );
+  const className = cn("size-4 transition-colors", hasVoted && "fill-current");
 
   return isAlquimista ? (
     <Sparkles aria-hidden="true" className={className} />

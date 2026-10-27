@@ -1,8 +1,8 @@
 "use client";
 
+import { X } from "lucide-react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import type { ReactNode } from "react";
 import { useState } from "react";
 import {
   Dialog,
@@ -17,13 +17,11 @@ export function HeroVideoDialog({
   thumbnailSrc,
   thumbnailAlt,
   title,
-  children,
 }: {
   videoSrc: string;
   thumbnailSrc: string;
   thumbnailAlt: string;
   title: string;
-  children: ReactNode;
 }) {
   const t = useTranslations("Talks");
   const [isOpen, setIsOpen] = useState(false);
@@ -32,53 +30,30 @@ export function HeroVideoDialog({
     <Dialog onOpenChange={setIsOpen} open={isOpen}>
       <DialogTrigger asChild>
         <button
-          className="talk-card group flex h-full w-full cursor-pointer flex-col border border-rule-2 bg-bg-2/80 p-0 text-left backdrop-blur-[3px]"
+          aria-label={`${t("playLabel")}: ${title}`}
+          className="group relative block aspect-video w-full cursor-pointer overflow-hidden bg-on-light"
           type="button"
         >
-          <span className="relative block w-full overflow-hidden border-rule-2 border-b">
-            <span className="relative block aspect-video w-full">
-              <Image
-                alt={thumbnailAlt}
-                className="object-cover brightness-[0.78] saturate-[0.8] transition-all duration-500 ease-out group-hover:scale-[1.03] group-hover:brightness-[0.92]"
-                fill
-                sizes="(max-width: 768px) 100vw, 640px"
-                src={thumbnailSrc}
-              />
+          <Image
+            alt={thumbnailAlt}
+            className="object-cover contrast-[1.05] grayscale sepia-[0.45] transition-[transform,filter] duration-700 ease-[var(--ease-out-expo)] group-hover:scale-[1.03] group-hover:sepia-[0.25]"
+            fill
+            sizes="(max-width: 768px) 100vw, 60vw"
+            src={thumbnailSrc}
+          />
+          <span className="absolute inset-0 grid place-items-center">
+            <span className="flex size-20 items-center justify-center rounded-full bg-bg text-ink transition-transform duration-200 ease-[var(--ease-out-expo)] group-hover:scale-105 group-active:scale-95 max-sm:size-16">
+              <PlayGlyph className="ml-1 size-7" />
             </span>
-
-            <span className="pointer-events-none absolute inset-0 bg-gradient-to-t from-bg via-bg/25 to-transparent" />
-
-            <span className="pointer-events-none absolute inset-0 flex items-center justify-center">
-              <span className="flex h-[74px] w-[74px] scale-90 items-center justify-center rounded-full border border-gold/40 bg-bg/45 backdrop-blur-md transition-transform duration-300 ease-out group-hover:scale-100">
-                <span className="play-core flex h-[52px] w-[52px] items-center justify-center rounded-full bg-gold">
-                  <PlayGlyph className="ml-[3px] h-5 w-5 text-primary-foreground" />
-                </span>
-              </span>
-            </span>
-
-            <span className="sr-only">{t("playLabel")}</span>
           </span>
-
-          {children}
         </button>
       </DialogTrigger>
 
       <DialogContent
-        className="w-[min(1100px,calc(100vw-2rem),calc((100dvh-8rem)*16/9))] max-w-none gap-0 rounded-none border-gold/30 bg-bg-2 p-0 shadow-[0_30px_120px_rgba(0,0,0,0.7)] sm:max-w-none"
+        className="w-[min(1100px,calc(100vw-2rem),calc((100dvh-8rem)*16/9))] max-w-none gap-0 rounded-none border-0 bg-bg-2 p-0 sm:max-w-none"
         showCloseButton={false}
       >
         <DialogTitle className="sr-only">{title}</DialogTitle>
-
-        <button
-          aria-label={t("closeLabel")}
-          className="absolute -top-11 right-0 flex h-9 w-9 items-center justify-center border border-rule bg-bg-2/80 text-ink-3 backdrop-blur-md transition-colors duration-200 hover:border-gold hover:text-gold"
-          onClick={() => setIsOpen(false)}
-          type="button"
-        >
-          <span aria-hidden="true" className="text-[15px] leading-none">
-            ✕
-          </span>
-        </button>
 
         <div className="aspect-video w-full bg-black">
           {isOpen && (
@@ -91,6 +66,15 @@ export function HeroVideoDialog({
             />
           )}
         </div>
+
+        <button
+          aria-label={t("closeLabel")}
+          className="absolute -top-14 right-0 flex size-12 cursor-pointer items-center justify-center bg-albedo text-on-light transition-colors duration-150 hover:bg-gold"
+          onClick={() => setIsOpen(false)}
+          type="button"
+        >
+          <X aria-hidden="true" className="size-6" />
+        </button>
       </DialogContent>
     </Dialog>
   );

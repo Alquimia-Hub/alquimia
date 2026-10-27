@@ -26,7 +26,7 @@ export default async function NewProjectPage({
       <BackLink href="/launchpad" />
 
       <header>
-        <h1 className="m-0 font-[family-name:var(--font-cormorant)] font-light text-3xl text-ink leading-none">
+        <h1 className="m-0 font-display font-medium text-ink text-title tracking-[-0.02em]">
           {t("createTitle")}
         </h1>
         <p className="mt-3 mb-0 text-ink-3">{t("createSubtitle")}</p>
@@ -34,7 +34,7 @@ export default async function NewProjectPage({
 
       {limitReached ? (
         <p
-          className="border border-rule-2 border-dashed px-4 py-6 text-center text-ink-3"
+          className="bg-bg-2 px-4 py-6 text-center text-ink-3"
           data-testid="limit-reached"
         >
           {t("limitReached", { max: MAX_PROJECTS_PER_USER })}

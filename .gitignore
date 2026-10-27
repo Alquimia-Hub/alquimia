@@ -28,3 +28,6 @@ dev/.discord-stub-tokens.json
 
 # design-taste-frontend
 .taste-skill/
+
+# impeccable scratch mocks
+.impeccable/mocks/

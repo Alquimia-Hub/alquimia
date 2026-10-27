@@ -5,21 +5,21 @@ import type * as React from "react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium text-sm outline-none transition-[background-color,border-color,color,box-shadow,transform] duration-200 ease-[var(--ease-out-quart)] focus-visible:ring-2 focus-visible:ring-gold/70 focus-visible:ring-offset-2 focus-visible:ring-offset-bg active:translate-y-0 disabled:pointer-events-none disabled:opacity-45 aria-invalid:border-destructive [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
+  "inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md font-medium text-sm outline-none transition-[background-color,border-color,color,transform] duration-200 ease-[var(--ease-out-quart)] focus-visible:outline-2 focus-visible:outline-gold focus-visible:outline-offset-3 active:translate-y-px disabled:pointer-events-none disabled:opacity-45 aria-invalid:border-destructive [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         default:
-          "border border-gold bg-gold text-primary-foreground hover:-translate-y-px hover:border-gold-2 hover:bg-gold-2 hover:shadow-[0_6px_28px_-10px_var(--gold-2)]",
+          "border border-gold bg-gold text-primary-foreground hover:border-[color-mix(in_oklab,var(--gold)_82%,white)] hover:bg-[color-mix(in_oklab,var(--gold)_82%,white)]",
         destructive:
-          "border border-destructive/50 bg-destructive/15 text-destructive hover:-translate-y-px hover:border-destructive hover:bg-destructive/25",
+          "border border-destructive/50 bg-destructive/15 text-destructive hover:border-destructive hover:bg-destructive/25",
         outline:
-          "border border-rule bg-transparent text-ink hover:-translate-y-px hover:border-gold/70 hover:bg-gold/10 hover:text-gold-2",
+          "border border-input bg-transparent text-ink hover:border-gold hover:bg-surface-hover hover:text-gold",
         secondary:
-          "border border-rule-2 bg-bg-3 text-ink hover:-translate-y-px hover:border-rule hover:bg-surface-active",
+          "border border-transparent bg-bg-3 text-ink hover:bg-surface-active",
         ghost:
-          "border border-transparent text-ink-2 hover:border-rule-2 hover:bg-surface-hover hover:text-ink",
-        link: "text-gold underline-offset-4 hover:text-gold-2 hover:underline",
+          "border border-transparent text-ink-2 hover:bg-surface-hover hover:text-ink",
+        link: "text-gold underline-offset-4 hover:underline",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

@@ -2,55 +2,64 @@
 
 import { useEffect, useRef } from "react";
 
+/**
+ * Lets the parts of a section (marked with `data-reveal-item` and an index in
+ * `--i`) rise in a short stagger the first time the section enters the
+ * viewport. Content is visible by default: it is only hidden once this script
+ * has run and found the section still below the fold.
+ */
 export function ScrollReveal({
   children,
-  className = "",
-  stagger = 0,
+  className,
   id,
+  as: Tag = "div",
+  ...rest
 }: {
   children: React.ReactNode;
   className?: string;
-  stagger?: number;
   id?: string;
-}) {
-  const ref = useRef<HTMLDivElement>(null);
+  as?: "div" | "section" | "footer";
+} & Omit<React.HTMLAttributes<HTMLElement>, "children">) {
+  const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) {
+
+    if (
+      !el ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+      el.getBoundingClientRect().top < window.innerHeight
+    ) {
       return;
     }
 
-    const prefersReduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
-    if (prefersReduced) {
-      el.classList.add("is-visible");
-      return;
-    }
+    el.dataset.reveal = "pending";
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          if (stagger > 0) {
-            setTimeout(() => el.classList.add("is-visible"), stagger);
-          } else {
-            el.classList.add("is-visible");
-          }
-          observer.unobserve(el);
+          el.dataset.reveal = "shown";
+          observer.disconnect();
         }
       },
-      { threshold: 0.15 }
+      { rootMargin: "0px 0px -12% 0px" }
     );
 
     observer.observe(el);
     return () => observer.disconnect();
-  }, [stagger]);
+  }, []);
 
   return (
-    <div className={`scroll-reveal ${className}`} id={id} ref={ref}>
+    <Tag
+      className={className}
+      data-reveal=""
+      id={id}
+      ref={(node: HTMLElement | null) => {
+        ref.current = node;
+      }}
+      {...rest}
+    >
       {children}
-    </div>
+    </Tag>
   );
 }

@@ -44,7 +44,7 @@ export function LogoContextMenuContent({
 
       {colorKeys.map((color) => (
         <Fragment key={color}>
-          <ContextMenuLabel className="text-[10px] text-ink-3 uppercase tracking-[0.25em]">
+          <ContextMenuLabel className="font-normal text-ink-3 text-note">
             {t("downloadPng")} ·{" "}
             {color === "light" ? t("downloadPngLight") : t("downloadPngDark")}
           </ContextMenuLabel>

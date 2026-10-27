@@ -73,11 +73,11 @@ export function ProjectFilters() {
         <div className="relative min-w-[240px] flex-1">
           <Search
             aria-hidden="true"
-            className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-ink-4"
+            className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-ink-3"
           />
           <Input
             aria-label={t("searchLabel")}
-            className="border-rule bg-bg-2 pl-9 text-ink placeholder:text-ink-4"
+            className="border-input bg-bg-2 pl-9 text-ink placeholder:text-ink-3"
             data-testid="launchpad-search"
             onChange={(event) => setQuery(event.target.value)}
             placeholder={t("searchPlaceholder")}
@@ -94,7 +94,7 @@ export function ProjectFilters() {
         >
           <SelectTrigger
             aria-label={t("sortLabel")}
-            className="w-[180px] border-rule bg-bg-2"
+            className="w-[180px] border-input bg-bg-2"
             data-testid="launchpad-sort"
           >
             <SelectValue />
@@ -156,10 +156,10 @@ function CategoryButton({
     <button
       aria-pressed={active}
       className={cn(
-        "border px-3 py-1.5 font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.1em] transition-colors",
+        "border px-3 py-1.5 text-note transition-colors",
         active
-          ? "border-gold bg-gold/15 text-gold-2"
-          : "border-rule-2 text-ink-3 hover:border-rule hover:text-ink-2"
+          ? "border-gold bg-gold text-bg"
+          : "border-input text-ink-2 hover:border-gold hover:text-gold"
       )}
       onClick={onClick}
       type="button"

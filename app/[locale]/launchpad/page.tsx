@@ -82,7 +82,7 @@ export default async function LaunchpadPage({
     <div className="flex flex-col gap-8">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="m-0 font-[family-name:var(--font-cormorant)] font-light text-[clamp(2rem,3vw+1rem,3rem)] text-ink leading-none tracking-tight">
+          <h1 className="m-0 font-display font-medium text-ink text-title tracking-[-0.02em]">
             {t("title")}
           </h1>
           <p className="mt-3 mb-0 max-w-[52ch] text-ink-3">{t("subtitle")}</p>
@@ -102,13 +102,13 @@ export default async function LaunchpadPage({
 
       <ProjectFilters />
 
-      <p className="m-0 font-[family-name:var(--font-jetbrains)] text-[11px] text-ink-4 uppercase tracking-[0.14em]">
+      <p className="m-0 text-ink-3 text-note tabular-nums">
         {t("resultCount", { count: total })}
       </p>
 
       {items.length === 0 ? (
-        <div className="border border-rule-2 border-dashed px-6 py-16 text-center">
-          <p className="m-0 font-[family-name:var(--font-cormorant)] text-2xl text-ink-2">
+        <div className="bg-bg-2 px-6 py-16 text-center">
+          <p className="m-0 font-display font-medium text-ink-2 text-lead tracking-[-0.02em]">
             {isFiltered ? t("emptySearchTitle") : t("emptyTitle")}
           </p>
           <p className="mt-2 mb-0 text-ink-3 text-sm">
@@ -151,7 +151,7 @@ export default async function LaunchpadPage({
             )}
           </Button>
 
-          <span className="font-[family-name:var(--font-jetbrains)] text-[11px] text-ink-4 tabular-nums">
+          <span className="text-ink-3 text-note tabular-nums">
             {t("pageOf", { page: filters.page, total: pageCount })}
           </span>
 

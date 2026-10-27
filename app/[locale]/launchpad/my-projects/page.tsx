@@ -36,14 +36,14 @@ export default async function MyProjectsPage({
 
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="m-0 font-[family-name:var(--font-cormorant)] font-light text-3xl text-ink leading-none">
+          <h1 className="m-0 font-display font-medium text-ink text-title tracking-[-0.02em]">
             {t("title")}
           </h1>
           <p className="mt-3 mb-0 text-ink-3">{t("subtitle")}</p>
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="font-[family-name:var(--font-jetbrains)] text-[11px] text-ink-4 uppercase tracking-[0.12em]">
+          <span className="text-ink-3 text-note tabular-nums">
             {slotsLeft > 0
               ? t("slotsLeft", { count: slotsLeft })
               : t("slotsFull", { max: MAX_PROJECTS_PER_USER })}
@@ -57,8 +57,8 @@ export default async function MyProjectsPage({
       </header>
 
       {projects.length === 0 ? (
-        <div className="border border-rule-2 border-dashed px-6 py-16 text-center">
-          <p className="m-0 font-[family-name:var(--font-cormorant)] text-2xl text-ink-2">
+        <div className="bg-bg-2 px-6 py-16 text-center">
+          <p className="m-0 font-display font-medium text-ink-2 text-lead tracking-[-0.02em]">
             {t("emptyTitle")}
           </p>
           <p className="mt-2 mb-4 text-ink-3 text-sm">{t("emptyBody")}</p>
@@ -70,20 +70,20 @@ export default async function MyProjectsPage({
         <ul className="m-0 flex list-none flex-col gap-3 p-0">
           {projects.map((project) => (
             <li
-              className="flex flex-wrap items-start gap-4 border border-rule-2 bg-bg-2/60 p-4"
+              className="flex flex-wrap items-start gap-4 bg-bg-2 p-4"
               key={project.id}
             >
               <Image
                 alt=""
-                className="size-12 shrink-0 border border-rule-2 object-cover"
+                className="size-12 shrink-0 object-cover"
                 height={48}
                 src={project.logoUrl}
                 width={48}
               />
 
-              <div className="flex min-w-0 flex-1 flex-col gap-2">
+              <div className="flex min-w-0 flex-[1_1_14rem] flex-col gap-2">
                 <div className="flex flex-wrap items-center gap-2">
-                  <h2 className="m-0 font-[family-name:var(--font-cormorant)] font-normal text-ink text-lg leading-tight">
+                  <h2 className="m-0 font-display font-medium text-ink text-xl leading-tight tracking-[-0.02em]">
                     {project.name}
                   </h2>
                   <StatusChip status={project.status} />
@@ -98,10 +98,8 @@ export default async function MyProjectsPage({
                 </div>
 
                 {project.status === "rejected" && project.rejectionReason && (
-                  <p className="m-0 border-red-500/40 border-l-2 pl-3 text-red-200 text-sm">
-                    <span className="font-[family-name:var(--font-jetbrains)] text-[10px] uppercase tracking-[0.12em]">
-                      {t("reason")}:
-                    </span>{" "}
+                  <p className="m-0 text-ink-2 text-sm">
+                    <span className="font-medium text-ink">{t("reason")}:</span>{" "}
                     {project.rejectionReason}
                   </p>
                 )}

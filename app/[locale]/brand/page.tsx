@@ -41,18 +41,10 @@ export default async function BrandPage({
       <main className="flex-1 px-14 pt-10 pb-24 max-md:px-6 max-lg:px-8">
         <div className="mx-auto flex w-full max-w-5xl flex-col gap-20">
           <header className="flex animate-entrance animate-fade-up flex-col items-center gap-3 text-center">
-            <span className="font-[family-name:var(--font-im-fell)] text-[11px] text-ink-3 uppercase tracking-[0.4em]">
-              {t("eyebrow")}
-            </span>
-            <h1
-              className="text-[clamp(44px,7vw,88px)] text-ink"
-              style={{ fontFamily: "var(--font-cormorant)" }}
-            >
+            <h1 className="m-0 font-display font-medium text-ink text-title tracking-[-0.02em]">
               {t("title")}
             </h1>
-            <p className="max-w-xl font-[family-name:var(--font-eb-garamond)] text-[16px] text-ink-3 italic leading-relaxed">
-              {t("subtitle")}
-            </p>
+            <p className="m-0 max-w-xl text-body text-ink-2">{t("subtitle")}</p>
           </header>
 
           <Section title={t("sections.logo")}>
@@ -87,13 +79,9 @@ function Section({
 }) {
   return (
     <section className="flex flex-col gap-6">
-      <div className="flex items-center gap-4">
-        <span className="h-px flex-1 bg-rule" />
-        <h2 className="font-[family-name:var(--font-im-fell)] text-[12px] text-ink-2 uppercase tracking-[0.4em]">
-          {title}
-        </h2>
-        <span className="h-px flex-1 bg-rule" />
-      </div>
+      <h2 className="m-0 font-display font-medium text-ink text-lead tracking-[-0.02em]">
+        {title}
+      </h2>
       {children}
     </section>
   );

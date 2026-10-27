@@ -113,39 +113,29 @@ export function AlquimistaCard({
 
   return (
     <section
-      className={cn(
-        "flex flex-col gap-5 border px-6 py-6",
-        isActive
-          ? "border-gold/50 bg-gradient-to-br from-gold/10 via-bg-2 to-elixir/5 shadow-[0_0_50px_-30px_var(--gold)]"
-          : "border-rule-2 bg-bg-2/60"
-      )}
+      className="flex flex-col gap-5 bg-bg-2 px-6 py-6"
       data-testid="alquimista-card"
     >
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-2.5">
           <span
             className={cn(
-              "flex size-9 items-center justify-center border",
-              isActive
-                ? "border-gold/50 bg-gold/15 shadow-[0_0_20px_-8px_var(--gold)]"
-                : "border-rule-2 bg-bg-3"
+              "flex size-9 items-center justify-center",
+              isActive ? "bg-gold" : "bg-bg-3"
             )}
           >
             <Sparkles
               aria-hidden="true"
-              className={cn(
-                "size-5",
-                isActive ? "fill-gold/40 text-gold" : "text-ink-3"
-              )}
+              className={cn("size-5", isActive ? "text-bg" : "text-ink-3")}
             />
           </span>
-          <h2 className="m-0 font-[family-name:var(--font-cormorant)] font-light text-ink text-xl">
+          <h2 className="m-0 font-display font-medium text-ink text-xl tracking-[-0.02em]">
             {t("badgeTitle")}
           </h2>
         </div>
 
         <Link
-          className="font-[family-name:var(--font-jetbrains)] text-[10px] text-ink-3 uppercase tracking-[0.14em] transition-colors duration-200 hover:text-gold-2"
+          className="text-ink-2 text-note underline transition-colors duration-200 hover:text-gold"
           href="/alquimista"
         >
           {t("badgeLearnMore")}
@@ -161,13 +151,13 @@ export function AlquimistaCard({
         </p>
       </div>
 
-      <p className="m-0 border-gold/60 border-l-2 bg-gold/5 py-2 pl-4 text-ink-2 text-sm leading-relaxed">
+      <p className="m-0 bg-bg-3 px-4 py-3 text-ink-2 text-sm leading-relaxed">
         {t("badgePerks")}
       </p>
 
       {linkFailed && (
         <p
-          className="m-0 border border-destructive/40 bg-destructive/5 px-4 py-3 text-destructive text-sm"
+          className="m-0 bg-bg-3 px-4 py-3 text-destructive text-sm"
           data-testid="badge-link-error"
           role="alert"
         >
@@ -176,7 +166,7 @@ export function AlquimistaCard({
       )}
 
       {checkedAt && (
-        <p className="m-0 font-[family-name:var(--font-jetbrains)] text-[10px] text-ink-4 uppercase tracking-[0.12em]">
+        <p className="m-0 text-ink-3 text-note">
           {t("lastCheck", {
             date: format.dateTime(checkedAt, {
               dateStyle: "medium",

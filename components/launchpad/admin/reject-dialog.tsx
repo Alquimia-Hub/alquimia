@@ -35,7 +35,7 @@ export function RejectDialog({
 
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
-      <DialogContent className="border-rule bg-bg-2">
+      <DialogContent className="bg-bg-2">
         <DialogHeader>
           <DialogTitle>{t("rejectTitle")}</DialogTitle>
           <DialogDescription>
