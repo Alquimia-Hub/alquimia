@@ -78,6 +78,12 @@
       "skillPath": "skills/hyperframes-registry/SKILL.md",
       "computedHash": "1acf359546af75f92fdcfa7fe685d53f0e85a121f145a4b90f8e4d9e763b8990"
     },
+    "image": {
+      "source": "coreyhaines31/marketingskills",
+      "sourceType": "github",
+      "skillPath": "skills/image/SKILL.md",
+      "computedHash": "c0f8c9af68113a4ae53a0e816d6f4573a3bb9f3d26e7400ff5fb3c9348d2e510"
+    },
     "impeccable": {
       "source": "pbakaus/impeccable",
       "sourceType": "github",

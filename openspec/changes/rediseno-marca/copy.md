@@ -85,6 +85,19 @@ solo en español; el link en inglés abre esa versión.
 | Texto | Hay un lugar en la mesa. No hace falta saber nada antes. | There's a seat at the table. You don't need to know anything first. |
 | Botones | Los mismos del hero | Same as the hero |
 
+## Imagen para redes (OG)
+
+| | Español | English |
+|---|---|---|
+| Frase (`Metadata.ogHeadline`) | Entrá al taller de la **IA** | Step into the **AI** workshop |
+| Marca | Logo y "Alquimia", chicos, debajo de la frase | Same |
+| Texto alternativo (`Metadata.ogAlt`) | «Entrá al taller de la IA», en letras grandes sobre el grabado de un taller renacentista en penumbra, con el logo y el nombre de Alquimia debajo. | “Step into the AI workshop” in large letters over an engraving of a dim Renaissance workshop, with the Alquimia logo and name underneath. |
+
+La frase repite el título del hero a propósito: quien hace clic encuentra arriba
+de la portada lo mismo que leyó en la tarjeta. "IA" va en oro (en el mensaje,
+`<accent>IA</accent>`). Sin bajada, sin cantidad de miembros y sin URL: la
+plataforma ya muestra el dominio y el título debajo de la imagen.
+
 ## Pie
 
 | | Español | English |

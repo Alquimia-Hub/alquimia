@@ -102,7 +102,8 @@ neutro detrás del texto y la luz de la puerta en la cámara del hero.
 Ningún título SHALL llevar una etiqueta chica encima. La interfaz no SHALL
 mostrar numeración decorativa (01, 02, "04"), emojis ni glifos de adorno como
 ✦. Una palabra dentro de un título no SHALL ir en otro color, cursiva o
-familia.
+familia. La única excepción es la imagen OG, donde "IA" va en citrinitas para
+que la frase se lea como miniatura.
 
 #### Scenario: Título de sección
 - **WHEN** se ve el título de cualquier sección de la portada

@@ -176,13 +176,20 @@ reemplace.
 - **THEN** ninguna imagen de la portada repite a otra
 
 ### Requirement: Imagen para redes con la marca
-La imagen OG (y la de X) SHALL mostrar, sobre la escena del taller oscurecida,
-solo el logo y "Alquimia" en grande (IM Fell English) y el título del hero
-debajo, en el idioma de la ruta, legibles como miniatura.
+La imagen OG (y la de X) SHALL llevar como protagonista la frase
+`Metadata.ogHeadline` en IM Fell English, en el idioma de la ruta, legible como
+miniatura en un feed, con "IA" (o "AI") en citrinitas, sobre la escena del
+taller oscurecida. La marca SHALL ir chica debajo (logo y "Alquimia") sin
+competir con la frase, y la tarjeta no SHALL llevar bajada, miembros ni URL.
 
 #### Scenario: Compartir el link
 - **WHEN** se pide `/opengraph-image/og` o `/en/opengraph-image/og`
-- **THEN** devuelve un PNG de 1200 × 630 con el logo, "Alquimia" y el título en ese idioma
+- **THEN** devuelve un PNG de 1200 × 630 con la frase gancho en ese idioma en grande y el logo con "Alquimia" chicos debajo
+- **AND** `og:image:alt` describe esa tarjeta en el mismo idioma (`Metadata.ogAlt`)
+
+#### Scenario: Miniatura en un feed
+- **WHEN** la tarjeta se ve reducida a unos 300 × 157 px
+- **THEN** la frase se lee sin esfuerzo y es lo primero que se ve
 
 ### Requirement: Portada en los dos idiomas
 Todo texto visible de la portada SHALL existir en español y en inglés, y SHALL

@@ -27,19 +27,37 @@ export async function generateImageMetadata({ params }: ImageProps) {
   return [{ id: "og", alt: copy.ogAlt, size, contentType }];
 }
 
+// The headline marks its key word as <accent>…</accent>, painted in gold.
+const ACCENT_TAG = /<\/?accent>/;
+
+/**
+ * Satori lays out each child of a flex box as its own item, so the headline
+ * goes word by word and wraps like text.
+ */
+const headlineWords = (headline: string) =>
+  headline
+    .split(ACCENT_TAG)
+    .flatMap((part, index) =>
+      part
+        .split(" ")
+        .filter(Boolean)
+        .map((word) => ({ word, accent: index % 2 === 1 }))
+    )
+    .map((item, position) => ({ ...item, id: `${position}-${item.word}` }));
+
 const asset = (path: string) => readFile(join(process.cwd(), "assets", path));
 
 /**
- * The brand, large enough to read as a thumbnail: the mark and the name in
- * the engraved display face over the great workshop, and the hero's title.
+ * A hook, large enough to read as a thumbnail in a feed: the headline in the
+ * engraved display face over the darkened workshop, with a small lockup of
+ * the mark and the name underneath so the brand is there without leading.
  */
 export default async function Image({ params }: ImageProps) {
   const { locale } = (await params) ?? {};
-  const { Hero: hero } = await loadMessages(locale);
+  const { Metadata: copy } = await loadMessages(locale);
 
-  const [imFell, literata, scene] = await Promise.all([
+  const [imFell, scene] = await Promise.all([
     asset("fonts/IMFellEnglish-Regular.woff"),
-    asset("fonts/Literata-Regular.woff"),
     asset("og/taller.jpg"),
   ]);
   const sceneSrc = `data:image/jpeg;base64,${scene.toString("base64")}`;
@@ -71,45 +89,61 @@ export default async function Image({ params }: ImageProps) {
           justifyContent: "center",
           width: "100%",
           height: "100%",
+          padding: "0 60px",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 36 }}>
+        <div
+          style={{
+            display: "flex",
+            fontFamily: "IM Fell English",
+            fontSize: 156,
+            lineHeight: 1,
+            letterSpacing: "-0.01em",
+            flexWrap: "wrap",
+            justifyContent: "center",
+            columnGap: 38,
+            maxWidth: 900,
+            color: ALBEDO,
+          }}
+        >
+          {headlineWords(copy.ogHeadline).map(({ id, word, accent }) => (
+            <span key={id} style={accent ? { color: CITRINITAS } : {}}>
+              {word}
+            </span>
+          ))}
+        </div>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 16,
+            marginTop: 44,
+          }}
+        >
           {/* biome-ignore lint/a11y/noSvgWithoutTitle: Satori would paint the title as text; the card has its own alt */}
           <svg
             fill="none"
-            height="170"
+            height="52"
             stroke={CITRINITAS}
-            strokeWidth="1.4"
+            strokeWidth="2"
             viewBox="0 0 40 40"
-            width="170"
+            width="52"
           >
             <circle cx="20" cy="20" r="16" />
             <path d="M20 8 L30 26 L10 26 Z" />
-            <circle cx="20" cy="20" fill={CITRINITAS} r="2" />
+            <circle cx="20" cy="20" fill={CITRINITAS} r="2.4" />
           </svg>
           <div
             style={{
               display: "flex",
               fontFamily: "IM Fell English",
-              fontSize: 190,
+              fontSize: 46,
               lineHeight: 1,
-              letterSpacing: "-0.02em",
-              color: ALBEDO,
+              color: CITRINITAS,
             }}
           >
             Alquimia
           </div>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            marginTop: 40,
-            fontFamily: "Literata",
-            fontSize: 52,
-            color: ALBEDO,
-          }}
-        >
-          {hero.title}
         </div>
       </div>
     </div>,
@@ -117,7 +151,6 @@ export default async function Image({ params }: ImageProps) {
       ...size,
       fonts: [
         { name: "IM Fell English", data: imFell, style: "normal", weight: 400 },
-        { name: "Literata", data: literata, style: "normal", weight: 400 },
       ],
     }
   );
