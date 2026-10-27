@@ -1,29 +1,11 @@
 import { getTranslations } from "next-intl/server";
-import { fetchOrgRepos, isCuratedRepo } from "@/lib/github";
-import { countApprovedProjects } from "@/lib/launchpad/queries";
+import { COMMUNITY_MEMBERS } from "@/lib/constants";
 import { HeroCamera } from "./hero-camera";
 import { JoinLinks } from "./join-links";
 import { HeroScene, Plate } from "./scene-picture";
 
-async function countProof() {
-  const [projects, repos] = await Promise.all([
-    countApprovedProjects().catch(() => 0),
-    fetchOrgRepos(),
-  ]);
-  // Without GitHub the curated list comes back as a fallback with no dates:
-  // the number would be ours, not GitHub's, so it is left out.
-  const live = repos.filter(
-    (repo) => isCuratedRepo(repo.name) && repo.updatedAt
-  );
-  return { projects, repos: live.length };
-}
-
 export async function HeroSection() {
-  const [t, proof] = await Promise.all([getTranslations("Hero"), countProof()]);
-  const facts = [
-    proof.projects > 0 && t("proofProjects", { count: proof.projects }),
-    proof.repos > 0 && t("proofRepos", { count: proof.repos }),
-  ].filter(Boolean);
+  const t = await getTranslations("Hero");
 
   return (
     <section
@@ -88,14 +70,12 @@ export async function HeroSection() {
               {t("subtitle")}
             </p>
             <JoinLinks className="hero-rise mt-9 justify-center max-sm:w-full max-sm:max-w-80" />
-            {facts.length > 0 && (
-              <p
-                className="hero-rise mt-7 mb-0 text-ink-2 text-note"
-                style={{ "--rise-delay": "620ms" } as React.CSSProperties}
-              >
-                {facts.join(" · ")}
-              </p>
-            )}
+            <p
+              className="hero-rise mt-7 mb-0 text-ink-2 text-note"
+              style={{ "--rise-delay": "620ms" } as React.CSSProperties}
+            >
+              {t("members", { count: COMMUNITY_MEMBERS })}
+            </p>
           </div>
         </div>
       </div>

@@ -4,8 +4,7 @@
     "description": "Una comunidad abierta y gratuita donde compartimos conocimiento sobre inteligencia artificial, automatización y productividad.",
     "brandTitle": "Alquimia | Marca",
     "brandDescription": "Los elementos visuales de Alquimia. Descarga el logo, copia los colores y consulta la tipografía.",
-    "ogAlt": "Alquimia — Comunidad abierta sobre IA, automatización y productividad",
-    "ogTagline": "Comunidad abierta sobre IA, automatización y productividad",
+    "ogAlt": "Alquimia: Entrá al taller de la IA. Comunidad abierta y gratuita para debatir sobre IA y automatización.",
     "termsTitle": "Alquimia | Términos y condiciones",
     "termsDescription": "Cómo funciona Alquimia, qué se puede publicar en el Launchpad y qué esperamos de quienes participan.",
     "privacyTitle": "Alquimia | Política de privacidad",
@@ -38,10 +37,9 @@
   },
   "Hero": {
     "title": "Entrá al taller de la IA",
-    "subtitle": "Alquimia es una comunidad abierta y gratuita para debatir sobre IA y automatización.",
+    "subtitle": "Comunidad abierta y gratuita para debatir sobre IA y automatización.",
     "imageAlt": "Un gran taller renacentista con un arco en el centro. A la izquierda, gente que escribe, estudia y mide con un astrolabio; a la derecha, gente que arma máquinas y levanta un frasco rojo. Dos estatuas de bronce verde estiran la mano hacia la entrada.",
-    "proofProjects": "{count, plural, one {# proyecto en el Launchpad} other {# proyectos en el Launchpad}}",
-    "proofRepos": "{count, plural, one {# repo abierto} other {# repos abiertos}}"
+    "members": "Unite a {count} alquimistas"
   },
   "Cta": {
     "discord": "Entrar al Discord",

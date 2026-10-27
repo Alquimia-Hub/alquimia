@@ -4,8 +4,7 @@
     "description": "An open, free community where we share knowledge about artificial intelligence, automation and productivity.",
     "brandTitle": "Alquimia | Brand",
     "brandDescription": "The visual elements of Alquimia. Download the logo, copy the colors and browse the typography.",
-    "ogAlt": "Alquimia — Open community on AI, automation and productivity",
-    "ogTagline": "Open community on AI, automation and productivity",
+    "ogAlt": "Alquimia: Step into the AI workshop. An open, free community to discuss AI and automation.",
     "termsTitle": "Alquimia | Terms and conditions",
     "termsDescription": "How Alquimia works, what can be published on the Launchpad and what we expect from everyone taking part.",
     "privacyTitle": "Alquimia | Privacy policy",
@@ -38,10 +37,9 @@
   },
   "Hero": {
     "title": "Step into the AI workshop",
-    "subtitle": "Alquimia is an open, free community to discuss AI and automation.",
+    "subtitle": "An open, free community to discuss AI and automation.",
     "imageAlt": "A great Renaissance workshop with an archway at its centre. On the left, people write, study and measure with an astrolabe; on the right, people build machines and raise a red flask. Two green bronze statues reach out towards the entrance.",
-    "proofProjects": "{count, plural, one {# project on the Launchpad} other {# projects on the Launchpad}}",
-    "proofRepos": "{count, plural, one {# open repo} other {# open repos}}"
+    "members": "Join {count} alchemists"
   },
   "Cta": {
     "discord": "Join the Discord",

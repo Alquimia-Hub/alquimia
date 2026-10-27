@@ -15,6 +15,9 @@ export const COMMUNITY_LINKS = {
   whatsapp: "https://chat.whatsapp.com/BhC5waw0nm1FIRSb9Kvs7a",
 } as const;
 
+/** Members across Discord and WhatsApp, shown in the hero. Update by hand. */
+export const COMMUNITY_MEMBERS = 200;
+
 export const PILLAR_IDS = [
   "inteligencia",
   "automatizacion",

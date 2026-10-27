@@ -148,14 +148,6 @@ export async function listApprovedProjects(filters: ProjectFilters) {
   };
 }
 
-export async function countApprovedProjects() {
-  const [row] = await db
-    .select({ total: count() })
-    .from(project)
-    .where(eq(project.status, "approved"));
-  return row?.total ?? 0;
-}
-
 export async function getTopProjects() {
   return await db
     .select(publicColumns)

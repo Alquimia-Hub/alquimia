@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { COMMUNITY_LINKS, SITE_SECTIONS, SOCIAL_LINKS } from "@/lib/constants";
-import { AlquimiaLogo } from "./icons";
+import { AlquimiaLogo, GithubIcon, XIcon, YoutubeIcon } from "./icons";
 
 const CHANNELS = [
   { key: "discord", href: COMMUNITY_LINKS.discord },
@@ -9,9 +9,9 @@ const CHANNELS = [
 ] as const;
 
 const SOCIALS = [
-  { key: "x", href: SOCIAL_LINKS.x },
-  { key: "github", href: SOCIAL_LINKS.github },
-  { key: "youtube", href: SOCIAL_LINKS.youtube },
+  { key: "x", href: SOCIAL_LINKS.x, Icon: XIcon },
+  { key: "github", href: SOCIAL_LINKS.github, Icon: GithubIcon },
+  { key: "youtube", href: SOCIAL_LINKS.youtube, Icon: YoutubeIcon },
 ] as const;
 
 const MENU = [...SITE_SECTIONS, { href: "/brand", key: "brand" }] as const;
@@ -41,16 +41,18 @@ export function LandingFooter() {
                 </li>
               ))}
             </ul>
-            <ul className="m-0 flex list-none gap-8 p-0">
-              {SOCIALS.map((social) => (
-                <li key={social.key}>
+            <ul className="m-0 flex list-none gap-2 p-0">
+              {SOCIALS.map(({ key, href, Icon }) => (
+                <li key={key}>
                   <a
-                    className="link-quiet text-ink text-lead"
-                    href={social.href}
+                    aria-label={t(key)}
+                    className="grid size-12 place-items-center text-ink transition-colors duration-150 hover:bg-bg-3 hover:text-gold"
+                    href={href}
                     rel="noopener noreferrer"
                     target="_blank"
+                    title={t(key)}
                   >
-                    {t(social.key)}
+                    <Icon className="size-6" />
                   </a>
                 </li>
               ))}
