@@ -51,7 +51,7 @@ export default async function AdminPodcastPage({
         <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-6 py-10 max-md:px-4">
           <header className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <h1 className="m-0 font-[family-name:var(--font-cormorant)] font-light text-3xl text-ink leading-none">
+              <h1 className="m-0 font-display font-medium text-ink text-title tracking-[-0.02em]">
                 {t("title")}
               </h1>
               <p className="mt-3 mb-0 text-ink-3">{t("subtitle")}</p>
@@ -61,7 +61,7 @@ export default async function AdminPodcastPage({
 
           {run ? (
             <>
-              <dl className="m-0 grid grid-cols-3 gap-px border border-rule-2 bg-rule-2 max-sm:grid-cols-1">
+              <dl className="m-0 grid grid-cols-3 gap-3 max-sm:grid-cols-1">
                 {[
                   { label: t("lastRun"), value: formatDate(run.createdAt) },
                   {
@@ -74,9 +74,7 @@ export default async function AdminPodcastPage({
                     className="flex flex-col gap-1 bg-bg-2 px-5 py-4"
                     key={item.label}
                   >
-                    <dt className="m-0 font-[family-name:var(--font-jetbrains)] text-[10px] text-ink-3 uppercase tracking-[0.14em]">
-                      {item.label}
-                    </dt>
+                    <dt className="m-0 text-ink-3 text-note">{item.label}</dt>
                     <dd className="m-0 text-ink text-sm">{item.value}</dd>
                   </div>
                 ))}
@@ -84,12 +82,12 @@ export default async function AdminPodcastPage({
 
               {run.sourceErrors.length > 0 && (
                 <div
-                  className="flex gap-3 border border-amber-500/40 bg-amber-500/10 p-4 text-amber-100 text-sm"
+                  className="flex gap-3 bg-bg-2 p-4 text-ink text-sm"
                   role="alert"
                 >
                   <AlertTriangle
                     aria-hidden="true"
-                    className="mt-0.5 size-4 shrink-0"
+                    className="mt-0.5 size-4 shrink-0 text-gold"
                   />
                   <div>
                     <p className="m-0 font-medium">
@@ -100,10 +98,8 @@ export default async function AdminPodcastPage({
                     <ul className="mt-2 mb-0 pl-4">
                       {run.sourceErrors.map((error) => (
                         <li key={`${error.source}:${error.message}`}>
-                          <span className="font-[family-name:var(--font-jetbrains)] uppercase">
-                            {error.source}
-                          </span>
-                          : {error.message}
+                          <span className="font-medium">{error.source}</span>:{" "}
+                          {error.message}
                         </li>
                       ))}
                     </ul>
@@ -112,13 +108,13 @@ export default async function AdminPodcastPage({
               )}
 
               <section className="flex flex-col gap-3">
-                <h2 className="m-0 font-[family-name:var(--font-jetbrains)] text-[11px] text-gold-2 uppercase tracking-[0.14em]">
+                <h2 className="m-0 font-display font-medium text-ink text-xl tracking-[-0.02em]">
                   {t("top", { count: run.top.length })}
                 </h2>
                 {run.top.length > 0 ? (
                   <CandidatesTable candidates={run.top} showPosition />
                 ) : (
-                  <p className="border border-rule-2 border-dashed px-6 py-12 text-center text-ink-3">
+                  <p className="bg-bg-2 px-6 py-12 text-center text-ink-3">
                     {t("topEmpty")}
                   </p>
                 )}
@@ -126,7 +122,7 @@ export default async function AdminPodcastPage({
 
               {run.rest.length > 0 && (
                 <details className="group flex flex-col gap-3">
-                  <summary className="cursor-pointer font-[family-name:var(--font-jetbrains)] text-[11px] text-ink-2 uppercase tracking-[0.14em] hover:text-gold-2">
+                  <summary className="cursor-pointer text-ink-2 text-sm hover:text-gold">
                     {t("rest", { count: run.rest.length })}
                   </summary>
                   <div className="mt-3">
@@ -139,7 +135,7 @@ export default async function AdminPodcastPage({
               )}
             </>
           ) : (
-            <p className="border border-rule-2 border-dashed px-6 py-12 text-center text-ink-3">
+            <p className="bg-bg-2 px-6 py-12 text-center text-ink-3">
               {t("empty")}
             </p>
           )}

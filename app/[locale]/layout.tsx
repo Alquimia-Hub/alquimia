@@ -1,12 +1,7 @@
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
-import {
-  Cormorant_Garamond,
-  EB_Garamond,
-  IM_Fell_English_SC,
-  JetBrains_Mono,
-} from "next/font/google";
+import { IM_Fell_English, Literata } from "next/font/google";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -16,30 +11,34 @@ import { localeAlternates } from "@/lib/alternates";
 import { publicUrl } from "@/lib/site-url";
 import "../globals.css";
 
-const cormorant = Cormorant_Garamond({
+// Variable font: one file covers weights 400 to 600 and the optical-size
+// axis, so headings and body text each get their own cut.
+const literata = Literata({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  style: ["normal", "italic"],
-  variable: "--font-cormorant",
+  style: "normal",
+  axes: ["opsz"],
+  variable: "--font-literata",
+  display: "swap",
 });
 
-const ebGaramond = EB_Garamond({
+// Italic is only for titles of works, never above the fold: a single static
+// 400 cut, not preloaded. `em`, `i` and `cite` point at it in globals.css.
+const literataItalic = Literata({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  style: ["normal", "italic"],
-  variable: "--font-eb-garamond",
+  style: "italic",
+  weight: "400",
+  variable: "--font-literata-italic",
+  display: "swap",
+  preload: false,
 });
 
-const imFell = IM_Fell_English_SC({
+// Engraved display face for the landing's titles and the illuminated capital.
+// One upright cut; it never sets running text.
+const imFell = IM_Fell_English({
   subsets: ["latin"],
   weight: "400",
-  variable: "--font-im-fell",
-});
-
-const jetbrains = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-jetbrains",
+  variable: "--font-im-fell-display",
+  display: "swap",
 });
 
 const GA_MEASUREMENT_ID = "G-XJPFB512TT";
@@ -102,10 +101,6 @@ export async function generateMetadata({
           url: "/icon-dark-32x32.png",
           media: "(prefers-color-scheme: dark)",
         },
-        {
-          url: "/icon.svg",
-          type: "image/svg+xml",
-        },
       ],
       apple: "/apple-icon.png",
     },
@@ -129,7 +124,7 @@ export default async function LocaleLayout({
 
   return (
     <html
-      className={`${cormorant.variable} ${ebGaramond.variable} ${imFell.variable} ${jetbrains.variable}`}
+      className={`${literata.variable} ${literataItalic.variable} ${imFell.variable}`}
       data-scroll-behavior="smooth"
       lang={locale}
     >

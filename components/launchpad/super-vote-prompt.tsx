@@ -43,10 +43,7 @@ export function SuperVotePrompt({
 
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
-      <DialogContent
-        className="border-gold/40 bg-gradient-to-br from-gold/10 via-bg-2 to-elixir/10"
-        data-testid="super-vote-prompt"
-      >
+      <DialogContent className="bg-bg-2" data-testid="super-vote-prompt">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-ink">
             <Sparkles
@@ -61,7 +58,7 @@ export function SuperVotePrompt({
         </DialogHeader>
 
         <Link
-          className="w-fit font-[family-name:var(--font-jetbrains)] text-[10px] text-ink-3 uppercase tracking-[0.14em] transition-colors duration-200 hover:text-gold-2"
+          className="w-fit text-gold text-note underline transition-colors duration-200 hover:text-ink"
           href="/alquimista"
           onClick={() => onOpenChange(false)}
         >

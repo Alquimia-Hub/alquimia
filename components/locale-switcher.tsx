@@ -23,25 +23,22 @@ export function LocaleSwitcher({ className }: { className?: string }) {
       <DropdownMenuTrigger
         aria-label={tNav("language")}
         className={cn(
-          "nav-link flex items-center gap-1 px-2 py-2 text-ink-3 outline-none transition-colors duration-200 hover:text-gold",
+          "flex items-center gap-1 px-3 py-2 font-medium text-note outline-none transition-colors duration-150 hover:text-gold",
           className
         )}
         data-testid="locale-switcher"
       >
         {t(active)}
-        <ChevronDown aria-hidden="true" className="size-3" />
+        <ChevronDown aria-hidden="true" className="size-3.5" />
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent
-        align="end"
-        className="min-w-[9rem] border-rule bg-bg-2"
-      >
+      <DropdownMenuContent align="end" className="min-w-[10rem] bg-bg-2">
         {routing.locales.map((locale) => (
           <DropdownMenuItem asChild key={locale}>
             <Link
               aria-current={locale === active ? "true" : undefined}
               className={cn(
-                "flex items-center justify-between gap-2",
+                "flex items-center justify-between gap-2 text-note",
                 locale === active && "text-gold"
               )}
               href={pathname}
@@ -50,7 +47,7 @@ export function LocaleSwitcher({ className }: { className?: string }) {
             >
               {t(`${locale}Name`)}
               {locale === active && (
-                <Check aria-hidden="true" className="size-3.5" />
+                <Check aria-hidden="true" className="size-4" />
               )}
             </Link>
           </DropdownMenuItem>

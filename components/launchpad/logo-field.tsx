@@ -57,7 +57,7 @@ export function LogoField({ value, onChange, error }: LogoFieldProps) {
 
   return (
     <div className="flex items-start gap-4">
-      <div className="flex size-20 shrink-0 items-center justify-center border border-rule bg-bg-2">
+      <div className="flex size-20 shrink-0 items-center justify-center bg-bg-3">
         {value ? (
           <Image
             alt=""
@@ -67,7 +67,7 @@ export function LogoField({ value, onChange, error }: LogoFieldProps) {
             width={LOGO_SIZE_PX}
           />
         ) : (
-          <ImagePlus aria-hidden="true" className="size-6 text-ink-4" />
+          <ImagePlus aria-hidden="true" className="size-6 text-ink-3" />
         )}
       </div>
 
@@ -99,7 +99,7 @@ export function LogoField({ value, onChange, error }: LogoFieldProps) {
           {value ? t("logoChange") : t("logoSelect")}
         </Button>
 
-        <p className="m-0 text-ink-3 text-xs">{t("logoHint")}</p>
+        <p className="m-0 text-ink-3 text-note">{t("logoHint")}</p>
         <FieldError message={error} />
       </div>
     </div>

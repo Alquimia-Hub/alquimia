@@ -106,7 +106,7 @@ export default async function AdminLaunchpadPage({
           <BackLink href="/launchpad" />
 
           <header>
-            <h1 className="m-0 font-[family-name:var(--font-cormorant)] font-light text-3xl text-ink leading-none">
+            <h1 className="m-0 font-display font-medium text-ink text-title tracking-[-0.02em]">
               {t("title")}
             </h1>
             <p className="mt-3 mb-0 text-ink-3">{t("subtitle")}</p>
@@ -114,7 +114,7 @@ export default async function AdminLaunchpadPage({
 
           <nav
             aria-label={t("sections")}
-            className="flex gap-1 overflow-x-auto border border-rule-2 bg-bg-2 p-1"
+            className="flex gap-1 overflow-x-auto bg-bg-2 p-1"
           >
             {tabs.map((tab) => (
               <a
@@ -122,7 +122,7 @@ export default async function AdminLaunchpadPage({
                 className={cn(
                   "shrink-0 whitespace-nowrap px-3 py-1.5 text-sm transition-colors duration-200",
                   tab.value === activeTab
-                    ? "bg-gold/15 text-gold-2"
+                    ? "bg-bg-3 text-gold"
                     : "text-ink-2 hover:bg-surface-hover hover:text-ink"
                 )}
                 data-testid={`tab-${tab.value}`}

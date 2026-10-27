@@ -2,29 +2,22 @@ import { GITHUB_ORG } from "./constants";
 
 export interface Repo {
   description: string | null;
-  homepage: string | null;
-  language: string | null;
   name: string;
   stars: number;
-  topics: readonly string[];
+  /** Last push, ISO 8601. Null when GitHub could not be read. */
+  updatedAt: string | null;
   url: string;
-}
-
-export interface DisplayRepo extends Omit<Repo, "description"> {
-  description: string;
 }
 
 interface GithubApiRepo {
   archived: boolean;
   description: string | null;
   fork: boolean;
-  homepage: string | null;
   html_url: string;
-  language: string | null;
   name: string;
   private: boolean;
+  pushed_at: string | null;
   stargazers_count: number;
-  topics?: string[];
 }
 
 const CURATED_NAMES = [
@@ -52,10 +45,8 @@ const fallbackRepos: readonly Repo[] = CURATED_NAMES.map((name) => ({
   name,
   description: null,
   url: `https://github.com/${GITHUB_ORG}/${name}`,
-  homepage: null,
-  language: null,
   stars: 0,
-  topics: [],
+  updatedAt: null,
 }));
 
 function compareRepos(a: Repo, b: Repo): number {
@@ -72,10 +63,8 @@ function toRepo(apiRepo: GithubApiRepo): Repo {
     name: apiRepo.name,
     description: apiRepo.description,
     url: apiRepo.html_url,
-    homepage: apiRepo.homepage?.trim() ? apiRepo.homepage : null,
-    language: apiRepo.language,
     stars: apiRepo.stargazers_count,
-    topics: (apiRepo.topics ?? []).slice(0, 3),
+    updatedAt: apiRepo.pushed_at,
   };
 }
 

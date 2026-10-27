@@ -1,7 +1,9 @@
 import { Blobatar } from "@/components/ui/blobatar";
 import { cn } from "@/lib/utils";
 
-const BLOBATAR_BACKGROUND = "#1e170f";
+const BLOBATAR_BACKGROUND = "#29221a";
+// Citrinitas hue (OKLCH), so generated avatars stay inside the palette.
+const BLOBATAR_HUE = 80;
 const BLOBATAR_TONE = 0.55;
 
 interface UserAvatarProps {
@@ -26,11 +28,12 @@ export function UserAvatar({
       blobatar={{
         background: "circle",
         contrast: true,
+        hue: BLOBATAR_HUE,
         palette: { bg: BLOBATAR_BACKGROUND },
         tone: BLOBATAR_TONE,
         ...(standalone ? { title: name } : {}),
       }}
-      className={cn("border border-rule-2 bg-bg-3", className)}
+      className={cn("bg-bg-3", className)}
       key={src ?? "blobatar"}
       name={name}
       src={src}

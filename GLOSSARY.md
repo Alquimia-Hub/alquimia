@@ -15,7 +15,9 @@ identificador en el código. **Evitar** lista sinónimos que generan confusión.
 | **Fundador** | | Inició Alquimia, maneja los fondos y elige a los custodios. También es custodio. |
 | **Firmante** | | Custodio o fundador que firmó `MANIFIESTO.md`. |
 | **Charla** | `TALKS` | Charla grabada de la comunidad, publicada en YouTube. |
-| **Código** | `repos` | Repos curados de la organización `Alquimia-Hub`. |
+| **Laboratorio** | `repos` | Repos curados de la organización `Alquimia-Hub`, en la portada y en el menú. Antes se llamaba "Código". |
+| **Etapas de la Gran Obra** | `stage` | Nigredo, albedo, citrinitas y rubedo. Dan los cuatro colores de la marca y las cuatro tablas del políptico de la portada ("Recién llego" a "Ya lancé algo"). En la copy no se dice "etapa": esa palabra es del podcast. |
+| **Lámina** | `PLATES` | Cada ilustración de la portada, generada con los prompts de `docs/ilustraciones.md`. |
 
 ## Launchpad
 

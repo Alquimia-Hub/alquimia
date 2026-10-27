@@ -26,10 +26,10 @@ export function CandidatesTable({
   const format = useFormatter();
 
   return (
-    <div className="border border-rule-2">
+    <div className="border border-border">
       <Table>
         <TableHeader>
-          <TableRow className="border-rule-2 hover:bg-transparent">
+          <TableRow className="border-border hover:bg-transparent">
             {showPosition && (
               <TableHead className="w-10 text-ink-3">
                 {t("columnPosition")}
@@ -48,18 +48,18 @@ export function CandidatesTable({
             const discussion = hnUrl(candidate);
             return (
               <TableRow
-                className="border-rule-2 hover:bg-surface-hover"
+                className="border-border hover:bg-surface-hover"
                 data-testid={`candidate-${candidate.id}`}
                 key={candidate.id}
               >
                 {showPosition && (
-                  <TableCell className="font-[family-name:var(--font-jetbrains)] text-gold-2 tabular-nums">
+                  <TableCell className="text-gold tabular-nums">
                     {candidate.topPosition}
                   </TableCell>
                 )}
                 <TableCell className="max-w-xl whitespace-normal">
                   <a
-                    className="inline-flex items-start gap-1.5 text-ink transition-colors duration-200 hover:text-gold-2"
+                    className="inline-flex items-start gap-1.5 text-ink transition-colors duration-200 hover:text-gold"
                     href={candidate.url}
                     rel="noopener noreferrer"
                     target="_blank"
@@ -67,12 +67,12 @@ export function CandidatesTable({
                     {candidate.title}
                     <ExternalLink
                       aria-hidden="true"
-                      className="mt-1 size-3 shrink-0 text-ink-4"
+                      className="mt-1 size-3.5 shrink-0 text-ink-3"
                     />
                   </a>
                   {discussion && (
                     <a
-                      className="mt-1 block text-ink-3 text-xs hover:text-gold-2"
+                      className="mt-1 block text-ink-3 text-note hover:text-gold"
                       href={discussion}
                       rel="noopener noreferrer"
                       target="_blank"
@@ -81,15 +81,15 @@ export function CandidatesTable({
                     </a>
                   )}
                 </TableCell>
-                <TableCell className="font-[family-name:var(--font-jetbrains)] text-[11px] text-ink-2 uppercase tracking-[0.12em]">
+                <TableCell className="text-ink-2 text-note">
                   {candidate.source}
                 </TableCell>
-                <TableCell className="text-right font-[family-name:var(--font-jetbrains)] text-ink-2 tabular-nums">
+                <TableCell className="text-right text-ink-2 tabular-nums">
                   {candidate.signal === null
                     ? "—"
                     : format.number(candidate.signal)}
                 </TableCell>
-                <TableCell className="whitespace-nowrap font-[family-name:var(--font-jetbrains)] text-ink-2 text-xs tabular-nums">
+                <TableCell className="whitespace-nowrap text-ink-2 text-note tabular-nums">
                   {format.dateTime(candidate.publishedAt, {
                     dateStyle: "short",
                   })}

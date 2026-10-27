@@ -6,7 +6,14 @@
     "ultracite/biome/next"
   ],
   "files": {
-    "includes": ["**", "!.agents", "!.claude", "!.next"]
+    "includes": [
+      "**",
+      "!.agents",
+      "!.claude",
+      "!.next",
+      "!.impeccable",
+      "!.taste-skill"
+    ]
   },
   "overrides": [
     {

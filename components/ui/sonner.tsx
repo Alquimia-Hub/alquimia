@@ -9,8 +9,8 @@ const Toaster = (props: ToasterProps) => (
     toastOptions={{
       classNames: {
         toast:
-          "rounded-none! border! border-rule! bg-bg-2! text-ink! font-[family-name:var(--font-eb-garamond)]! shadow-[0_20px_50px_-30px_black]!",
-        description: "text-ink-3!",
+          "rounded-none! border! border-border! bg-bg-2! text-ink! text-sm!",
+        description: "text-ink-3! text-sm!",
         actionButton: "bg-gold! text-primary-foreground!",
         cancelButton: "bg-bg-3! text-ink-2!",
         error: "border-destructive/50!",

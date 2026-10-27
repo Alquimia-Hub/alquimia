@@ -13,12 +13,11 @@ export function HeaderLogoTrigger() {
     <ContextMenu>
       <ContextMenuTrigger asChild>
         <Link
-          aria-label={t("brand")}
-          className="flex w-fit select-none items-center gap-3 font-[family-name:var(--font-im-fell)] text-[11px] text-ink uppercase tracking-[0.34em] transition-colors hover:text-ink-2 max-sm:gap-2 max-sm:text-[10px] max-sm:tracking-[0.18em]"
+          className="group flex w-fit select-none items-center gap-3 py-1 font-semibold text-body text-ink tracking-[-0.01em]"
           href="/"
         >
-          <AlquimiaLogo className="h-[26px] w-[26px] shrink-0 text-gold transition-colors group-hover:text-gold-2 max-sm:h-[22px] max-sm:w-[22px]" />
-          <span className="truncate">{t("brand")}</span>
+          <AlquimiaLogo className="size-8 shrink-0 text-gold transition-transform duration-500 ease-[var(--ease-out-expo)] group-hover:rotate-[120deg]" />
+          {t("brand")}
         </Link>
       </ContextMenuTrigger>
       <LogoContextMenuContent showViewBrand variant="horizontal" />

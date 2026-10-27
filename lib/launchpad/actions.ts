@@ -87,8 +87,8 @@ async function withinRateLimit(
   scope: keyof typeof RATE_LIMITS,
   subject: string
 ) {
-  const rule = RATE_LIMITS[scope];
-  const windows = Array.isArray(rule) ? rule : [rule];
+  const limits = RATE_LIMITS[scope];
+  const windows = Array.isArray(limits) ? limits : [limits];
   let allowed = true;
 
   for (const { limit: max, windowMs } of windows) {

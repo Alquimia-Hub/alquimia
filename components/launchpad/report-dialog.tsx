@@ -49,7 +49,7 @@ export function ReportDialog({ projectId }: { projectId: string }) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="border-rule bg-bg-2">
+      <DialogContent className="bg-bg-2">
         <DialogHeader>
           <DialogTitle>{t("reportTitle")}</DialogTitle>
           <DialogDescription>{t("reportBody")}</DialogDescription>

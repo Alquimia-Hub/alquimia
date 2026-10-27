@@ -297,7 +297,7 @@ export function ProjectForm({
         />
 
         <fieldset className="flex flex-col gap-4 border-0 p-0">
-          <legend className="mb-2 font-[family-name:var(--font-im-fell)] text-[11px] text-ink-3 uppercase tracking-[0.28em]">
+          <legend className="mb-2 font-medium text-ink-3 text-note">
             {t("socialLinks")} · {t("optional")}
           </legend>
 
@@ -332,7 +332,7 @@ export function ProjectForm({
 
         {showSummary && (
           <div
-            className="flex items-start gap-3 border border-destructive/40 bg-destructive/5 px-4 py-3"
+            className="flex items-start gap-3 bg-bg-2 px-4 py-3"
             data-testid="form-error-summary"
             role="alert"
           >
@@ -398,8 +398,8 @@ function CharCount({ value, max }: { value: string; max: number }) {
   return (
     <span
       className={cn(
-        "font-[family-name:var(--font-jetbrains)] text-[10px] tabular-nums",
-        used > max ? "text-destructive" : "text-ink-4"
+        "text-note tabular-nums",
+        used > max ? "text-destructive" : "text-ink-3"
       )}
     >
       {t("charCount", { count: used, max })}
@@ -422,10 +422,10 @@ function CategoryToggle({
     <button
       aria-pressed={active}
       className={cn(
-        "border px-3 py-1.5 font-[family-name:var(--font-jetbrains)] text-[11px] uppercase tracking-[0.1em] transition-colors",
+        "border px-3 py-1.5 text-note transition-colors",
         active
-          ? "border-gold bg-gold/15 text-gold-2"
-          : "border-rule-2 text-ink-3 hover:border-rule hover:text-ink-2"
+          ? "border-gold bg-gold text-bg"
+          : "border-input text-ink-2 hover:border-gold hover:text-gold"
       )}
       data-testid={`category-${categoryId}`}
       onClick={() => onToggle(categoryId)}

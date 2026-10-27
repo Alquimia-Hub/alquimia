@@ -4,8 +4,8 @@
     "description": "An open, free community where we share knowledge about artificial intelligence, automation and productivity.",
     "brandTitle": "Alquimia | Brand",
     "brandDescription": "The visual elements of Alquimia. Download the logo, copy the colors and browse the typography.",
-    "ogAlt": "Alquimia — Open community on AI, automation and productivity",
-    "ogTagline": "Open community on AI, automation and productivity",
+    "ogHeadline": "Step into the <accent>AI</accent> workshop",
+    "ogAlt": "“Step into the AI workshop” in large letters over an engraving of a dim Renaissance workshop, with the Alquimia logo and name underneath.",
     "termsTitle": "Alquimia | Terms and conditions",
     "termsDescription": "How Alquimia works, what can be published on the Launchpad and what we expect from everyone taking part.",
     "privacyTitle": "Alquimia | Privacy policy",
@@ -15,20 +15,19 @@
   },
   "Common": {
     "brand": "Alquimia",
-    "year": "Anno MMXXVI"
+    "close": "Close"
   },
   "Nav": {
-    "repos": "Code",
     "talks": "Talks",
     "brand": "Brand",
-    "githubLabel": "Alquimia on GitHub",
-    "xLabel": "Alquimia on X",
     "launchpad": "Launchpad",
-    "resources": "Resources",
     "back": "Back",
     "language": "Language",
     "alquimista": "Alchemist",
-    "menu": "Menu"
+    "menu": "Menu",
+    "lab": "Laboratory",
+    "manifesto": "Manifesto",
+    "main": "Main navigation"
   },
   "LocaleSwitcher": {
     "label": "Change language",
@@ -38,47 +37,33 @@
     "enName": "English"
   },
   "Hero": {
-    "eyebrow": "Open Community",
-    "title": "Alquim",
-    "titleAccent": "ia",
-    "titleSrSuffix": " — Open community on AI and productivity",
-    "subtitle": "An open, free community where we share knowledge about artificial intelligence, automation and productivity."
+    "title": "Step into the AI workshop",
+    "subtitle": "An open, free community to discuss AI and automation.",
+    "imageAlt": "A great Renaissance workshop with an archway at its centre. On the left, people write, study and measure with an astrolabe; on the right, people build machines and raise a red flask. Two green bronze statues reach out towards the entrance.",
+    "members": "Join {count} alchemists"
   },
   "Cta": {
-    "button": "Join the Discord",
-    "whatsappButton": "Join the WhatsApp",
-    "note": "open to all"
+    "discord": "Join the Discord",
+    "whatsapp": "Join the WhatsApp"
   },
   "Pillars": {
     "inteligencia": {
       "title": "Intelligence",
-      "description": "models · papers · prompts"
+      "description": "Models, papers and prompts, and whether they're worth trying."
     },
     "automatizacion": {
       "title": "Automation",
-      "description": "workflows · agents · integrations"
+      "description": "Flows, agents and integrations someone already built and shares."
     },
     "productividad": {
       "title": "Productivity",
-      "description": "systems · habits · methods"
+      "description": "Ways to use AI in everyday work."
     }
   },
-  "Quote": {
-    "text": "The tragedy of life is that we get old too soon and wise too late.",
-    "author": "Benjamin Franklin"
-  },
   "Repos": {
-    "eyebrow": "Open Source",
     "title": "The Laboratory",
-    "subtitle": "Everything we build is public. Come in, copy it, break it and improve it — no permission needed.",
-    "cta": "View the organization on GitHub",
-    "cardCta": "View repository",
-    "starsLabel": "stars",
-    "emptyLabel": "A community experiment.",
-    "liveLabel": "Demo",
-    "carouselLabel": "Alquimia repositories",
-    "prevLabel": "Previous repositories",
-    "nextLabel": "Next repositories",
+    "subtitle": "Everything we build is public: copy it, break it, improve it.",
+    "cta": "See the organization on GitHub",
     "descriptions": {
       "alquimia": "The community site. The very page you are looking at, open from end to end.",
       "alquimia-cli": "The community in your terminal: one command and the socials, links and news are at hand.",
@@ -87,30 +72,13 @@
       "videos": "The Alquimia promo video, made 100% in code with Remotion and the brand palette.",
       "discussions": "The community's open forum: questions, ideas and experiments in progress."
     },
-    "topics": {
-      "alquimia": "nextjs, site",
-      "alquimia-cli": "cli, node",
-      "ai-payments": "agents, crypto, ai sdk",
-      "slides": "slides, talks",
-      "videos": "remotion, video",
-      "discussions": "community"
-    }
+    "stars": "{count, plural, one {# star} other {# stars}}",
+    "updated": "Updated {when}"
   },
   "Talks": {
-    "eyebrow": "Live",
-    "title": "Talks",
-    "subtitle": "What we share at conferences and meetups. Watch the videos without leaving the site.",
     "playLabel": "Play",
     "closeLabel": "Close video",
     "thumbnailAlt": "Talk thumbnail: {title}",
-    "carouselLabel": "Alquimia talks",
-    "prevLabel": "Previous talks",
-    "nextLabel": "Next talks",
-    "soon": {
-      "title": "Coming soon",
-      "description": "We are preparing the next talks. Join the community to hear about them before anyone else.",
-      "cta": "Join the Discord"
-    },
     "items": {
       "agentes-ia-opbnb": {
         "title": "AI Agents on opBNB for Fintechs",
@@ -122,15 +90,16 @@
     }
   },
   "Footer": {
-    "tagline": "Alquimia — a community of modern arts",
-    "year": "· MMXXVI ·",
-    "craft": "Forged with ink and patience",
     "brand": "Brand",
     "terms": "Terms",
-    "privacy": "Privacy"
+    "privacy": "Privacy",
+    "discord": "Discord",
+    "whatsapp": "WhatsApp",
+    "x": "X",
+    "github": "GitHub",
+    "youtube": "YouTube"
   },
   "Brand": {
-    "eyebrow": "Identity",
     "title": "Brand",
     "subtitle": "The visual elements of Alquimia. Download the logo, copy the colors and browse the typography.",
     "sections": {
@@ -169,34 +138,22 @@
       "downloadPngLight": "Light",
       "downloadPngDark": "Dark"
     },
-    "colorGroups": {
-      "backgrounds": "Backgrounds",
-      "ink": "Ink",
-      "accents": "Accents"
-    },
     "colorNotes": {
-      "bg": "Primary background",
-      "bg-2": "Raised surfaces",
-      "bg-3": "Cards and borders",
-      "ink": "Primary text",
-      "ink-2": "Secondary text",
-      "ink-3": "Supporting text",
-      "ink-4": "Borders and rules only",
-      "gold": "Primary accent",
-      "gold-2": "Luminous accent",
-      "copper": "Warm accent"
-    },
-    "typographyRoles": {
-      "display": "Display",
-      "body": "Body",
-      "ornament": "Ornament",
-      "mono": "Mono"
+      "nigredo": "Background",
+      "albedo": "Text and light field",
+      "citrinitas": "Primary action",
+      "rubedo": "Launchpad field"
     },
     "pangram": "The quick brown fox jumps over the lazy dog.",
-    "aaLabel": "AA",
     "aaaLabel": "AAA",
-    "decorativeLabel": "decorative",
-    "googleFontsLabel": "Google Fonts"
+    "googleFontsLabel": "Google Fonts",
+    "typeSteps": {
+      "display": "Display",
+      "title": "Title",
+      "lead": "Lead",
+      "body": "Body",
+      "note": "Note"
+    }
   },
   "Launchpad": {
     "name": "Alquimia Launchpad",
@@ -347,11 +304,11 @@
     "rejected": "Needs changes"
   },
   "LaunchpadLanding": {
-    "eyebrow": "Launchpad",
     "title": "What the community builds",
-    "subtitle": "The most supported projects on the Alquimia Launchpad.",
+    "subtitle": "Projects by members, ranked by community support.",
     "cta": "See all projects",
-    "emptyCta": "Publish the first one"
+    "emptyCta": "Publish the first one",
+    "publish": "Publish a project"
   },
   "Account": {
     "title": "My account",
@@ -595,7 +552,6 @@
     "logoBadFormat": "The logo must be a WebP, PNG or JPG image."
   },
   "Terms": {
-    "eyebrow": "Legal",
     "title": "Terms and conditions",
     "updated": "Last updated: August 25, 2026",
     "intro": "These terms explain how Alquimia works and what we expect from everyone taking part. By using the site or publishing a project on the Launchpad, you agree to what follows.",
@@ -682,7 +638,6 @@
     }
   },
   "Privacy": {
-    "eyebrow": "Legal",
     "title": "Privacy policy",
     "updated": "Last updated: August 25, 2026",
     "intro": "This policy explains what data we keep, what we use it for, and how you can ask us to delete it. We aim to ask for the minimum needed to make the site work.",
@@ -772,5 +727,55 @@
       "title": "Contact",
       "body": "To exercise your rights or ask anything about privacy, write to us at"
     }
+  },
+  "Welcome": {
+    "title": "Where are you starting from?",
+    "text": "Find where you are and start there.",
+    "stages": {
+      "nigredo": {
+        "option": "I just got here",
+        "text": "Introduce yourself in the group and tell us what you want to learn.",
+        "link": "Join the group",
+        "name": "Nigredo"
+      },
+      "albedo": {
+        "option": "I want to learn",
+        "text": "Talk in our group and join the community calls.",
+        "link": "Watch our podcast",
+        "name": "Albedo"
+      },
+      "citrinitas": {
+        "option": "I'm building something",
+        "text": "Show it on the Discord. The community repos are open: copy them and break them.",
+        "link": "See the repos",
+        "name": "Citrinitas"
+      },
+      "rubedo": {
+        "option": "I've launched something",
+        "text": "Post it on the Launchpad and let the community support it.",
+        "link": "Publish my project",
+        "name": "Rubedo"
+      }
+    }
+  },
+  "Topics": {
+    "title": "What we talk about",
+    "talk": "<title>AI Agents on opBNB for Fintechs</title>, an X Space with BNB Chain, May 2026, with Brian Sasbon and Emmanuel Martínez.",
+    "recentTitle": "What we've been debating",
+    "recent": {
+      "cloud": "Multiplayer coding in the cloud",
+      "peptides": "Peptides in biotech",
+      "taste": "Taste in design",
+      "automation": "AI automation"
+    }
+  },
+  "Manifesto": {
+    "title": "Zero hype",
+    "quote": "We share what we've tried, and we also tell you what didn't work.",
+    "link": "Read the manifesto"
+  },
+  "Closing": {
+    "title": "Joining is free",
+    "text": "There's a seat at the table. You don't need to know anything first."
   }
 }

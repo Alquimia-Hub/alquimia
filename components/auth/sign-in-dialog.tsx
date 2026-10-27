@@ -50,9 +50,9 @@ export function SignInDialog({
 
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
-      <DialogContent className="border-rule bg-bg-2 sm:max-w-[400px]">
+      <DialogContent className="bg-bg-2 sm:max-w-[400px]">
         <DialogHeader>
-          <DialogTitle className="font-[family-name:var(--font-cormorant)] font-light text-2xl">
+          <DialogTitle className="font-display font-medium text-2xl tracking-[-0.02em]">
             {t("signInTitle")}
           </DialogTitle>
           <DialogDescription>{t("signInBody")}</DialogDescription>
@@ -95,12 +95,10 @@ export function SignInDialog({
             <div
               className={cn(
                 "flex flex-col gap-2",
-                (hasGoogle || hasDiscord) && "mt-3 border-rule-2 border-t pt-3"
+                (hasGoogle || hasDiscord) && "mt-4"
               )}
             >
-              <p className="font-[family-name:var(--font-jetbrains)] text-[10px] text-ink-4 uppercase tracking-[0.12em]">
-                {t("devNotice")}
-              </p>
+              <p className="text-ink-3 text-note">{t("devNotice")}</p>
               <Button
                 data-testid="signin-google-dev"
                 disabled={pending !== null}
@@ -123,7 +121,7 @@ export function SignInDialog({
           )}
         </div>
 
-        <p className="m-0 text-balance text-center text-[12px] text-ink-3 leading-relaxed">
+        <p className="m-0 text-balance text-center text-ink-3 text-note">
           {t.rich("legalHint", {
             privacy: (chunks) => (
               <LegalLink href="/privacy">{chunks}</LegalLink>

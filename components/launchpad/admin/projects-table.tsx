@@ -166,7 +166,7 @@ export function ProjectsTable({
       <div className="flex flex-wrap items-center gap-3">
         <Input
           aria-label={t("search")}
-          className="max-w-xs border-rule bg-bg-2"
+          className="max-w-xs border-input bg-bg-2"
           data-testid="admin-search"
           onChange={(event) => setQuery(event.target.value)}
           placeholder={t("search")}
@@ -176,7 +176,7 @@ export function ProjectsTable({
 
         {selectedIds.length > 0 && (
           <div className="flex items-center gap-2" data-testid="bulk-actions">
-            <span className="font-[family-name:var(--font-jetbrains)] text-[11px] text-gold-2 uppercase tracking-[0.12em]">
+            <span className="text-gold text-note">
               {t("selected", { count: selectedIds.length })}
             </span>
             <Button
@@ -213,10 +213,10 @@ export function ProjectsTable({
         )}
       </div>
 
-      <div className="overflow-x-auto border border-rule-2">
+      <div className="overflow-x-auto border border-border">
         <Table>
           <TableHeader>
-            <TableRow className="border-rule-2 hover:bg-transparent">
+            <TableRow className="border-border hover:bg-transparent">
               <TableHead className="w-10">
                 <Checkbox
                   aria-label={t("approveSelected")}
@@ -245,7 +245,7 @@ export function ProjectsTable({
             ) : (
               visible.map((project) => (
                 <TableRow
-                  className="cursor-pointer border-rule-2"
+                  className="cursor-pointer border-border"
                   data-testid={`row-${project.slug}`}
                   key={project.id}
                   onClick={() => setOpenProject(project)}
@@ -263,7 +263,7 @@ export function ProjectsTable({
                     <div className="flex items-center gap-3">
                       <Image
                         alt=""
-                        className="size-8 shrink-0 border border-rule-2 object-cover"
+                        className="size-8 shrink-0 object-cover"
                         height={32}
                         src={project.logoUrl}
                         width={32}
@@ -272,7 +272,7 @@ export function ProjectsTable({
                         <p className="m-0 truncate font-medium text-ink">
                           {project.name}
                         </p>
-                        <p className="m-0 max-w-[26ch] truncate text-ink-3 text-xs">
+                        <p className="m-0 max-w-[26ch] truncate text-ink-3 text-note">
                           {project.tagline}
                         </p>
                       </div>
@@ -298,11 +298,11 @@ export function ProjectsTable({
                     <StatusChip status={project.status} />
                   </TableCell>
 
-                  <TableCell className="text-right font-[family-name:var(--font-jetbrains)] text-ink-2 tabular-nums">
+                  <TableCell className="text-right text-ink-2 tabular-nums">
                     {project.voteScore}
                   </TableCell>
 
-                  <TableCell className="text-ink-3 text-xs">
+                  <TableCell className="text-ink-3 text-note tabular-nums">
                     {format.dateTime(project.submittedAt ?? project.createdAt, {
                       dateStyle: "short",
                     })}
@@ -315,7 +315,7 @@ export function ProjectsTable({
       </div>
 
       <nav className="flex items-center justify-between gap-4">
-        <span className="font-[family-name:var(--font-jetbrains)] text-[11px] text-ink-4 uppercase tracking-[0.12em]">
+        <span className="text-ink-3 text-note tabular-nums">
           {t("resultCount", { count: total })}
         </span>
 
@@ -336,7 +336,7 @@ export function ProjectsTable({
               )}
             </Button>
 
-            <span className="font-[family-name:var(--font-jetbrains)] text-[11px] text-ink-4 tabular-nums">
+            <span className="text-ink-3 text-note tabular-nums">
               {t("pageOf", { page, total: pageCount })}
             </span>
 

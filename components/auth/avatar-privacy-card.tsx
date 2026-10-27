@@ -45,14 +45,14 @@ export function AvatarPrivacyCard({
   };
 
   return (
-    <section className="flex flex-col gap-5 border border-rule-2 bg-bg-2/60 px-6 py-6">
-      <h2 className="m-0 font-[family-name:var(--font-cormorant)] font-light text-ink text-xl">
+    <section className="flex flex-col gap-5 bg-bg-2 px-6 py-6">
+      <h2 className="m-0 font-display font-medium text-ink text-xl tracking-[-0.02em]">
         {t("avatarTitle")}
       </h2>
 
       <div className="flex items-center gap-4">
         <UserAvatar
-          className="size-12 border-rule"
+          className="size-12"
           hideAvatar={hidden}
           image={image}
           name={name}
@@ -61,13 +61,9 @@ export function AvatarPrivacyCard({
         <div className="min-w-0">
           <p className="m-0 font-medium text-ink">{name}</p>
           <p className="m-0 truncate text-ink-3 text-sm">{email}</p>
-          <p className="m-0 font-[family-name:var(--font-jetbrains)] text-[10px] text-ink-4 uppercase tracking-[0.12em]">
-            {t("avatarPreview")}
-          </p>
+          <p className="m-0 text-ink-3 text-note">{t("avatarPreview")}</p>
         </div>
       </div>
-
-      <hr className="m-0 border-0 border-rule-2 border-t" />
 
       <div className="flex items-start justify-between gap-6">
         <div className="min-w-0">

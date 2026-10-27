@@ -46,16 +46,14 @@ export function VotesTable({
 
   return (
     <div className="flex flex-col gap-6">
-      <dl className="m-0 grid grid-cols-3 gap-px border border-rule-2 bg-rule-2 max-sm:grid-cols-1">
+      <dl className="m-0 grid grid-cols-3 gap-3 max-sm:grid-cols-1">
         {stats.map((stat) => (
           <div
             className="flex flex-col gap-1 bg-bg-2 px-5 py-4"
             key={stat.label}
           >
-            <dt className="m-0 font-[family-name:var(--font-jetbrains)] text-[10px] text-ink-3 uppercase tracking-[0.14em]">
-              {stat.label}
-            </dt>
-            <dd className="m-0 font-[family-name:var(--font-cormorant)] font-light text-3xl text-ink tabular-nums leading-none">
+            <dt className="m-0 text-ink-3 text-note">{stat.label}</dt>
+            <dd className="m-0 font-display font-medium text-3xl text-ink tabular-nums leading-none tracking-[-0.02em]">
               {stat.value}
             </dd>
           </div>
@@ -63,14 +61,14 @@ export function VotesTable({
       </dl>
 
       {votes.length === 0 ? (
-        <p className="border border-rule-2 border-dashed px-6 py-12 text-center text-ink-3">
+        <p className="bg-bg-2 px-6 py-12 text-center text-ink-3">
           {t("votesEmpty")}
         </p>
       ) : (
-        <div className="border border-rule-2">
+        <div className="border border-border">
           <Table>
             <TableHeader>
-              <TableRow className="border-rule-2 hover:bg-transparent">
+              <TableRow className="border-border hover:bg-transparent">
                 <TableHead className="text-ink-3">{t("columnWhen")}</TableHead>
                 <TableHead className="text-ink-3">{t("columnVoter")}</TableHead>
                 <TableHead className="text-ink-3">
@@ -91,11 +89,11 @@ export function VotesTable({
             <TableBody>
               {votes.map((vote) => (
                 <TableRow
-                  className="border-rule-2 hover:bg-surface-hover"
+                  className="border-border hover:bg-surface-hover"
                   data-testid={`vote-row-${vote.id}`}
                   key={vote.id}
                 >
-                  <TableCell className="whitespace-nowrap font-[family-name:var(--font-jetbrains)] text-ink-2 text-xs tabular-nums">
+                  <TableCell className="whitespace-nowrap text-ink-2 text-note tabular-nums">
                     {format.dateTime(vote.createdAt, {
                       dateStyle: "short",
                       timeStyle: "short",
@@ -112,7 +110,7 @@ export function VotesTable({
                       />
                       <div className="min-w-0">
                         <p className="m-0 text-ink">{vote.voterName}</p>
-                        <p className="m-0 truncate text-ink-3 text-xs">
+                        <p className="m-0 truncate text-ink-3 text-note">
                           {vote.voterEmail}
                         </p>
                       </div>
@@ -121,15 +119,12 @@ export function VotesTable({
 
                   <TableCell>
                     {vote.weight >= VOTE_WEIGHT_ALQUIMISTA ? (
-                      <span className="inline-flex items-center gap-1 border border-gold/50 bg-gold/10 px-1.5 py-0.5 font-[family-name:var(--font-jetbrains)] text-[9px] text-gold-2 uppercase tracking-[0.1em]">
-                        <Sparkles
-                          aria-hidden="true"
-                          className="size-3 fill-gold/40"
-                        />
+                      <span className="inline-flex items-center gap-1 bg-bg-3 px-1.5 py-0.5 text-gold text-note">
+                        <Sparkles aria-hidden="true" className="size-3.5" />
                         {t("isAlquimista")}
                       </span>
                     ) : (
-                      <span className="text-ink-3 text-xs">
+                      <span className="text-ink-3 text-note">
                         {t("notAlquimista")}
                       </span>
                     )}
@@ -137,7 +132,7 @@ export function VotesTable({
 
                   <TableCell>
                     <Link
-                      className="text-ink-2 transition-colors duration-200 hover:text-gold-2"
+                      className="text-ink-2 transition-colors duration-200 hover:text-gold"
                       href={`/launchpad/${vote.projectSlug}`}
                     >
                       {vote.projectName}
@@ -152,8 +147,8 @@ export function VotesTable({
 
                   <TableCell
                     className={cn(
-                      "text-right font-[family-name:var(--font-jetbrains)] tabular-nums",
-                      vote.action === "added" ? "text-gold-2" : "text-ink-3"
+                      "text-right tabular-nums",
+                      vote.action === "added" ? "text-gold" : "text-ink-3"
                     )}
                   >
                     {vote.action === "added" ? "+" : "−"}
@@ -181,7 +176,7 @@ export function VotesTable({
             )}
           </Button>
 
-          <span className="font-[family-name:var(--font-jetbrains)] text-[11px] text-ink-3 tabular-nums">
+          <span className="text-ink-3 text-note tabular-nums">
             {t("pageOf", { page, total: pageCount })}
           </span>
 

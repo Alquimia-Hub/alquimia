@@ -45,7 +45,7 @@ export function ProjectSheet({
   return (
     <Sheet onOpenChange={onOpenChange} open={project !== null}>
       <SheetContent
-        className="w-full overflow-y-auto border-rule bg-bg-2 sm:max-w-lg"
+        className="w-full overflow-y-auto bg-bg-2 sm:max-w-lg"
         data-testid="project-sheet"
       >
         {project && (
@@ -54,7 +54,7 @@ export function ProjectSheet({
               <SheetTitle className="flex items-center gap-3">
                 <Image
                   alt=""
-                  className="size-10 border border-rule-2 object-cover"
+                  className="size-10 object-cover"
                   height={40}
                   src={project.logoUrl}
                   width={40}
@@ -73,19 +73,19 @@ export function ProjectSheet({
               </div>
 
               <section>
-                <h3 className="mt-0 mb-2 font-[family-name:var(--font-im-fell)] text-[10px] text-ink-3 uppercase tracking-[0.24em]">
+                <h3 className="mt-0 mb-2 font-medium text-ink-3 text-note">
                   {t("columnAuthor")}
                 </h3>
                 <p className="m-0 text-ink-2 text-sm">
                   {project.ownerName} · {project.ownerEmail}
                   {project.ownerIsAlquimista && (
-                    <span className="ml-2 border border-gold/40 bg-gold/10 px-1.5 py-0.5 font-[family-name:var(--font-jetbrains)] text-[9px] text-gold-2 uppercase">
+                    <span className="ml-2 bg-bg-3 px-1.5 py-0.5 text-gold text-note">
                       Alquimista
                     </span>
                   )}
                 </p>
                 {project.submittedAt && (
-                  <p className="mt-1 mb-0 text-ink-3 text-xs">
+                  <p className="mt-1 mb-0 text-ink-3 text-note tabular-nums">
                     {format.dateTime(project.submittedAt, {
                       dateStyle: "medium",
                       timeStyle: "short",
@@ -95,7 +95,7 @@ export function ProjectSheet({
               </section>
 
               <section>
-                <h3 className="mt-0 mb-2 font-[family-name:var(--font-im-fell)] text-[10px] text-ink-3 uppercase tracking-[0.24em]">
+                <h3 className="mt-0 mb-2 font-medium text-ink-3 text-note">
                   {t("reviewTitle")}
                 </h3>
                 <p className="m-0 whitespace-pre-wrap text-ink-2 text-sm leading-relaxed">
@@ -104,7 +104,7 @@ export function ProjectSheet({
               </section>
 
               <section>
-                <h3 className="mt-0 mb-2 font-[family-name:var(--font-im-fell)] text-[10px] text-ink-3 uppercase tracking-[0.24em]">
+                <h3 className="mt-0 mb-2 font-medium text-ink-3 text-note">
                   Links
                 </h3>
                 <ul className="m-0 flex list-none flex-col gap-1.5 p-0">
@@ -137,7 +137,7 @@ export function ProjectSheet({
                 </ul>
               </section>
 
-              <p className="m-0 font-[family-name:var(--font-jetbrains)] text-[10px] text-ink-4 uppercase tracking-[0.12em]">
+              <p className="m-0 text-ink-3 text-note">
                 {project.reviewedByName
                   ? t("reviewedBy", { name: project.reviewedByName })
                   : t("notReviewed")}
@@ -147,7 +147,7 @@ export function ProjectSheet({
               </p>
 
               {project.rejectionReason && (
-                <p className="m-0 border-red-500/40 border-l-2 pl-3 text-red-200 text-sm">
+                <p className="m-0 bg-rubedo px-4 py-3 text-albedo text-sm">
                   {project.rejectionReason}
                 </p>
               )}

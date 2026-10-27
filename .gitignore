@@ -25,3 +25,12 @@ dev/.discord-stub-tokens.json
 
 # El ejemplo si se versiona (no tiene valores)
 !.env.example
+
+# design-taste-frontend
+.taste-skill/
+
+# impeccable scratch mocks
+.impeccable/mocks/
+
+# TypeScript incremental build info
+*.tsbuildinfo

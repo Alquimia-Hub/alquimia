@@ -13,7 +13,7 @@ export function SignInRequired({ callbackURL }: { callbackURL?: string }) {
   return (
     <div className="flex flex-col items-center gap-6 py-24 text-center">
       <div>
-        <h1 className="m-0 font-[family-name:var(--font-cormorant)] font-light text-3xl text-ink leading-none">
+        <h1 className="m-0 font-display font-medium text-ink text-title tracking-[-0.02em]">
           {t("requiredTitle")}
         </h1>
         <p className="mx-auto mt-4 mb-0 max-w-[46ch] text-ink-3">

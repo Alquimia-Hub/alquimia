@@ -26,19 +26,11 @@ export async function LegalPage({
       <main className="flex-1 px-14 pt-10 pb-24 max-md:px-6 max-lg:px-8">
         <div className="mx-auto flex w-full max-w-3xl flex-col gap-14">
           <header className="flex animate-entrance animate-fade-up flex-col items-center gap-3 text-center">
-            <span className="font-[family-name:var(--font-im-fell)] text-[11px] text-ink-3 uppercase tracking-[0.4em]">
-              {t("eyebrow")}
-            </span>
-            <h1
-              className="text-[clamp(36px,6vw,68px)] text-ink"
-              style={{ fontFamily: "var(--font-cormorant)" }}
-            >
+            <h1 className="m-0 font-display font-medium text-ink text-title tracking-[-0.02em]">
               {t("title")}
             </h1>
-            <p className="font-[family-name:var(--font-im-fell)] text-[10px] text-ink-4 uppercase tracking-[0.32em]">
-              {t("updated")}
-            </p>
-            <p className="mt-2 max-w-xl font-[family-name:var(--font-eb-garamond)] text-[16px] text-ink-3 italic leading-relaxed">
+            <p className="m-0 text-ink-3 text-note">{t("updated")}</p>
+            <p className="mt-2 mb-0 max-w-xl text-body text-ink-2">
               {t("intro")}
             </p>
           </header>
@@ -54,10 +46,10 @@ export async function LegalPage({
 
             <section className="flex flex-col gap-5">
               <SectionTitle>{t("contact.title")}</SectionTitle>
-              <p className="m-0 font-[family-name:var(--font-eb-garamond)] text-[16px] text-ink-2 leading-relaxed">
+              <p className="m-0 max-w-[65ch] text-body text-ink-2">
                 {t("contact.body")}{" "}
                 <a
-                  className="text-gold underline underline-offset-4 transition-colors duration-200 hover:text-gold-2"
+                  className="text-gold underline underline-offset-4 transition-colors duration-200 hover:text-ink"
                   href={`mailto:${CONTACT_EMAIL}`}
                 >
                   {CONTACT_EMAIL}
@@ -76,12 +68,9 @@ export async function LegalPage({
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex items-center gap-4">
-      <h2 className="font-[family-name:var(--font-im-fell)] text-[12px] text-ink-2 uppercase tracking-[0.32em]">
-        {children}
-      </h2>
-      <span className="h-px flex-1 bg-rule" />
-    </div>
+    <h2 className="m-0 font-display font-medium text-ink text-lead tracking-[-0.02em]">
+      {children}
+    </h2>
   );
 }
 
@@ -91,10 +80,7 @@ function Section({ title, body }: { title: string; body: string[] }) {
       <SectionTitle>{title}</SectionTitle>
       <div className="flex flex-col gap-4">
         {body.map((paragraph) => (
-          <p
-            className="m-0 font-[family-name:var(--font-eb-garamond)] text-[16px] text-ink-2 leading-relaxed"
-            key={paragraph}
-          >
+          <p className="m-0 max-w-[65ch] text-body text-ink-2" key={paragraph}>
             {paragraph}
           </p>
         ))}

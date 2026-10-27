@@ -57,7 +57,7 @@ export default async function AccountPage({
           <BackLink href="/launchpad" />
 
           <header>
-            <h1 className="m-0 font-[family-name:var(--font-cormorant)] font-light text-3xl text-ink leading-none">
+            <h1 className="m-0 font-display font-medium text-ink text-title tracking-[-0.02em]">
               {t("title")}
             </h1>
             <p className="mt-3 mb-0 text-ink-3">{t("subtitle")}</p>
@@ -93,7 +93,7 @@ export default async function AccountPage({
                   {t("adminPanel")}
                   {pendingCount > 0 && (
                     <span
-                      className="ml-1 border border-amber-500/40 bg-amber-500/10 px-1.5 py-0.5 font-[family-name:var(--font-jetbrains)] text-[10px] text-amber-200 tabular-nums"
+                      className="ml-1 bg-gold px-1.5 py-0.5 text-bg text-note tabular-nums"
                       title={tAdmin("pendingBadge", { count: pendingCount })}
                     >
                       {pendingCount}

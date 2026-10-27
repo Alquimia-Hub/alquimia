@@ -38,7 +38,7 @@ export default async function EditProjectPage({
       <BackLink href={`/launchpad/${slug}`} />
 
       <header>
-        <h1 className="m-0 font-[family-name:var(--font-cormorant)] font-light text-3xl text-ink leading-none">
+        <h1 className="m-0 font-display font-medium text-ink text-title tracking-[-0.02em]">
           {t("editTitle")}
         </h1>
         <p className="mt-3 mb-0 text-ink-3">{t("editSubtitle")}</p>

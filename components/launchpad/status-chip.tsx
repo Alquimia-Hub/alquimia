@@ -4,9 +4,9 @@ import { cn } from "@/lib/utils";
 type Status = "pending" | "approved" | "rejected";
 
 const TONES: Record<Status, string> = {
-  pending: "border-amber-500/40 bg-amber-500/10 text-amber-200",
-  approved: "border-emerald-500/40 bg-emerald-500/10 text-emerald-200",
-  rejected: "border-red-500/40 bg-red-500/10 text-red-200",
+  pending: "bg-bg-3 text-gold",
+  approved: "bg-bg-3 text-ink-2",
+  rejected: "bg-rubedo text-albedo",
 };
 
 export function StatusChip({
@@ -21,7 +21,7 @@ export function StatusChip({
   return (
     <span
       className={cn(
-        "inline-flex items-center border px-2 py-0.5 font-[family-name:var(--font-jetbrains)] text-[10px] uppercase tracking-[0.12em]",
+        "inline-flex items-center px-2 py-0.5 text-note",
         TONES[status],
         className
       )}
