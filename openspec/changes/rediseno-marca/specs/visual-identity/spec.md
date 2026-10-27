@@ -13,9 +13,9 @@ Los títulos de sección, el `h1` del hero y la capital iluminada SHALL
 componerse en IM Fell English. Todo el resto del texto visible (cuerpo, menú,
 botones, etiquetas, puntos y fechas) SHALL componerse en Literata, salvo el
 código real dentro de bloques de código. Ninguna pantalla SHALL cargar ni usar
-Cormorant Garamond, EB Garamond, IM Fell English SC ni JetBrains Mono. Quedan
-fuera, para la fase siguiente, las imágenes OG (`opengraph-image.tsx`) y la
-escala de las pantallas internas, que todavía usan tamaños y espaciado propios.
+Cormorant Garamond, EB Garamond, IM Fell English SC ni JetBrains Mono. Queda
+fuera, para la fase siguiente, la escala de las pantallas internas, que
+todavía usan tamaños y espaciado propios.
 
 #### Scenario: Fuentes cargadas en la portada
 - **WHEN** se abre la portada en un navegador

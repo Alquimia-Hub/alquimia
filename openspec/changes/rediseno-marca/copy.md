@@ -13,9 +13,11 @@ rubedo) van solo como pie de cada lámina.
 | | Español | English |
 |---|---|---|
 | Título (`h1`) | Entrá al taller de la IA | Step into the AI workshop |
-| Bajada | Alquimia es una comunidad abierta y gratuita para debatir sobre IA y automatización. | Alquimia is an open, free community to discuss AI and automation. |
+| Bajada | Comunidad abierta y gratuita para debatir sobre IA y automatización. | An open, free community to discuss AI and automation. |
 | Botones | Entrar al Discord · Entrar al WhatsApp | Join the Discord · Join the WhatsApp |
-| Prueba | {n} proyectos en el Launchpad · {n} repos abiertos | {n} projects on the Launchpad · {n} open repos |
+| Miembros | Unite a {n} alquimistas | Join {n} alchemists |
+
+El número sale de `COMMUNITY_MEMBERS` (`lib/constants.ts`), hoy 200.
 
 ## Políptico
 

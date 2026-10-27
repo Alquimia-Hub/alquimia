@@ -11,23 +11,22 @@ WhatsApp.
 ### Requirement: Hero con la escena del gran taller
 La portada SHALL abrir con una escena ilustrada a pantalla completa y el
 contenido centrado sobre el arco del centro: el título "Entrá al taller de la
-IA" en el único `h1`, la oración "Alquimia es una comunidad abierta y gratuita
-para debatir sobre IA y automatización.", los botones "Entrar al Discord" y
-"Entrar al WhatsApp" con el mismo tamaño, y una línea de prueba con la cantidad
-real de proyectos publicados en el Launchpad y de repos abiertos. Un dato que
-no se pueda leer o valga cero no SHALL mostrarse.
+IA" en el único `h1`, la oración "Comunidad abierta y gratuita para debatir
+sobre IA y automatización.", los botones "Entrar al Discord" y "Entrar al
+WhatsApp" con el mismo tamaño, y la línea "Unite a {n} alquimistas", con el
+número tomado de `COMMUNITY_MEMBERS` en `lib/constants.ts`.
 
 #### Scenario: Primer pantallazo en desktop
 - **WHEN** se abre la portada a 1440 × 900
-- **THEN** se ven la escena entera, el título, la oración, los dos botones y la línea de prueba sin scrollear
+- **THEN** se ven la escena entera, el título, la oración, los dos botones y "Unite a 200 alquimistas" sin scrollear
 
 #### Scenario: Los dos canales pesan lo mismo
 - **WHEN** se miden los dos botones del hero
 - **THEN** tienen la misma altura y el mismo tamaño de letra, y llevan a los canales reales de la comunidad
 
-#### Scenario: Sin proyectos
-- **WHEN** no hay proyectos publicados
-- **THEN** la línea de prueba muestra solo los repos, o no se muestra si tampoco hay repos
+#### Scenario: Cantidad de miembros
+- **WHEN** se cambia `COMMUNITY_MEMBERS`
+- **THEN** el hero y la imagen OG muestran el número nuevo
 
 ### Requirement: La escena se adapta al formato de pantalla
 En pantallas verticales la portada SHALL mostrar la versión vertical de la
@@ -175,6 +174,15 @@ reemplace.
 #### Scenario: Portada terminada
 - **WHEN** existen todas las láminas de `docs/ilustraciones.md`
 - **THEN** ninguna imagen de la portada repite a otra
+
+### Requirement: Imagen para redes con la marca
+La imagen OG (y la de X) SHALL mostrar la escena del taller oscurecida, la
+marca, el título y la oración del hero en IM Fell English y Literata, y "Unite
+a {n} alquimistas", en el idioma de la ruta.
+
+#### Scenario: Compartir el link
+- **WHEN** se pide `/opengraph-image/og` o `/en/opengraph-image/og`
+- **THEN** devuelve un PNG de 1200 × 630 con el título y la oración en ese idioma
 
 ### Requirement: Portada en los dos idiomas
 Todo texto visible de la portada SHALL existir en español y en inglés, y SHALL
