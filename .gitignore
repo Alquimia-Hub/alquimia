@@ -31,3 +31,6 @@ dev/.discord-stub-tokens.json
 
 # impeccable scratch mocks
 .impeccable/mocks/
+
+# TypeScript incremental build info
+*.tsbuildinfo
