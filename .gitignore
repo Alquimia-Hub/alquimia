@@ -25,3 +25,6 @@ dev/.discord-stub-tokens.json
 
 # El ejemplo si se versiona (no tiene valores)
 !.env.example
+
+# design-taste-frontend
+.taste-skill/
