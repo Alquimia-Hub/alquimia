@@ -12,7 +12,7 @@ export const SOCIAL_LINKS = {
 
 export const COMMUNITY_LINKS = {
   discord: "https://discord.gg/wkhHrWZC3Q",
-  whatsapp: "https://chat.whatsapp.com/BhC5waw0nm1FIRSb9Kvs7a",
+  whatsapp: "https://chat.whatsapp.com/Bbm7IrcnIeLIWDU19Bta8r",
 } as const;
 
 /** Members across Discord and WhatsApp, shown in the hero. Update by hand. */
