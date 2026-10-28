@@ -5,8 +5,8 @@ import { useEffect, useRef } from "react";
 // The walk through the archway, as shares of the hero's scroll (0 to 1). One
 // thing happens at a time: the copy leaves, the camera approaches while the
 // corridor lights up inside the arch, the arch opens past the screen, the
-// corridor carries on towards the furnace, and its light becomes the albedo
-// field the next section starts on.
+// corridor carries on towards the furnace, its light becomes the albedo
+// field the next section starts on, and the symbol appears on it.
 const COPY = [0, 0.1] as const;
 const APPROACH = [0.08, 0.45] as const;
 const REVEAL = [0.12, 0.3] as const;
@@ -15,6 +15,7 @@ const HALL_OUT = [0.5, 0.62] as const;
 const WALK = [0.62, 0.9] as const;
 const BLOOM = [0.7, 0.92] as const;
 const VEIL = [0.88, 0.93] as const;
+const MARK = [0.9, 0.98] as const;
 
 // How far each move goes. Phones show the tall scene, whose arch is wider.
 const WIDE = { approach: 1.3, through: 1.5, open: 4.6, bloom: 6 };
@@ -51,16 +52,27 @@ export function HeroCamera() {
     const view = find("door-view");
     const bloom = find("bloom");
     const veil = find("veil");
+    const mark = find("mark");
 
     if (
-      !(section && camera && content && scrim && door && view && bloom && veil)
+      !(
+        section &&
+        camera &&
+        content &&
+        scrim &&
+        door &&
+        view &&
+        bloom &&
+        veil &&
+        mark
+      )
     ) {
       return;
     }
 
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
     const tall = window.matchMedia(TALL_MEDIA);
-    const layers = [camera, content, scrim, door, view, bloom, veil];
+    const layers = [camera, content, scrim, door, view, bloom, veil, mark];
     let frame = 0;
     let shown = -1;
 
@@ -111,6 +123,13 @@ export function HeroCamera() {
       veil.style.opacity = String(easeIn(settle));
     };
 
+    // The symbol rises out of the settled light.
+    const paintMark = (appear: number) => {
+      const eased = easeInOut(appear);
+      mark.style.opacity = String(eased);
+      mark.style.transform = `scale(${0.9 + 0.1 * eased})`;
+    };
+
     const paint = (progress: number) => {
       const reach = tall.matches ? TALL : WIDE;
       const approach = easeInOut(stretch(APPROACH, progress));
@@ -135,6 +154,7 @@ export function HeroCamera() {
         reach.bloom,
         stretch(VEIL, progress)
       );
+      paintMark(stretch(MARK, progress));
     };
 
     const tick = () => {
