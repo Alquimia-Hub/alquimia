@@ -227,7 +227,8 @@ html {
    placed like the picture (cover, 50% 42%), so it sits exactly on it. */
 .hero-door,
 .hero-bloom,
-.hero-veil {
+.hero-veil,
+.hero-mark {
   display: none;
 }
 
@@ -237,8 +238,14 @@ html {
   display: block;
 }
 
-/* The last step of the light: the screen settles on flat albedo. */
-.hero-veil {
+.hero[data-camera="on"] .hero-mark {
+  display: grid;
+}
+
+/* The last step of the light: the screen settles on flat albedo, and the
+   symbol appears on it. */
+.hero-veil,
+.hero-mark {
   opacity: 0;
 }
 

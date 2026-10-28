@@ -1,11 +1,13 @@
 import { getTranslations } from "next-intl/server";
 import { COMMUNITY_MEMBERS } from "@/lib/constants";
 import { HeroCamera } from "./hero-camera";
+import { AlquimiaLogo } from "./icons";
 import { JoinLinks } from "./join-links";
 import { HeroScene, Plate } from "./scene-picture";
 
 export async function HeroSection() {
   const t = await getTranslations("Hero");
+  const tCommon = await getTranslations("Common");
 
   return (
     <section
@@ -51,6 +53,15 @@ export async function HeroSection() {
           className="hero-veil pointer-events-none absolute inset-0 bg-albedo"
           data-hero-veil
         />
+        {/* The symbol and the name the light settles into. */}
+        <div
+          aria-hidden="true"
+          className="hero-mark pointer-events-none absolute inset-0 place-content-center justify-items-center gap-5 text-on-light"
+          data-hero-mark
+        >
+          <AlquimiaLogo className="size-40 sm:size-56" />
+          <p className="m-0 font-heading text-display">{tCommon("brand")}</p>
+        </div>
 
         <div
           className="pointer-events-none relative grid h-full place-items-center px-[var(--gutter)] pt-20 pb-[8svh] text-center"
